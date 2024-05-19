@@ -1,0 +1,24 @@
+{
+  "name": "stockify",
+  "version": "1.0.0",
+  "description": "stockify is an internal stock management system",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aasess/Stockify.git"
+  },
+  "keywords": [
+    "stock",
+    "sales",
+    "inventory"
+  ],
+  "author": "Ashish, Bipin, Sandeep",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aasess/Stockify/issues"
+  },
+  "homepage": "https://github.com/Aasess/Stockify#readme"
+}
