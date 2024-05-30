@@ -4,7 +4,9 @@
   "description": "stockify is an internal stock management system",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start-backend": "cd API && npm start",
+    "start-backend-local": "cd API && nodemon index.js",
+    "start-frontend": "cd frontend && npm start"
   },
   "repository": {
     "type": "git",
@@ -20,5 +22,12 @@
   "bugs": {
     "url": "https://github.com/Aasess/Stockify/issues"
   },
-  "homepage": "https://github.com/Aasess/Stockify#readme"
+  "homepage": "https://github.com/Aasess/Stockify#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
 }
