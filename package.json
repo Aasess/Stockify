@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start-backend": "npm start",
+    "start-backend": "node index.js",
     "start-backend-local": "nodemon index.js",
     "start-frontend": "cd frontend && npm start"
   },
