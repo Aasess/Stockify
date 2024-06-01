@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
 
+//API
+import UserAction from '../api/user/action'
+import { redirect } from 'react-router-dom'
+
 const UserRegistration = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -16,10 +20,21 @@ const UserRegistration = () => {
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Handle form submission logic here
-    console.log(formData)
+
+    if (formData.password !== formData.confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+      try {
+        const result = await UserAction.userRegistration(formData);
+        console.log(result)
+        redirect("/login")
+      } catch (error) {
+        console.error("There was an error registering the user!", error);
+        
+      }
   }
 
   return (
