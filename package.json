@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "stockify is an internal stock management system",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start-backend": "cd API && npm start",
-    "start-backend-local": "cd API && nodemon index.js",
+    "start-backend": "npm start",
+    "start-backend-local": "nodemon index.js",
     "start-frontend": "cd frontend && npm start"
   },
   "repository": {
