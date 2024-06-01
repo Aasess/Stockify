@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 
 //API
 import UserAction from '../api/user/action'
-import { redirect } from 'react-router-dom'
+
+//ROUTER-DOM
+import { useNavigate } from 'react-router-dom';
 
 const UserRegistration = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +13,7 @@ const UserRegistration = () => {
     password: '',
     confirmPassword: '',
   })
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -29,8 +32,9 @@ const UserRegistration = () => {
       }
       try {
         const result = await UserAction.userRegistration(formData);
-        console.log(result)
-        redirect("/login")
+        if (result) {
+          navigate('/login');
+        }
       } catch (error) {
         console.error("There was an error registering the user!", error);
         
