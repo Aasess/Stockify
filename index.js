@@ -8,9 +8,19 @@ import { connectDB } from './API/config/db.config.js'
 import { UserRoutes } from './API/routes/index.js'
 import session from 'express-session'
 
+//CORS
+import cors from 'cors'
+
 dotenv.config()
 
 const app = express()
+
+// Configure CORS
+const corsOptions = {
+  origin: 'https://stockify-smoky.vercel.app',
+  optionsSuccessStatus: 200 // For legacy browser support
+};
+app.use(cors(corsOptions))
 
 //MIDDLEWARES
 app.use(express.urlencoded({ extended: false }))
