@@ -1,10 +1,17 @@
 import React, { useState } from 'react'
 
+//API
+import UserAction from '../api/user/action'
+
+//ROUTER-DOM
+import { useNavigate } from 'react-router-dom';
+
 const UserLogin = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
   })
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -14,10 +21,17 @@ const UserLogin = () => {
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Handle form submission logic here
-    console.log(formData)
+    try {
+        const result = await UserAction.userLogin(formData);
+        if (result) {
+          navigate('/dashboard');  // Redirect to a dashboard after successful login
+        }
+      } catch (error) {
+        console.error("There was an error logging in the user!", error);
+        
+      }
   }
 
   return (
