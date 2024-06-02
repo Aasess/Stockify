@@ -20,7 +20,7 @@ const corsOptions = {
   origin: 'https://stockify-smoky.vercel.app',
   optionsSuccessStatus: 200, // For legacy browser support
 }
-app.use(cors(corsOptions))
+app.use(cors())
 
 //MIDDLEWARES
 app.use(express.urlencoded({ extended: false }))
