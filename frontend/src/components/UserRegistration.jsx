@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import UserAction from '../api/user/action'
 
 //ROUTER-DOM
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'
 
 const UserRegistration = () => {
   const [formData, setFormData] = useState({
@@ -13,7 +13,7 @@ const UserRegistration = () => {
     password: '',
     confirmPassword: '',
   })
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -27,18 +27,17 @@ const UserRegistration = () => {
     e.preventDefault()
 
     if (formData.password !== formData.confirmPassword) {
-        alert("Passwords do not match!");
-        return;
+      alert('Passwords do not match!')
+      return
+    }
+    try {
+      const result = await UserAction.userRegistration(formData)
+      if (result) {
+        navigate('/login')
       }
-      try {
-        const result = await UserAction.userRegistration(formData);
-        if (result) {
-          navigate('/login');
-        }
-      } catch (error) {
-        console.error("There was an error registering the user!", error);
-        
-      }
+    } catch (error) {
+      console.error('There was an error registering the user!', error)
+    }
   }
 
   return (
@@ -106,6 +105,9 @@ const UserRegistration = () => {
             Register
           </button>
         </form>
+        <div className="mt-3 text-center">
+          <Link to="/login">Already have an account? Login here</Link>
+        </div>
       </div>
     </div>
   )

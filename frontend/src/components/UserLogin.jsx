@@ -4,14 +4,14 @@ import React, { useState } from 'react'
 import UserAction from '../api/user/action'
 
 //ROUTER-DOM
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'
 
 const UserLogin = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
   })
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -24,14 +24,13 @@ const UserLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-        const result = await UserAction.userLogin(formData);
-        if (result) {
-          navigate('/dashboard');  // Redirect to a dashboard after successful login
-        }
-      } catch (error) {
-        console.error("There was an error logging in the user!", error);
-        
+      const result = await UserAction.userLogin(formData)
+      if (result) {
+        navigate('/dashboard') // Redirect to a dashboard after successful login
       }
+    } catch (error) {
+      console.error('There was an error logging in the user!', error)
+    }
   }
 
   return (
@@ -71,6 +70,9 @@ const UserLogin = () => {
             Login
           </button>
         </form>
+        <div className="mt-3 text-center">
+          <Link to="/register">Don't have an account? Register here</Link>
+        </div>
       </div>
     </div>
   )
