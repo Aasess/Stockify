@@ -1,5 +1,5 @@
 const baseURL = {
-  user: 'api/user',
+  user: 'https://stockify-smoky.vercel.app/api/user',
 }
 
 export const UserEndPoint = {
