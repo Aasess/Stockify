@@ -17,7 +17,7 @@ const app = express()
 
 // Configure CORS
 const corsOptions = {
-  origin: 'https://stockify-smoky.vercel.app/',
+  origin: 'https://stockify-smoky.vercel.app',
   optionsSuccessStatus: 200, // For legacy browser support
 }
 app.use(cors(corsOptions))
