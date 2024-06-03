@@ -1,5 +1,10 @@
+/* General Styles */
+body {
+  background-color: #f8f9fa;
+  font-family: 'Roboto', sans-serif;
+}
 
-
+/* Navbar Styles */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -9,12 +14,33 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.navbar-custom {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-custom .nav-icon {
+  color: #ffffff;
+  margin-left: 15px;
+  font-size: 1.5rem;
+}
+
+.navbar-custom .nav-icon:hover {
+  color: #f8f9fa;
+}
+
+.navbar-custom .dropdown-menu-right {
+  right: 0;
+  left: auto;
+}
+
+/* Company Logo */
 .company h2 {
   margin: 0;
   font-size: 24px;
   color: #333;
 }
 
+/* Search Bar */
 .search-bar input {
   width: 400px;
   padding: 8px;
@@ -23,6 +49,7 @@
   font-size: 16px;
 }
 
+/* User Options */
 .user-options .user-button {
   background-color: #1DA1F2;
   color: #fff;
@@ -37,17 +64,20 @@
   background-color: #0d95e8;
 }
 
+/* Dashboard */
 .dashboard {
   padding: 20px;
   font-family: Arial, sans-serif;
 }
 
+/* Header */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+/* Profile */
 .profile {
   display: flex;
   align-items: center;
@@ -60,6 +90,7 @@
   margin-right: 10px;
 }
 
+/* Summary Cards */
 .summary-cards {
   display: flex;
   justify-content: space-around;
@@ -74,6 +105,7 @@
   text-align: center;
 }
 
+/* Analytics Tracking and Orders */
 .analytics-tracking, .orders {
   margin-top: 20px;
 }
@@ -88,4 +120,23 @@
   padding: 10px;
   border-radius: 5px;
   margin-bottom: 10px;
+}
+
+/* Chart and Summary Card */
+.chart-card, .summary-card {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.summary-card h5 {
+  font-weight: bold;
+  color: #343a40;
+}
+
+.summary-card p {
+  font-size: 1.5rem;
+  color: #007bff;
 }
