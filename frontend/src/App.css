@@ -1,0 +1,91 @@
+
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.company h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.search-bar input {
+  width: 400px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.user-options .user-button {
+  background-color: #1DA1F2;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.user-options .user-button:hover {
+  background-color: #0d95e8;
+}
+
+.dashboard {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+}
+
+.profile img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.summary-cards {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.card {
+  background: #f0f0f0;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 0 10px;
+  text-align: center;
+}
+
+.analytics-tracking, .orders {
+  margin-top: 20px;
+}
+
+.orders ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.orders li {
+  background: #f0f0f0;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
