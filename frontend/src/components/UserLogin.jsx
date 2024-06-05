@@ -69,7 +69,7 @@ const UserLogin = () => {
           </Button>
         </Form>
         <div className="mt-3 text-center">
-          <Link to="/register">Don't have an account? Register here</Link>
+          <Link to="/signup">Don't have an account? Register here</Link>
         </div>
     </Card.Body>
     </Card>
