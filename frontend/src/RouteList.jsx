@@ -14,7 +14,7 @@ const RouteList = () => {
       <Routes>
         <Route path="/dashboard" exact element={<Dashboard />} />
         <Route path="/login" exact element={<UserLogin />} />
-        <Route path="/signup" exact element={<UserRegistration />} />
+        <Route path="/register" exact element={<UserRegistration />} />
         <Route path="/" element={<Navigate to="/dashboard" />} />
       </Routes>
     </Suspense>
