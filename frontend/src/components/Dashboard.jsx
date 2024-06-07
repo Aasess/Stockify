@@ -3,8 +3,15 @@ import { Bar, Doughnut, Radar, Line } from 'react-chartjs-2';
 import 'chart.js/auto';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Navbar, Nav, Form, FormControl, Button, Container, NavDropdown } from 'react-bootstrap';
-import './Dashboard.css';  
+import {
+  Navbar,
+  Nav,
+  Form,
+  FormControl,
+  Button,
+  Container,
+  NavDropdown,
+} from 'react-bootstrap'
 
 const Dashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false);
