@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { Form,Button,Card,Container,Row,Col} from 'react-bootstrap';
+
 
 //API
 import UserAction from '../api/user/action'
@@ -41,76 +43,70 @@ const UserRegistration = () => {
   }
 
   return (
-    <div className="container d-flex justify-content-center align-items-center min-vh-100">
-      <div className="card p-4" style={{ width: '400px' }}>
-        <h2 className="mb-4 text-center">User Registration</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">
-              Email
-            </label>
-            <input
+    <Container className="d-flex justify-content-center align-items-center min-vh-100" style={{ backgroundColor: '#F5EEE6' }}>
+      <Row className="w-100 justify-content-center">
+        <Col md={8} lg={5}>
+          <Card className="p-4 shadow-sm">
+            <Card.Body>
+              <Card.Title className="mb-4 text-center"><b>USER REGISTRATION</b></Card.Title>
+        <Form onSubmit={handleSubmit} className="border p-3" >
+        <Form.Group className="mb-3" controlId="email"  >
+                  <Form.Label ><b>Email:</b></Form.Label>
+                  <Form.Control
+              placeholder="name@example.com"
               type="email"
-              className="form-control"
-              id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               required
             />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="username" className="form-label">
-              Username
-            </label>
-            <input
+            </Form.Group>
+          <Form.Group className="mb-3" controlId="username">
+                  <Form.Label><b>Username:</b></Form.Label>
+                  <Form.Control
+              placeholder="Username"
               type="text"
-              className="form-control"
-              id="username"
               name="username"
               value={formData.username}
               onChange={handleChange}
               required
             />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <input
+            </Form.Group>
+          <Form.Group className="mb-3" controlId="password">
+                  <Form.Label><b>Password:</b></Form.Label>
+                  <Form.Control
+              placeholder="Password"
               type="password"
-              className="form-control"
-              id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
               required
             />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="confirmPassword" className="form-label">
-              Confirm Password
-            </label>
-            <input
+            </Form.Group>
+          <Form.Group className="mb-3" controlId="confirmPassword">
+                  <Form.Label><b>Confirm Password:</b></Form.Label>
+                  <Form.Control
+              placeholder="Confirm Password"
               type="password"
-              className="form-control"
-              id="confirmPassword"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
               required
             />
-          </div>
-          <button type="submit" className="btn btn-primary w-100">
+            </Form.Group>
+          <Button type="submit" variant="success" className="btn btn-primary w-100">
             Register
-          </button>
-        </form>
+          </Button>
+        </Form>
         <div className="mt-3 text-center">
-          <Link to="/login">Already have an account? Login here</Link>
+          <Link to="/login">Already have an account? Login here!</Link>
         </div>
-      </div>
-    </div>
-  )
-}
+    </Card.Body>
+    </Card>
+    </Col>
+    </Row>
+    </Container>
+  );
+};
 
 export default UserRegistration
