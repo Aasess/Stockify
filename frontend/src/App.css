@@ -5,34 +5,46 @@ body {
 }
 
 /* Navbar Styles */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.navbar-custom {
+  background-color: #343a40;
   padding: 10px 20px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.navbar-custom {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.navbar-custom .navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.navbar-custom .form-control {
+  width: 200px;
+}
+
+.navbar-custom .btn-outline-light {
+  margin-left: 10px;
 }
 
 .navbar-custom .nav-icon {
+  position: relative;
+}
+
+.navbar-custom .fa-bell {
+  font-size: 1.2rem;
   color: #ffffff;
-  margin-left: 15px;
-  font-size: 1.5rem;
 }
 
-.navbar-custom .nav-icon:hover {
-  color: #f8f9fa;
+.navbar-custom .dropdown-menu {
+  background-color: #343a40;
+  border: none;
 }
 
-.navbar-custom .dropdown-menu-right {
-  right: 0;
-  left: auto;
+.navbar-custom .dropdown-item {
+  color: #ffffff;
 }
 
+.navbar-custom .dropdown-item:hover {
+  background-color: #495057;
+}
 /* Company Logo */
 .company h2 {
   margin: 0;
