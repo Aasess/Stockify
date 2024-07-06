@@ -1,5 +1,5 @@
 const baseURL = {
-  user: 'https://stockify-y4e2.onrender.com/api/user',
+  user: 'http://localhost:3001/api/user',
 }
 
 export const UserEndPoint = {

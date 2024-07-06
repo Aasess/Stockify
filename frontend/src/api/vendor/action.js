@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { VendorEndPoint } from './endpoint'
 
+axios.defaults.withCredentials = true
 class VendorAction {
   static async findNumberOfVendor() {
     try {

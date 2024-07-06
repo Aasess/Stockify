@@ -1,16 +1,8 @@
 import axios from 'axios'
 import { UserEndPoint } from './endpoint'
 
+axios.defaults.withCredentials = true
 class UserAction {
-  static async userDetails() {
-    try {
-      const response = await axios.get(UserEndPoint.userDetail)
-      return response.data
-    } catch (error) {
-      throw error
-    }
-  }
-
   static async userRegistration(formData) {
     try {
       const response = await axios.post(UserEndPoint.register, {
@@ -54,6 +46,15 @@ class UserAction {
         UserEndPoint.resetPassword.replace('id', id),
         formData
       )
+      return response.data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  static async userDetails() {
+    try {
+      const response = await axios.get(UserEndPoint.userDetail)
       return response.data
     } catch (error) {
       throw error

@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { CategoryEndPoint } from './endpoint'
 
+axios.defaults.withCredentials = true
+
 class CategoryAction {
   static async findNumberOfCategory() {
     try {

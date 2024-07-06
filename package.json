@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start-backend": "node index.js",
-    "start-backend-local": "nodemon index.js",
+    "start-backend-local": "cross-env NODE_ENV=development nodemon index.js",
     "start-frontend": "cd frontend && npm start"
   },
   "repository": {
@@ -34,6 +34,7 @@
     "nodemailer": "^6.9.14"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "nodemon": "^3.1.0"
   }
 }
