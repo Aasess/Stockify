@@ -1,8 +1,17 @@
 // src/components/UserResetPassword.js
 
 import React, { useState } from 'react'
-import { useParams, Link, useNavigate } from 'react-router-dom'
+
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap'
+
+//API
+import UserAction from '../api/user/action'
+
+//ROUTER-DOM
+import { useParams, Link, useNavigate } from 'react-router-dom'
+
+//HELPERS
+import { verifyStatus } from '../helpers'
 
 const UserResetPassword = () => {
   const { id } = useParams()
@@ -21,19 +30,13 @@ const UserResetPassword = () => {
     }
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/user/reset-password/${id}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ password }),
-        }
-      )
+        const formData = {
+            password,
+            confirmationPassword: confirmPassword
+          }
+          const result = await UserAction.userResetPassword(id, formData)
 
-      const data = await response.json()
-      if (response.ok) {
+      if (verifyStatus(result.status)) {
         setMessage('Password reset successful. You can now log in.')
         setError('')
         setTimeout(() => {
@@ -41,7 +44,7 @@ const UserResetPassword = () => {
         }, 3000)
       } else {
         setMessage('')
-        setError(data.error || 'Failed to reset password')
+        setError(result.message || 'Failed to reset password')
       }
     } catch (err) {
       setMessage('')

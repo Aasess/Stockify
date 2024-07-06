@@ -28,11 +28,23 @@ class UserAction {
     }
   }
 
-  static async userResetPassword(formData) {
+  static async userResetPasswordLink(formData) {
     try {
-      const response = await axios.post(UserEndPoint.resetPassword, {
+      const response = await axios.post(UserEndPoint.resetPasswordLink, {
         email: formData.email,
       })
+      return response.data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  static async userResetPassword(id, formData) {
+    try {
+      const response = await axios.post(
+        UserEndPoint.resetPassword.replace('id', id),
+        formData
+      )
       return response.data
     } catch (error) {
       throw error

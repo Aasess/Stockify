@@ -13,7 +13,7 @@ router.use('/change-password', authMiddleware)
 router.post('/register', UserController.userRegistration)
 router.post('/login', UserController.userLogin)
 router.post('/send-reset-password-email', UserController.sendPasswordResetEmail)
-router.post('/reset-password/:id/:token', UserController.resetUserPassword)
+router.post('/reset-password/:id', UserController.resetUserPassword)
 
 //Protected Routes
 router.post('/change-password', UserController.changeUserPassword)

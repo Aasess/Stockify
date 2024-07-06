@@ -21,8 +21,7 @@ const UserForgetPassword = () => {
       const formData = {
         email,
       }
-      const result = await UserAction.userResetPassword(formData)
-      console.log(result)
+      const result = await UserAction.userResetPasswordLink(formData)
 
       if (verifyStatus(result.status)) {
         setMessage(result.message)
