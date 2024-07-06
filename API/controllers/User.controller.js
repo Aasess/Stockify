@@ -5,6 +5,18 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 class UserController {
+  static isUserLoggedIn = async (req, res) => {
+    try {
+      const foundUser = await UserServices.findById(req.userId)
+      if (foundUser) {
+        return res.status(201).send({ status: 'success', detail: foundUser })
+      }
+      throw new Error('Access denied. Please log in.')
+    } catch (error) {
+      res.send({ status: 'failed', message: error })
+    }
+  }
+
   static userRegistration = async (req, res) => {
     try {
       const { username, email, password, rePassword } = req.body

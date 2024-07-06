@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Bar, Doughnut, Radar, Line } from 'react-chartjs-2'
 import 'chart.js/auto'
 
@@ -13,8 +13,17 @@ import {
   NavDropdown,
 } from 'react-bootstrap'
 
+//API
+import CategoryAction from '../../api/category/action'
+import VendorAction from '../../api/vendor/action'
+
 const Dashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false)
+
+  const [state, setState] = useState({
+    numCategories: 0,
+    numVender: 0,
+  })
 
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen)
@@ -118,6 +127,19 @@ const Dashboard = () => {
       },
     ],
   }
+
+  const findTotalNumberOfCategories = async () => {
+    const result = await CategoryAction.findNumberOfCategory()
+  }
+
+  const findTotalNumberOfVendors = async () => {
+    const result = await VendorAction.findNumberOfVendor()
+  }
+
+  useEffect(() => {
+    findTotalNumberOfCategories()
+    findTotalNumberOfVendors()
+  }, [])
 
   return (
     <div>

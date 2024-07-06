@@ -3,6 +3,7 @@ const baseURL = {
 }
 
 export const UserEndPoint = {
+  userDetail: baseURL.user,
   register: `${baseURL.user}/register`,
   login: `${baseURL.user}/login`,
   resetPasswordLink: `${baseURL.user}/send-reset-password-email`,

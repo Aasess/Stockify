@@ -2,6 +2,15 @@ import axios from 'axios'
 import { UserEndPoint } from './endpoint'
 
 class UserAction {
+  static async userDetails() {
+    try {
+      const response = await axios.get(UserEndPoint.userDetail)
+      return response.data
+    } catch (error) {
+      throw error
+    }
+  }
+
   static async userRegistration(formData) {
     try {
       const response = await axios.post(UserEndPoint.register, {

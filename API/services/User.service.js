@@ -37,6 +37,18 @@ class UserServices {
     })
   }
 
+  static findById(username) {
+    const sql = 'SELECT * FROM user WHERE id = ?'
+    return new Promise((resolve, reject) => {
+      connection.query(sql, [username], (error, result) => {
+        if (error) {
+          return reject(error)
+        }
+        resolve(result[0]) // Assuming username is unique
+      })
+    })
+  }
+
   static createUser(username, email, hashedPassword) {
     const sql = 'INSERT INTO user (username, email, password) VALUES (?, ?, ?)'
     return new Promise((resolve, reject) => {
