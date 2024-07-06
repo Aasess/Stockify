@@ -15,21 +15,10 @@ dotenv.config()
 
 const app = express()
 
-let corsOptions = {}
-
-console.log(process.env.NODE_ENV)
-if (process.env.NODE_ENV === 'development') {
-  // Configure CORS
-  corsOptions = {
-    origin: 'http://localhost:3000',
+// Configure CORS
+const  corsOptions = {
+    origin: true,
     credentials: true, // Allow credentials (cookies)
-  }
-} else {
-  // Configure CORS
-  corsOptions = {
-    origin: 'https://stockify-smoky.vercel.app',
-    credentials: true, // Allow credentials (cookies)
-  }
 }
 
 app.use(cors(corsOptions))
