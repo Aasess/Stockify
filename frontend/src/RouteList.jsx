@@ -8,6 +8,7 @@ import Dashboard from './components/Dashboard'
 import UserLogin from './components/UserLogin'
 import UserRegistration from './components/UserRegistration'
 import UserForgetPassword from './components/UserForgetPassword'
+import UserResetPassword from './components/UserResetPassword'
 
 const RouteList = () => {
   return (
@@ -17,6 +18,11 @@ const RouteList = () => {
         <Route path="/login" exact element={<UserLogin />} />
         <Route path="/register" exact element={<UserRegistration />} />
         <Route path="/forget-password" exact element={<UserForgetPassword />} />
+        <Route
+          path="/reset-password/:id"
+          exact
+          element={<UserResetPassword />}
+        />
         <Route path="/" element={<Navigate to="/dashboard" />} />
       </Routes>
     </Suspense>
