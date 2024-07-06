@@ -76,6 +76,7 @@ const UserLogin = () => {
                     value={formData.password}
                     onChange={handleChange}
                     required
+                    autoComplete="off"
                   />
                 </Form.Group>
 

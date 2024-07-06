@@ -13,9 +13,13 @@ import {
   NavDropdown,
 } from 'react-bootstrap'
 
+//ROUTER-DOM
+import { useNavigate } from 'react-router-dom'
+
 //API
 import CategoryAction from '../../api/category/action'
 import VendorAction from '../../api/vendor/action'
+import UserAction from '../../api/user/action'
 
 const Dashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -28,6 +32,18 @@ const Dashboard = () => {
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen)
   }
+
+  const navigate = useNavigate()
+
+  const checkIfUserIsLoggedInOrNot = async () => {
+    try {
+      const response = await UserAction.userDetails()
+      return response;
+    } catch (error) {
+      return navigate('/login')
+    }
+  }
+
 
   const doughnutData = {
     labels: [
@@ -137,8 +153,12 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
-    findTotalNumberOfCategories()
-    findTotalNumberOfVendors()
+    checkIfUserIsLoggedInOrNot().then((res)=>{
+        if(res) {
+            findTotalNumberOfCategories()
+            findTotalNumberOfVendors()
+        }
+    })
   }, [])
 
   return (
