@@ -5,6 +5,6 @@ export const authMiddleware = (req, res, next) => {
   } else {
     res
       .status(401)
-      .json({ status: 'failed', message: 'Access denied. Please log in.' })
+      .send({ status: 'failed', message: 'Access denied. Please log in.' })
   }
 }

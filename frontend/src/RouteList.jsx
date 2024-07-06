@@ -1,18 +1,33 @@
-import React, { Suspense, lazy } from 'react'
+import React, { Suspense, lazy, useEffect } from 'react'
 
 //ROUTER-DOM
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 
-
+//API
+import UserAction from './api/user/action'
 
 //COMPONENTS
 import UserLogin from './components/UserLogin'
 import UserRegistration from './components/UserRegistration'
 import UserForgetPassword from './components/UserForgetPassword'
 import UserResetPassword from './components/UserResetPassword'
-const Dashboard = lazy(()=> import("./scenes/dashboard"));
+const Dashboard = lazy(() => import('./scenes/dashboard'))
 
 const RouteList = () => {
+  const navigate = useNavigate()
+
+  const checkIfUserIsLoggedInOrNot = async () => {
+    try {
+      await UserAction.userDetails()
+    } catch (error) {
+      navigate('/login')
+    }
+  }
+
+  useEffect(() => {
+    checkIfUserIsLoggedInOrNot()
+  }, [])
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
