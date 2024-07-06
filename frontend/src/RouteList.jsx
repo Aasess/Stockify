@@ -3,12 +3,14 @@ import React, { Suspense, lazy } from 'react'
 //ROUTER-DOM
 import { Navigate, Route, Routes } from 'react-router-dom'
 
+
+
 //COMPONENTS
-import Dashboard from './components/Dashboard'
 import UserLogin from './components/UserLogin'
 import UserRegistration from './components/UserRegistration'
 import UserForgetPassword from './components/UserForgetPassword'
 import UserResetPassword from './components/UserResetPassword'
+const Dashboard = lazy(()=> import("./scenes/dashboard"));
 
 const RouteList = () => {
   return (
