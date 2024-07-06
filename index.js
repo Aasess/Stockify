@@ -45,7 +45,7 @@ app.get('/', (req, res) => {
 //LOAD ROUTES
 app.use('/api/user', UserRoutes)
 app.use('/api/category', CategoryRoutes)
-app.use('api/vendor', VendorRoutes)
+app.use('/api/vendor', VendorRoutes)
 
 const listeningPort = process.env.PORT || 3050
 

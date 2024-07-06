@@ -9,10 +9,10 @@ const router = express.Router()
 router.use(authMiddleware)
 
 //PROTECTED ROUTES
-router.get('/categories', CategoryController.findAllCategory)
-router.post('/categories', CategoryController.createCategory)
-router.get('/categories/count', CategoryController.findCountOfAllCategories)
-router.get('/categories/:id', CategoryController.findCategoryById)
-router.put('/categories/:id', CategoryController.updateCategoryById)
+router.get('/', CategoryController.findAllCategory)
+router.post('/', CategoryController.createCategory)
+router.get('/count', CategoryController.findCountOfAllCategories)
+router.get('/:id', CategoryController.findCategoryById)
+router.put('/:id', CategoryController.updateCategoryById)
 
 export default router

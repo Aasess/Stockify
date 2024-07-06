@@ -9,10 +9,10 @@ const router = express.Router()
 router.use(authMiddleware)
 
 //PROTECTED ROUTES
-router.get('/vendor', VendorController.findAllVendor)
-router.post('/vendor', VendorController.createVendor)
-router.get('/vendor/count', VendorController.findCountOfAllCategories)
-router.get('/vendor/:id', VendorController.findVendorById)
-router.put('/vendor/:id', VendorController.updateVendorById)
+router.get('/', VendorController.findAllVendor)
+router.post('/', VendorController.createVendor)
+router.get('/count', VendorController.findCountOfAllCategories)
+router.get('/:id', VendorController.findVendorById)
+router.put('/:id', VendorController.updateVendorById)
 
 export default router
