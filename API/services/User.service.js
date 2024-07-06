@@ -52,6 +52,18 @@ class UserServices {
       )
     })
   }
+
+  static updatePassword(id, password) {
+    const sql = 'UPDATE user SET password=? WHERE id=?'
+    return new Promise((resolve, reject) => {
+      connection.query(sql, [password, id], (error, result) => {
+        if (error) {
+          return reject(error)
+        }
+        resolve(result)
+      })
+    })
+  }
 }
 
 export default UserServices
