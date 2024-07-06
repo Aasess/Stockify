@@ -1,7 +1,13 @@
 import express from 'express'
 import { UserController } from '../controllers/index.js'
 
+//middleware
+import { authMiddleware } from '../middlewares/authMiddleware.js'
+
 const router = express.Router()
+
+// Route level middleware - to Protect routes
+router.use('/change-password', authMiddleware)
 
 //PUBLIC ROUTES
 router.post('/register', UserController.userRegistration)
