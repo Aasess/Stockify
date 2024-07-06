@@ -5,7 +5,7 @@ import dotenv from 'dotenv'
 import { connectDB } from './API/config/db.config.js'
 
 //ROUTES
-import { CategoryRoutes, UserRoutes } from './API/routes/index.js'
+import { CategoryRoutes, UserRoutes, VendorRoutes } from './API/routes/index.js'
 import session from 'express-session'
 
 //CORS
@@ -45,6 +45,7 @@ app.get('/', (req, res) => {
 //LOAD ROUTES
 app.use('/api/user', UserRoutes)
 app.use('/api/category', CategoryRoutes)
+app.use('api/vendor', VendorRoutes)
 
 const listeningPort = process.env.PORT || 3050
 
