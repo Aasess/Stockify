@@ -17,6 +17,7 @@ const app = express()
 
 let corsOptions = {}
 
+console.log(process.env.NODE_ENV)
 if (process.env.NODE_ENV === 'development') {
   // Configure CORS
   corsOptions = {
@@ -39,7 +40,7 @@ app.use(
     secret: process.env.secret_key,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true },
+    cookie: { secure: false },
   })
 )
 app.use(express.urlencoded({ extended: false }))
