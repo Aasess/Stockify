@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Form,Button,Card,Container,Row,Col} from 'react-bootstrap';
+import { Form, Button, Card, Container, Row, Col, Alert } from 'react-bootstrap'
 
 //API
 import UserAction from '../api/user/action'
@@ -7,11 +7,15 @@ import UserAction from '../api/user/action'
 //ROUTER-DOM
 import { Link, useNavigate } from 'react-router-dom'
 
+//HELPERS
+import { verifyStatus } from '../helpers'
+
 const UserLogin = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
   })
+  const [error, setError] = useState('')
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -26,11 +30,12 @@ const UserLogin = () => {
     e.preventDefault()
     try {
       const result = await UserAction.userLogin(formData)
-      if (result) {
+      if (verifyStatus(result.status)) {
         navigate('/dashboard') // Redirect to a dashboard after successful login
       }
+      throw result.message
     } catch (error) {
-      console.error('There was an error logging in the user!', error)
+      setError(error || 'Failed to login user')
     }
   }
 
@@ -73,9 +78,15 @@ const UserLogin = () => {
                     required
                   />
                 </Form.Group>
+
                 <Button type="submit" className="btn btn-primary w-100">
                   Login
                 </Button>
+                {error && (
+                  <Alert variant="danger" className="mt-3">
+                    {error}
+                  </Alert>
+                )}
               </Form>
               <div className="mt-3 text-center">
                 <Link to="/register">Don't have an account? Register here</Link>
@@ -90,6 +101,6 @@ const UserLogin = () => {
       </Row>
     </Container>
   )
-};
+}
 
 export default UserLogin
