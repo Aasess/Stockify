@@ -15,10 +15,21 @@ dotenv.config()
 
 const app = express()
 
-// Configure CORS
-const  corsOptions = {
-    origin: true,
+let corsOptions = {}
+
+console.log(process.env.NODE_ENV === 'development')
+if (process.env.NODE_ENV === 'development') {
+  // Configure CORS
+  corsOptions = {
+    origin: 'http://localhost:3000',
     credentials: true, // Allow credentials (cookies)
+  }
+} else {
+  // Configure CORS
+  corsOptions = {
+    origin: 'https://stockify-smoky.vercel.app',
+    credentials: true, // Allow credentials (cookies)
+  }
 }
 
 app.use(cors(corsOptions))
@@ -29,7 +40,11 @@ app.use(
     secret: process.env.secret_key,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true },
+    cookie: {
+      secure: process.env.NODE_ENV === 'development' ? false : true,
+      httpOnly: true, // ensures the cookie is sent only over HTTP(S), not client JavaScript, helps protect against cross-site scripting attacks
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // necessary to allow cross-origin requests in production
+    },
   })
 )
 app.use(express.urlencoded({ extended: false }))
