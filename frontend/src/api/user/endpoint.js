@@ -5,4 +5,5 @@ const baseURL = {
 export const UserEndPoint = {
   register: `${baseURL.user}/register`,
   login: `${baseURL.user}/login`,
+  resetPassword: `${baseURL.user}/send-reset-password-email`,
 }

@@ -27,6 +27,17 @@ class UserAction {
       throw error
     }
   }
+
+  static async userResetPassword(formData) {
+    try {
+      const response = await axios.post(UserEndPoint.resetPassword, {
+        email: formData.email,
+      })
+      return response.data
+    } catch (error) {
+      throw error
+    }
+  }
 }
 
 export default UserAction

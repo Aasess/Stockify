@@ -80,6 +80,10 @@ const UserLogin = () => {
               <div className="mt-3 text-center">
                 <Link to="/register">Don't have an account? Register here</Link>
               </div>
+
+              <div className="mt-3 text-center">
+                <Link to="/forget-password">Forget Password?</Link>
+              </div>
             </Card.Body>
           </Card>
         </Col>

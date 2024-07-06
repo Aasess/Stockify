@@ -1,7 +1,9 @@
 import bcrypt from 'bcrypt'
 import { UserServices } from '../services/index.js'
 import transporter from '../config/emailConfig.js'
+import dotenv from 'dotenv'
 
+dotenv.config()
 class UserController {
   static userRegistration = async (req, res) => {
     try {
@@ -86,20 +88,33 @@ class UserController {
   static sendPasswordResetEmail = async (req, res) => {
     try {
       const { email } = req.body
-
       if (email) {
         //find the user from DB
         const foundUser = await UserServices.findByEmail(email)
+
         if (foundUser) {
           //create link to send as email for user to reset the password
-          const link = `http://localhost:8000/api/user/reset-password/${foundUser._id}`
+          const link = `http://localhost:3000/api/user/reset-password/${foundUser.id}`
 
           //send the link as email
           await transporter.sendMail({
             from: process.env.EMAIL_FROM,
             to: foundUser.email,
             subject: 'Password Reset Link',
-            html: `<a href=${link}>Click to reset password</a>`,
+            html: `
+            <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+              <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+                <h2 style="color: #4CAF50; text-align: center;">Password Reset Request</h2>
+                <p>Hi ${foundUser.username || 'User'},</p>
+                <p>We received a request to reset your password. Please click the button below to reset your password:</p>
+                <div style="text-align: center; margin: 20px 0;">
+                  <a href="${link}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a>
+                </div>
+                <p>If you did not request a password reset, please ignore this email. This link will expire in 30 minutes.</p>
+                <p>Thanks,<br>Stockify Team</p>
+              </div>
+            </div>
+          `,
           })
 
           //successful json msg
