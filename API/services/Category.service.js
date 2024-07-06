@@ -1,4 +1,4 @@
-import { connection } from '../config/db.config'
+import { connection } from '../config/db.config.js'
 
 class CategoryServices {
   static findAll() {
