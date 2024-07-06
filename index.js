@@ -39,7 +39,7 @@ app.use(
     secret: process.env.secret_key,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false },
+    cookie: { secure: true },
   })
 )
 app.use(express.urlencoded({ extended: false }))
