@@ -14,5 +14,6 @@ router.post('/', VendorController.createVendor)
 router.get('/count', VendorController.findCountOfAllCategories)
 router.get('/:id', VendorController.findVendorById)
 router.put('/:id', VendorController.updateVendorById)
+router.delete('/:id', VendorController.deleteVendorById)
 
 export default router
