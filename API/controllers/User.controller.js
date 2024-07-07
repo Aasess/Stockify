@@ -7,7 +7,6 @@ dotenv.config()
 class UserController {
   static isUserLoggedIn = async (req, res) => {
     try {
-      console.log(req.params)
       const foundUser = await UserServices.findById(req.params.id)
       if (foundUser) {
         return res.status(201).send({ status: 'success', detail: foundUser })
@@ -59,11 +58,13 @@ class UserController {
       if (foundUser) {
         const samePassword = await bcrypt.compare(password, foundUser.password)
         if (samePassword) {
+          const { id, username } = foundUser
           //save to session
           req.session.userId = foundUser.id
           res.status(201).send({
             status: 'success',
             message: 'Login successful',
+            data: { id, username },
           })
         } else {
           throw 'Username or password not match'
