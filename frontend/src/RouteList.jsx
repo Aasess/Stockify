@@ -8,6 +8,8 @@ import UserLogin from './components/UserLogin'
 import UserRegistration from './components/UserRegistration'
 import UserForgetPassword from './components/UserForgetPassword'
 import UserResetPassword from './components/UserResetPassword'
+import Category from './components/Category'
+import Vendor from './components/Vendor'
 const Dashboard = lazy(() => import('./scenes/dashboard'))
 
 const RouteList = () => {
@@ -24,6 +26,8 @@ const RouteList = () => {
           element={<UserResetPassword />}
         />
         <Route path="/" element={<Navigate to="/dashboard" />} />
+        <Route path="/category" exact element={<Category />} />
+        <Route path="/vendor" exact element={<Vendor />} />
       </Routes>
     </Suspense>
   )

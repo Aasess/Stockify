@@ -52,6 +52,17 @@ class VendorAction {
       throw error
     }
   }
+
+static async deleteVendorById(id) {
+  try {
+    const response = await apiClient.delete(
+      VendorEndPoint.vendorById.replace('id', id)
+    );
+    return response.data;
+  } catch (error) {
+    throw error
+  }
+}
 }
 
 export default VendorAction
