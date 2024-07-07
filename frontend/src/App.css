@@ -5,32 +5,47 @@ body {
 }
 
 /* Navbar Styles */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.navbar-custom {
+  background-color: #343a40;
   padding: 10px 20px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1000;
 }
 
-.navbar-custom {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.navbar-custom .navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.navbar-custom .form-control {
+  width: 200px;
+}
+
+.navbar-custom .btn-outline-light {
+  margin-left: 10px;
 }
 
 .navbar-custom .nav-icon {
+  position: relative;
+}
+
+.navbar-custom .fa-bell {
+  font-size: 1.2rem;
   color: #ffffff;
-  margin-left: 15px;
-  font-size: 1.5rem;
 }
 
-.navbar-custom .nav-icon:hover {
-  color: #f8f9fa;
+.navbar-custom .dropdown-menu {
+  background-color: #343a40;
+  border: none;
 }
 
-.navbar-custom .dropdown-menu-right {
-  right: 0;
-  left: auto;
+.navbar-custom .dropdown-item {
+  color: #ffffff;
+}
+
+.navbar-custom .dropdown-item:hover {
+  background-color: #495057;
 }
 
 /* Company Logo */
@@ -139,4 +154,25 @@ body {
 .summary-card p {
   font-size: 1.5rem;
   color: #007bff;
+}
+
+/* Sliding Menu */
+.slide-in-menu {
+  position: fixed;
+  left: -350px;
+  width: 350px;
+  height: 100%;
+  background: #343a40;
+  transition: left 0.5s ease;
+  overflow-x: hidden;
+  z-index: 999;
+}
+
+.slide-in-menu.show {
+  left: 0;
+}
+
+.slide-in-menu .nav-link {
+  color: white;
+  padding: 15px;
 }
