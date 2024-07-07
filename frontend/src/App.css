@@ -8,6 +8,8 @@ body {
 .navbar-custom {
   background-color: #343a40;
   padding: 10px 20px;
+  position: relative;
+  z-index: 1000;
 }
 
 .navbar-custom .navbar-brand {
@@ -45,6 +47,7 @@ body {
 .navbar-custom .dropdown-item:hover {
   background-color: #495057;
 }
+
 /* Company Logo */
 .company h2 {
   margin: 0;
@@ -151,4 +154,25 @@ body {
 .summary-card p {
   font-size: 1.5rem;
   color: #007bff;
+}
+
+/* Sliding Menu */
+.slide-in-menu {
+  position: fixed;
+  left: -350px;
+  width: 350px;
+  height: 100%;
+  background: #343a40;
+  transition: left 0.5s ease;
+  overflow-x: hidden;
+  z-index: 999;
+}
+
+.slide-in-menu.show {
+  left: 0;
+}
+
+.slide-in-menu .nav-link {
+  color: white;
+  padding: 15px;
 }
