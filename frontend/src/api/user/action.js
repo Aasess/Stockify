@@ -23,9 +23,10 @@ class UserAction {
         username: formData.username,
         password: formData.password,
       })
+
       // Save to localStorage
-      localStorage.setItem('userId', response.data.id)
-      localStorage.setItem('username', response.data.username)
+      localStorage.setItem('userId', response.data.data.id)
+      localStorage.setItem('username', response.data.data.username)
 
       return response.data
     } catch (error) {
