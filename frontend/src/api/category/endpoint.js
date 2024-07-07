@@ -7,3 +7,4 @@ export const CategoryEndPoint = {
   count: `${baseURL.category}/count`,
   categoryById: `${baseURL.category}/id`,
 }
+  

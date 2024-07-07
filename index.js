@@ -43,7 +43,7 @@ app.use(
     cookie: {
       secure: process.env.NODE_ENV === 'development' ? false : true,
       httpOnly: true, // ensures the cookie is sent only over HTTP(S), not client JavaScript, helps protect against cross-site scripting attacks
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // necessary to allow cross-origin requests in production
+      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'lax', // necessary to allow cross-origin requests in production
     },
   })
 )

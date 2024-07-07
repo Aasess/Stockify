@@ -54,7 +54,9 @@ class UserAction {
 
   static async userDetails() {
     try {
-      const response = await axios.get(UserEndPoint.userDetail)
+      const response = await axios.get(UserEndPoint.userDetail, {
+        withCredentials: true, // Ensure credentials are included
+      })
       return response.data
     } catch (error) {
       throw error

@@ -6,7 +6,9 @@ axios.defaults.withCredentials = true
 class CategoryAction {
   static async findNumberOfCategory() {
     try {
-      const response = await axios.get(CategoryEndPoint.count)
+      const response = await axios.get(CategoryEndPoint.count, {
+        withCredentials: true, // Ensure credentials are included
+      })
       return response.data
     } catch (error) {
       throw error
