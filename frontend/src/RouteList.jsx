@@ -4,9 +4,11 @@ import React, { Suspense, lazy } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 //COMPONENTS
-import Dashboard from './components/Dashboard'
 import UserLogin from './components/UserLogin'
 import UserRegistration from './components/UserRegistration'
+import UserForgetPassword from './components/UserForgetPassword'
+import UserResetPassword from './components/UserResetPassword'
+const Dashboard = lazy(() => import('./scenes/dashboard'))
 
 const RouteList = () => {
   return (
@@ -14,7 +16,13 @@ const RouteList = () => {
       <Routes>
         <Route path="/dashboard" exact element={<Dashboard />} />
         <Route path="/login" exact element={<UserLogin />} />
-        <Route path="/signup" exact element={<UserRegistration />} />
+        <Route path="/register" exact element={<UserRegistration />} />
+        <Route path="/forget-password" exact element={<UserForgetPassword />} />
+        <Route
+          path="/reset-password/:id"
+          exact
+          element={<UserResetPassword />}
+        />
         <Route path="/" element={<Navigate to="/dashboard" />} />
       </Routes>
     </Suspense>
