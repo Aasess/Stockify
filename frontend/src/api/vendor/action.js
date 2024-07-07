@@ -1,11 +1,11 @@
 import axios from 'axios'
 import { VendorEndPoint } from './endpoint'
+import apiClient from '../apiClient'
 
-axios.defaults.withCredentials = true
 class VendorAction {
   static async findNumberOfVendor() {
     try {
-      const response = await axios.get(VendorEndPoint.count)
+      const response = await apiClient.get(VendorEndPoint.count)
       return response.data
     } catch (error) {
       throw error
@@ -14,7 +14,7 @@ class VendorAction {
 
   static async findAllVendor() {
     try {
-      const response = await axios.get(VendorEndPoint.vendor)
+      const response = await apiClient.get(VendorEndPoint.vendor)
       return response.data
     } catch (error) {
       throw error
@@ -23,7 +23,7 @@ class VendorAction {
 
   static async findVendorById(id) {
     try {
-      const response = await axios.get(
+      const response = await apiClient.get(
         VendorEndPoint.vendorById.replace('id', id)
       )
       return response.data
@@ -34,7 +34,7 @@ class VendorAction {
 
   static async createNewVendor(formData) {
     try {
-      const response = await axios.post(VendorEndPoint.vendor, formData)
+      const response = await apiClient.post(VendorEndPoint.vendor, formData)
       return response.data
     } catch (error) {
       throw error
@@ -43,7 +43,7 @@ class VendorAction {
 
   static async updateVendorById(id, formData) {
     try {
-      const response = await axios.put(
+      const response = await apiClient.put(
         VendorEndPoint.vendorById.replace('id', id),
         formData
       )

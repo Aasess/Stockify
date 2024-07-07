@@ -14,7 +14,7 @@ class CategoryServices {
   }
 
   static findCountOfAll() {
-    const sql = 'SELECT COUNT(*) FROM category'
+    const sql = 'SELECT COUNT(*) AS Count FROM category'
     return new Promise((resolve, reject) => {
       connection.query(sql, (error, result) => {
         if (error) {

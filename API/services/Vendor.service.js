@@ -14,7 +14,7 @@ class VendorServices {
   }
 
   static findCountOfAll() {
-    const sql = 'SELECT COUNT(*) FROM vendor'
+    const sql = 'SELECT COUNT(*) AS Count FROM vendor'
     return new Promise((resolve, reject) => {
       connection.query(sql, (error, result) => {
         if (error) {

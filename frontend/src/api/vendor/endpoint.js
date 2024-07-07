@@ -1,5 +1,5 @@
 const baseURL = {
-  vendor: 'https://stockify-y4e2.onrender.com/api/vendor',
+  vendor: '/api/vendor',
 }
 
 export const VendorEndPoint = {

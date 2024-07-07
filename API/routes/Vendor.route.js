@@ -2,11 +2,11 @@ import express from 'express'
 import { VendorController } from '../controllers/index.js'
 
 //middleware
-import { authMiddleware } from '../middlewares/authMiddleware.js'
+// import { authMiddleware } from '../middlewares/authMiddleware.js'
 
 const router = express.Router()
 
-router.use(authMiddleware)
+// router.use(authMiddleware)
 
 //PROTECTED ROUTES
 router.get('/', VendorController.findAllVendor)

@@ -7,7 +7,8 @@ dotenv.config()
 class UserController {
   static isUserLoggedIn = async (req, res) => {
     try {
-      const foundUser = await UserServices.findById(req.userId)
+      console.log(req.params)
+      const foundUser = await UserServices.findById(req.params.id)
       if (foundUser) {
         return res.status(201).send({ status: 'success', detail: foundUser })
       }
