@@ -20,7 +20,7 @@ class CategoryServices {
         if (error) {
           return reject(error)
         }
-        resolve(result)
+        resolve(result?.[0])
       })
     })
   }

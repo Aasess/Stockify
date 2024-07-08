@@ -8,7 +8,7 @@ class CategoryAction {
       const response = await apiClient.get(CategoryEndPoint.count, {
         withCredentials: true, // Ensure credentials are included
       })
-      return response.data
+      return response.data?.data
     } catch (error) {
       throw error
     }

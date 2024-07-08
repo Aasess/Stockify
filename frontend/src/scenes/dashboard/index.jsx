@@ -127,10 +127,24 @@ const Dashboard = () => {
 
   const findTotalNumberOfCategories = async () => {
     const result = await CategoryAction.findNumberOfCategory()
+
+    setState((prev) => {
+      return {
+        ...prev,
+        numCategories: result?.Count,
+      }
+    })
   }
 
   const findTotalNumberOfVendors = async () => {
     const result = await VendorAction.findNumberOfVendor()
+
+    setState((prev) => {
+      return {
+        ...prev,
+        numVender: result?.Count,
+      }
+    })
   }
 
   useEffect(() => {
@@ -173,11 +187,11 @@ const Dashboard = () => {
         <div className="col-12 d-flex justify-content-between">
           <div className="card p-3 m-2 summary-card" style={{ width: '18rem' }}>
             <h5 className="card-title">Number of Vendors</h5>
-            <p className="card-text">0</p>
+            <p className="card-text">{state.numVender}</p>
           </div>
           <div className="card p-3 m-2 summary-card" style={{ width: '18rem' }}>
             <h5 className="card-title">Number of Category</h5>
-            <p className="card-text">0</p>
+            <p className="card-text">{state.numCategories}</p>
           </div>
           <div className="card p-3 m-2 summary-card" style={{ width: '18rem' }}>
             <h5 className="card-title">Number of Product 1</h5>
