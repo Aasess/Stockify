@@ -60,6 +60,19 @@ class CategoryServices {
       })
     })
   }
+
+  static deleteCategoryById(id) {
+    const sql = 'DELETE FROM category WHERE id = ?'
+
+    return new Promise((resolve, reject) => {
+      connection.query(sql, [id], (error, result) => {
+        if (error) {
+          return reject(error)
+        }
+        resolve(result)
+      })
+    })
+  }
 }
 
 export default CategoryServices

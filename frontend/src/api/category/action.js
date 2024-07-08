@@ -17,7 +17,7 @@ class CategoryAction {
   static async findAllCategory() {
     try {
       const response = await apiClient.get(CategoryEndPoint.category)
-      return response.data
+      return response.data?.data
     } catch (error) {
       throw error
     }
@@ -50,6 +50,18 @@ class CategoryAction {
         formData
       )
       return response.data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  static async deleteCategoryById(id) {
+    try {
+      console.log(id)
+      const response = await apiClient.delete(
+        CategoryEndPoint.categoryById.replace('id', id)
+      );
+      return response.data;
     } catch (error) {
       throw error
     }

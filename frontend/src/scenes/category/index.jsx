@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Button,
   Card,
@@ -10,21 +10,11 @@ import {
   Modal,
   Form,
 } from 'react-bootstrap'
+import CategoryAction from '../../api/category/action'
 import NavbarComponent from '../../components/NavbarComponent'
 
 const Category = () => {
-  const [categories, setCategories] = useState([
-    { id: 1, name: 'Category 1' },
-    { id: 2, name: 'Category 2' },
-    { id: 3, name: 'Category 3' },
-    { id: 4, name: 'Category 4' },
-    { id: 5, name: 'Category 5' },
-    { id: 6, name: 'Category 6' },
-    { id: 7, name: 'Category 7' },
-    { id: 8, name: 'Category 8' },
-    { id: 9, name: 'Category 9' },
-    { id: 10, name: 'Category 10' },
-  ])
+  const [categories, setCategories] = useState([])
 
   const [currentPage, setCurrentPage] = useState(1)
   const categoriesPerPage = 5
@@ -33,6 +23,15 @@ const Category = () => {
   const [editCategory, setEditCategory] = useState(null)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [deleteCategoryId, setDeleteCategoryId] = useState(null)
+
+  const fetchCategories = async () => {
+    try {
+      const data = await CategoryAction.findAllCategory()
+      setCategories(data)
+    } catch (error) {
+      console.error('There was an error fetching the vendors!', error)
+    }
+  }
 
   const handleCreate = () => {
     setShowModal(true)
@@ -45,26 +44,27 @@ const Category = () => {
     setShowDeleteModal(false)
   }
 
-  const handleSave = () => {
-    if (editCategory) {
-      setCategories(
-        categories.map((cat) =>
-          cat.id === editCategory.id ? { ...cat, name: newCategoryName } : cat
-        )
-      )
-    } else {
-      const newCategory = {
-        id: categories.length + 1,
-        name: newCategoryName,
+  const handleSave = async () => {
+    try {
+      const formData = {
+        categoryName: newCategoryName,
       }
-      setCategories([...categories, newCategory])
+
+      if (editCategory) {
+        await CategoryAction.updateCategoryById(editCategory.id, formData)
+      } else {
+        await CategoryAction.createNewCategory(formData)
+      }
+      fetchCategories()
+      handleClose()
+    } catch (error) {
+      console.error('There was an error saving the vendor!', error)
     }
-    handleClose()
   }
 
   const handleEdit = (category) => {
     setEditCategory(category)
-    setNewCategoryName(category.name)
+    setNewCategoryName(category.category_name)
     setShowModal(true)
   }
 
@@ -73,9 +73,14 @@ const Category = () => {
     setShowDeleteModal(true)
   }
 
-  const confirmDelete = () => {
-    setCategories(categories.filter((cat) => cat.id !== deleteCategoryId))
-    handleClose()
+  const confirmDelete = async () => {
+    try {
+      await CategoryAction.deleteCategoryById(deleteCategoryId)
+      fetchCategories()
+      handleClose()
+    } catch (error) {
+      console.error('There was an error deleting the vendor!', error)
+    }
   }
 
   // Get current categories
@@ -116,6 +121,10 @@ const Category = () => {
     pageNumbers.length
   )
 
+  useEffect(() => {
+    fetchCategories()
+  }, [])
+
   return (
     <div>
       <NavbarComponent />
@@ -147,7 +156,7 @@ const Category = () => {
                     {currentCategories.map((category) => (
                       <tr key={category.id}>
                         <td>{category.id}</td>
-                        <td>{category.name}</td>
+                        <td>{category.category_name}</td>
                         <td>
                           <Button
                             variant="warning"
