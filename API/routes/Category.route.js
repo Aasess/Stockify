@@ -14,5 +14,6 @@ router.post('/', CategoryController.createCategory)
 router.get('/count', CategoryController.findCountOfAllCategories)
 router.get('/:id', CategoryController.findCategoryById)
 router.put('/:id', CategoryController.updateCategoryById)
+router.delete('/:id', CategoryController.deleteCategoryById)
 
 export default router

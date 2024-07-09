@@ -71,6 +71,23 @@ class CategoryController {
       res.status(400).send({ status: 'failed', message: error.message })
     }
   }
+
+  static deleteCategoryById = async (req, res) => {
+    try {
+      const { id } = req.params
+
+      const result = await CategoryServices.deleteCategoryById(id)
+      if (result.affectedRows === 0) {
+        res
+          .status(404)
+          .send({ status: 'failed', message: 'Category not found' })
+      } else {
+        res.status(200).send({ status: 'success', message: 'Category deleted' })
+      }
+    } catch (error) {
+      res.status(400).send({ status: 'failed', message: error.message })
+    }
+  }
 }
 
 export default CategoryController

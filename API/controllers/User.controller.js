@@ -108,7 +108,11 @@ class UserController {
 
         if (foundUser) {
           //create link to send as email for user to reset the password
-          const link = `https://stockify-smoky.vercel.app/reset-password/${foundUser.id}`
+          const link = `${
+            process.env.NODE_ENV === 'development'
+              ? 'http://localhost:3000'
+              : 'https://stockify-smoky.vercel.app'
+          }/reset-password/${foundUser.id}`
 
           //send the link as email
           await transporter.sendMail({

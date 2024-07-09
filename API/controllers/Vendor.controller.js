@@ -3,13 +3,13 @@ import { VendorServices } from '../services/index.js'
 class VendorController {
   static createVendor = async (req, res) => {
     try {
-      const { vendorName } = req.body
+      const { name, address, phone } = req.body
 
-      if (!vendorName) {
+      if (!name || !address || !phone) {
         throw new Error('All fields are required')
       }
 
-      await VendorServices.createVendor(vendorName)
+      await VendorServices.createVendor(name, address, phone)
       res.status(201).send({ status: 'success', message: 'New vendor added' })
     } catch (error) {
       res.status(400).send({ status: 'failed', message: error.message })
@@ -51,17 +51,34 @@ class VendorController {
   static updateVendorById = async (req, res) => {
     try {
       const { id } = req.params
-      const { vendorName } = req.body
+      const { name, address, phone } = req.body
 
-      if (!vendorName) {
+      if (!name || !address || !phone) {
         throw new Error('All fields are required')
       }
 
-      const result = await VendorServices.updateVendorById(id, vendorName)
+      const updateData = { name, address, phone }
+
+      const result = await VendorServices.updateVendorById(id, updateData)
       if (result.affectedRows === 0) {
         res.status(404).send({ status: 'failed', message: 'Vendor not found' })
       } else {
         res.status(200).send({ status: 'success', message: 'Vendor updated' })
+      }
+    } catch (error) {
+      res.status(400).send({ status: 'failed', message: error.message })
+    }
+  }
+
+  static deleteVendorById = async (req, res) => {
+    try {
+      const { id } = req.params
+
+      const result = await VendorServices.deleteVendorById(id)
+      if (result.affectedRows === 0) {
+        res.status(404).send({ status: 'failed', message: 'Vendor not found' })
+      } else {
+        res.status(200).send({ status: 'success', message: 'Vendor deleted' })
       }
     } catch (error) {
       res.status(400).send({ status: 'failed', message: error.message })

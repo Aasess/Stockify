@@ -20,7 +20,7 @@ class CategoryServices {
         if (error) {
           return reject(error)
         }
-        resolve(result)
+        resolve(result?.[0])
       })
     })
   }
@@ -53,6 +53,19 @@ class CategoryServices {
     const sql = 'UPDATE category SET category_name = ? WHERE id = ?'
     return new Promise((resolve, reject) => {
       connection.query(sql, [category_name, id], (error, result) => {
+        if (error) {
+          return reject(error)
+        }
+        resolve(result)
+      })
+    })
+  }
+
+  static deleteCategoryById(id) {
+    const sql = 'DELETE FROM category WHERE id = ?'
+
+    return new Promise((resolve, reject) => {
+      connection.query(sql, [id], (error, result) => {
         if (error) {
           return reject(error)
         }

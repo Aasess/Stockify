@@ -6,7 +6,7 @@ class VendorAction {
   static async findNumberOfVendor() {
     try {
       const response = await apiClient.get(VendorEndPoint.count)
-      return response.data
+      return response.data?.data
     } catch (error) {
       throw error
     }
@@ -15,7 +15,7 @@ class VendorAction {
   static async findAllVendor() {
     try {
       const response = await apiClient.get(VendorEndPoint.vendor)
-      return response.data
+      return response.data?.data
     } catch (error) {
       throw error
     }

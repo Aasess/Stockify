@@ -3,55 +3,67 @@ import { Bar, Doughnut, Radar, Line } from 'react-chartjs-2';
 import 'chart.js/auto';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import {
-  Navbar,
-  Nav,
-  Form,
-  FormControl,
-  Button,
-  Container,
-} from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import CategoryAction from '../../api/category/action';
-import VendorAction from '../../api/vendor/action';
-import UserAction from '../../api/user/action';
+import { Container } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
+import CategoryAction from '../../api/category/action'
+import VendorAction from '../../api/vendor/action'
+import UserAction from '../../api/user/action'
+import NavbarComponent from '../../components/NavbarComponent'
 
 const Dashboard = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-
   const [state, setState] = useState({
     numCategories: 0,
     numVender: 0,
-  });
+  })
 
-  const handleMenuToggle = () => {
-    setMenuOpen(!menuOpen);
-  };
-
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const checkIfUserIsLoggedInOrNot = async () => {
     try {
-      const response = await UserAction.userDetails();
-      return response;
+      const response = await UserAction.userDetails()
+      return response
     } catch (error) {
-      return navigate('/login');
+      return navigate('/login')
     }
-  };
+  }
 
   const doughnutData = {
-    labels: ['Aspirin', 'Ibuprofen', 'Paracetamol', 'Amoxicillin', 'Omeprazole'],
+    labels: [
+      'Aspirin',
+      'Ibuprofen',
+      'Paracetamol',
+      'Amoxicillin',
+      'Omeprazole',
+    ],
     datasets: [
       {
         data: [5000, 3000, 4000, 2000, 3500],
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF9F40', '#B4B4B4'],
-        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF9F40', '#B4B4B4'],
+        backgroundColor: [
+          '#FF6384',
+          '#36A2EB',
+          '#FFCE56',
+          '#FF9F40',
+          '#B4B4B4',
+        ],
+        hoverBackgroundColor: [
+          '#FF6384',
+          '#36A2EB',
+          '#FFCE56',
+          '#FF9F40',
+          '#B4B4B4',
+        ],
       },
     ],
-  };
+  }
 
   const radarData = {
-    labels: ['Aspirin', 'Ibuprofen', 'Paracetamol', 'Amoxicillin', 'Omeprazole'],
+    labels: [
+      'Aspirin',
+      'Ibuprofen',
+      'Paracetamol',
+      'Amoxicillin',
+      'Omeprazole',
+    ],
     datasets: [
       {
         label: 'Average Usage',
@@ -64,7 +76,7 @@ const Dashboard = () => {
         data: [65, 59, 90, 81, 56],
       },
     ],
-  };
+  }
   const barData = {
     labels: [
       'Aspirin',
@@ -84,8 +96,8 @@ const Dashboard = () => {
         data: [5000, 3000, 4000, 2000, 3500],
       },
     ],
-  };
-  
+  }
+
   const lineData = {
     labels: ['Q1', 'Q2', 'Q3', 'Q4'],
     datasets: [
@@ -111,25 +123,38 @@ const Dashboard = () => {
         data: [10000, 15000, 12000, 17000],
       },
     ],
-  };
-  
+  }
 
   const findTotalNumberOfCategories = async () => {
     const result = await CategoryAction.findNumberOfCategory()
+
+    setState((prev) => {
+      return {
+        ...prev,
+        numCategories: result?.Count,
+      }
+    })
   }
 
   const findTotalNumberOfVendors = async () => {
     const result = await VendorAction.findNumberOfVendor()
+
+    setState((prev) => {
+      return {
+        ...prev,
+        numVender: result?.Count,
+      }
+    })
   }
 
   useEffect(() => {
     checkIfUserIsLoggedInOrNot().then((res) => {
       if (res) {
-        findTotalNumberOfCategories();
-        findTotalNumberOfVendors();
+        findTotalNumberOfCategories()
+        findTotalNumberOfVendors()
       }
-    });
-  }, []);
+    })
+  }, [])
 
   const vendorData = {
     labels: ['Vendors'],
@@ -140,7 +165,7 @@ const Dashboard = () => {
         backgroundColor: ['#36A2EB'],
       },
     ],
-  };
+  }
 
   const categoryData = {
     labels: ['Categories'],
@@ -151,100 +176,65 @@ const Dashboard = () => {
         backgroundColor: ['#FF6384'],
       },
     ],
-  };
+  }
 
   return (
     <div>
-      <Navbar bg="dark" variant="dark" expand="lg" className="navbar-custom">
-        <Container className="d-flex justify-content-between align-items-center">
-          <Button variant="dark" className="navbar-toggler-icon" onClick={handleMenuToggle}></Button>
-          <Navbar.Brand href="#home" className="mx-auto">Stockify</Navbar.Brand>
-          <Form className="d-flex ms-auto">
-            <FormControl
-              type="search"
-              placeholder="Search..."
-              className="me-2"
-              aria-label="Search"
-            />
-            <Button variant="outline-light">Search</Button>
-          </Form>
-        </Container>
-      </Navbar>
-
-      <div className={`slide-in-menu ${menuOpen ? 'show' : ''}`}>
-  <Nav className="flex-column p-4">
-  <Nav.Link href="#home">
-      <i className="fas fa-home"></i> Category
-    </Nav.Link>
-    <Nav.Link href="#link">
-      <i className="fas fa-users"></i> Vendors
-    </Nav.Link>
-    <Nav.Link href="#another">
-      <i className="fas fa-user-shield"></i> Admin Portal
-    </Nav.Link>
-    <Nav.Link href="#another">
-      <i className="fas fa-cogs"></i> Settings
-    </Nav.Link>
-  </Nav>
-</div>
-
-
-
+      <NavbarComponent />
 
       <Container className="mt-4">
-        {/* Top Summary Cards */}	
-        <div className="col-12 d-flex justify-content-between">	
-            <div className="card p-3 m-2 summary-card" style={{ width: '18rem' }}>	
-              <h5 className="card-title">Number of Vendors</h5>	
-              <p className="card-text">0</p>	
-            </div>	
-            <div className="card p-3 m-2 summary-card" style={{ width: '18rem' }}>	
-              <h5 className="card-title">Number of Category</h5>	
-              <p className="card-text">0</p>	
-            </div>	
-            <div className="card p-3 m-2 summary-card" style={{ width: '18rem' }}>	
-              <h5 className="card-title">Number of Product 1</h5>	
-              <p className="card-text">0</p>	
-            </div>	
-            <div className="card p-3 m-2 summary-card" style={{ width: '18rem' }}>	
-              <h5 className="card-title">Number of Product 2</h5>	
-              <p className="card-text">0</p>	
-            </div>	
-            <div className="card p-3 m-2 summary-card" style={{ width: '18rem' }}>	
-              <h5 className="card-title">Number of Product 3</h5>	
-              <p className="card-text">0</p>	
-            </div>	
+        {/* Top Summary Cards */}
+        <div className="col-12 d-flex justify-content-between">
+          <div className="card p-3 m-2 summary-card" style={{ width: '18rem' }}>
+            <h5 className="card-title">Number of Vendors</h5>
+            <p className="card-text">{state.numVender}</p>
           </div>
+          <div className="card p-3 m-2 summary-card" style={{ width: '18rem' }}>
+            <h5 className="card-title">Number of Category</h5>
+            <p className="card-text">{state.numCategories}</p>
+          </div>
+          <div className="card p-3 m-2 summary-card" style={{ width: '18rem' }}>
+            <h5 className="card-title">Number of Product 1</h5>
+            <p className="card-text">0</p>
+          </div>
+          <div className="card p-3 m-2 summary-card" style={{ width: '18rem' }}>
+            <h5 className="card-title">Number of Product 2</h5>
+            <p className="card-text">0</p>
+          </div>
+          <div className="card p-3 m-2 summary-card" style={{ width: '18rem' }}>
+            <h5 className="card-title">Number of Product 3</h5>
+            <p className="card-text">0</p>
+          </div>
+        </div>
         <div className="row">
           <div className="col-12">
             <div className="row">
               <div className="col-md-6 mb-4">
                 <div className="chart-card">
-                <Radar data={radarData} />
+                  <Radar data={radarData} />
                 </div>
               </div>
               <div className="col-md-6 mb-4">
                 <div className="chart-card">
-                <Doughnut data={doughnutData} />
+                  <Doughnut data={doughnutData} />
                 </div>
               </div>
               <div className="col-md-6 mb-4">
                 <div className="chart-card">
-                <Bar data={barData} />
+                  <Bar data={barData} />
                 </div>
               </div>
               <div className="col-md-6 mb-4">
                 <div className="chart-card">
-                <Line data={lineData} />
+                  <Line data={lineData} />
                 </div>
               </div>
             </div>
           </div>
         </div>
-        
       </Container>
     </div>
-  );
-};
+  )
+}
 
 export default Dashboard;
