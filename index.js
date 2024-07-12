@@ -5,7 +5,13 @@ import dotenv from 'dotenv'
 import { connectDB } from './API/config/db.config.js'
 
 //ROUTES
-import { CategoryRoutes, UserRoutes, VendorRoutes } from './API/routes/index.js'
+import {
+  CategoryRoutes,
+  UserRoutes,
+  VendorRoutes,
+  ItemRoutes,
+} from './API/routes/index.js'
+
 import session from 'express-session'
 
 //CORS
@@ -17,7 +23,6 @@ const app = express()
 
 let corsOptions = {}
 
-console.log(process.env.NODE_ENV === 'development')
 if (process.env.NODE_ENV === 'development') {
   // Configure CORS
   corsOptions = {
@@ -50,7 +55,6 @@ app.use(
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
-
 //DB CONN
 connectDB()
 
@@ -63,6 +67,7 @@ app.get('/', (req, res) => {
 app.use('/api/user', UserRoutes)
 app.use('/api/category', CategoryRoutes)
 app.use('/api/vendor', VendorRoutes)
+app.use('/api/item', ItemRoutes)
 
 const listeningPort = process.env.PORT || 3050
 
