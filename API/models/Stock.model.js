@@ -1,8 +1,8 @@
 import { connection } from '../config/db.config.js'
 
-class ItemModel {
+class StockModel {
   static findAll() {
-    const sql = 'SELECT * FROM item'
+    const sql = 'SELECT * FROM stock'
     return new Promise((resolve, reject) => {
       connection.query(sql, (error, result) => {
         if (error) {
@@ -14,7 +14,7 @@ class ItemModel {
   }
 
   static findById(id) {
-    const sql = 'SELECT * FROM item WHERE id=?'
+    const sql = 'SELECT * FROM stock WHERE id=?'
     return new Promise((resolve, reject) => {
       connection.query(sql, [id], (error, result) => {
         if (error) {
@@ -26,14 +26,14 @@ class ItemModel {
   }
 
   static create(payload) {
-    const { sku, item_name, category_id, vendor_id } = payload
+    const { item_id, price, received_quantity, created_by } = payload
 
     const sql =
-      'INSERT INTO item (sku, item_name, category_id, vendor_id) VALUES (?,?,?,?)'
+      'INSERT INTO stock (item_id, price, received_quantity, created_by) VALUES (?,?,?,?)'
     return new Promise((resolve, reject) => {
       connection.query(
         sql,
-        [sku, item_name, category_id, vendor_id],
+        [item_id, price, received_quantity, created_by],
         (error, result) => {
           if (error) {
             return reject(error)
@@ -53,7 +53,7 @@ class ItemModel {
       values.push(value)
     }
 
-    const sql = `UPDATE item SET ${fields.join(', ')} WHERE id = ?`
+    const sql = `UPDATE stock SET ${fields.join(', ')} WHERE id = ?`
     values.push(id)
 
     return new Promise((resolve, reject) => {
@@ -67,7 +67,7 @@ class ItemModel {
   }
 
   static deleteById(id) {
-    const sql = 'DELETE FROM item WHERE id = ?'
+    const sql = 'DELETE FROM stock WHERE id = ?'
 
     return new Promise((resolve, reject) => {
       connection.query(sql, [id], (error, result) => {
@@ -80,4 +80,4 @@ class ItemModel {
   }
 }
 
-export default ItemModel
+export default StockModel

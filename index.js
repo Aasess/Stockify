@@ -10,6 +10,8 @@ import {
   UserRoutes,
   VendorRoutes,
   ItemRoutes,
+  StockRoutes,
+  SaleRoutes,
 } from './API/routes/index.js'
 
 import session from 'express-session'
@@ -68,6 +70,9 @@ app.use('/api/user', UserRoutes)
 app.use('/api/category', CategoryRoutes)
 app.use('/api/vendor', VendorRoutes)
 app.use('/api/item', ItemRoutes)
+app.use('/api/stock', StockRoutes)
+app.use('/api/sale', SaleRoutes)
+
 
 const listeningPort = process.env.PORT || 3050
 
