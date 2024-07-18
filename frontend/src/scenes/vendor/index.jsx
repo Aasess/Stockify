@@ -114,7 +114,7 @@ const Vendor = () => {
                       <th>Name</th>
                       <th>Address</th>
                       <th>Phone</th>
-                      <th>Action</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
