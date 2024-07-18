@@ -66,7 +66,7 @@ class ItemController {
     try {
       const { id } = req.params
 
-      const result = await ItemServices.updateItem(id)
+      const result = await ItemServices.deleteItem(id)
       if (result.affectedRows === 0) {
         res.status(404).send({ status: 'failed', message: 'Item not found' })
       } else {

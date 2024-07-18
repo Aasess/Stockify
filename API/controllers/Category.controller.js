@@ -88,6 +88,15 @@ class CategoryController {
       res.status(400).send({ status: 'failed', message: error.message })
     }
   }
+
+  static findAllCategoryDropDown = async (req, res) => {
+    try {
+      const categories = await CategoryServices.findAllDropDown()
+      res.status(201).send({ status: 'success', data: categories })
+    } catch (error) {
+      res.status(400).send({ status: 'failed', message: error.message })
+    }
+  }
 }
 
 export default CategoryController

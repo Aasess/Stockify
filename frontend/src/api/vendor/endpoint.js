@@ -6,4 +6,5 @@ export const VendorEndPoint = {
   vendor: baseURL.vendor,
   count: `${baseURL.vendor}/count`,
   vendorById: `${baseURL.vendor}/id`,
+  dropDown: `${baseURL.vendor}/dropdown`,
 }

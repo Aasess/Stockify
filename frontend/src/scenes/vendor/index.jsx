@@ -13,7 +13,7 @@ import VendorAction from '../../api/vendor/action'
 import NavbarComponent from '../../components/NavbarComponent'
 
 const Vendor = () => {
-  const [data, setVendors] = useState([])
+  const [vendors, setVendors] = useState([])
 
   const [showModal, setShowModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -33,7 +33,7 @@ const Vendor = () => {
   const fetchVendors = async () => {
     try {
       const data = await VendorAction.findAllVendor()
-      setVendors(data)
+      setVendors(data ?? [])
     } catch (error) {
       console.error('There was an error fetching the vendors!', error)
     }
@@ -118,7 +118,7 @@ const Vendor = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data?.map((vendor) => (
+                    {vendors?.map((vendor) => (
                       <tr key={vendor.id}>
                         <td>{vendor.id}</td>
                         <td>{vendor.name}</td>

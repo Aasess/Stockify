@@ -23,6 +23,15 @@ class CategoryAction {
     }
   }
 
+  static async findAllCategoryDropDown() {
+    try {
+      const response = await apiClient.get(CategoryEndPoint.dropDown)
+      return response.data?.data
+    } catch (error) {
+      throw error
+    }
+  }
+
   static async findCategoryById(id) {
     try {
       const response = await apiClient.get(
@@ -60,8 +69,8 @@ class CategoryAction {
       console.log(id)
       const response = await apiClient.delete(
         CategoryEndPoint.categoryById.replace('id', id)
-      );
-      return response.data;
+      )
+      return response.data
     } catch (error) {
       throw error
     }

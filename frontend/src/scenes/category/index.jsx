@@ -27,9 +27,9 @@ const Category = () => {
   const fetchCategories = async () => {
     try {
       const data = await CategoryAction.findAllCategory()
-      setCategories(data)
+      setCategories(data ?? [])
     } catch (error) {
-      console.error('There was an error fetching the vendors!', error)
+      console.error('There was an error fetching the categorys!', error)
     }
   }
 
@@ -58,7 +58,7 @@ const Category = () => {
       fetchCategories()
       handleClose()
     } catch (error) {
-      console.error('There was an error saving the vendor!', error)
+      console.error('There was an error saving the category!', error)
     }
   }
 
@@ -79,7 +79,7 @@ const Category = () => {
       fetchCategories()
       handleClose()
     } catch (error) {
-      console.error('There was an error deleting the vendor!', error)
+      console.error('There was an error deleting the category!', error)
     }
   }
 

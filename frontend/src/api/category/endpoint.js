@@ -6,5 +6,6 @@ export const CategoryEndPoint = {
   category: baseURL.category,
   count: `${baseURL.category}/count`,
   categoryById: `${baseURL.category}/id`,
+  dropDown: `${baseURL.category}/dropdown`,
 }
   

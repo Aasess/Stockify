@@ -13,6 +13,18 @@ class VendorServices {
     })
   }
 
+  static findAllDropDown() {
+    const sql = 'SELECT id,name FROM vendor'
+    return new Promise((resolve, reject) => {
+      connection.query(sql, (error, result) => {
+        if (error) {
+          return reject(error)
+        }
+        resolve(result)
+      })
+    })
+  }
+
   static findCountOfAll() {
     const sql = 'SELECT COUNT(*) AS Count FROM vendor'
     return new Promise((resolve, reject) => {

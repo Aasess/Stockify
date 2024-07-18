@@ -10,6 +10,7 @@ const router = express.Router()
 
 //PROTECTED ROUTES
 router.get('/', CategoryController.findAllCategory)
+router.get('/dropdown', CategoryController.findAllCategoryDropDown)
 router.post('/', CategoryController.createCategory)
 router.get('/count', CategoryController.findCountOfAllCategories)
 router.get('/:id', CategoryController.findCategoryById)

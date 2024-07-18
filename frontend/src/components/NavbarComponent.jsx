@@ -63,7 +63,7 @@ const NavbarComponent = () => {
             <span className="ps-2 fs-5">Vendor</span>
           </Nav.Link>
           <Nav.Link as={Link} to="/item" className="d-flex align-items-center">
-            <i className="fas fa-cart-shopping"></i>
+            <i className="fa-solid fa-cart-shopping"></i>
             <span className="ps-2 fs-5">Item</span>
           </Nav.Link>
         </Nav>
