@@ -10,6 +10,7 @@ const router = express.Router()
 
 //PROTECTED ROUTES
 router.get('/', VendorController.findAllVendor)
+router.get('/dropdown', VendorController.findAllVendorsDropDown)
 router.post('/', VendorController.createVendor)
 router.get('/count', VendorController.findCountOfAllCategories)
 router.get('/:id', VendorController.findVendorById)

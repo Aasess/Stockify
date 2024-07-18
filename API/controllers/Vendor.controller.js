@@ -18,8 +18,8 @@ class VendorController {
 
   static findAllVendor = async (req, res) => {
     try {
-      const categories = await VendorServices.findAll()
-      res.status(201).send({ status: 'success', data: categories })
+      const vendors = await VendorServices.findAll()
+      res.status(201).send({ status: 'success', data: vendors })
     } catch (error) {
       res.status(400).send({ status: 'failed', message: error.message })
     }
@@ -80,6 +80,15 @@ class VendorController {
       } else {
         res.status(200).send({ status: 'success', message: 'Vendor deleted' })
       }
+    } catch (error) {
+      res.status(400).send({ status: 'failed', message: error.message })
+    }
+  }
+
+  static findAllVendorsDropDown = async (req, res) => {
+    try {
+      const vendors = await VendorServices.findAllDropDown()
+      res.status(201).send({ status: 'success', data: vendors })
     } catch (error) {
       res.status(400).send({ status: 'failed', message: error.message })
     }

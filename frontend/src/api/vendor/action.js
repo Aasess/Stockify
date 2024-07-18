@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { VendorEndPoint } from './endpoint'
 import apiClient from '../apiClient'
 
@@ -15,6 +14,15 @@ class VendorAction {
   static async findAllVendor() {
     try {
       const response = await apiClient.get(VendorEndPoint.vendor)
+      return response.data?.data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  static async findAllVendorsDropDown() {
+    try {
+      const response = await apiClient.get(VendorEndPoint.dropDown)
       return response.data?.data
     } catch (error) {
       throw error
@@ -53,16 +61,16 @@ class VendorAction {
     }
   }
 
-static async deleteVendorById(id) {
-  try {
-    const response = await apiClient.delete(
-      VendorEndPoint.vendorById.replace('id', id)
-    );
-    return response.data;
-  } catch (error) {
-    throw error
+  static async deleteVendorById(id) {
+    try {
+      const response = await apiClient.delete(
+        VendorEndPoint.vendorById.replace('id', id)
+      )
+      return response.data
+    } catch (error) {
+      throw error
+    }
   }
-}
 }
 
 export default VendorAction

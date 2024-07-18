@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-
+import { Link } from 'react-router-dom'
 import {
   Navbar,
   Nav,
@@ -42,17 +42,29 @@ const NavbarComponent = () => {
 
       <div className={`slide-in-menu ${menuOpen ? 'show' : ''}`}>
         <Nav className="flex-column p-4">
-          <Nav.Link href="/" className="d-flex align-items-center">
+          <Nav.Link as={Link} to="/" className="d-flex align-items-center">
             <i className="fas fa-home"></i>
             <span className="ps-2 fs-5">Dashboard</span>
           </Nav.Link>
-          <Nav.Link href="/category" className="d-flex align-items-center">
+          <Nav.Link
+            as={Link}
+            to="/category"
+            className="d-flex align-items-center"
+          >
             <i className="fas fa-list"></i>
             <span className="ps-2 fs-5">Category</span>
           </Nav.Link>
-          <Nav.Link href="/vendor" className="d-flex align-items-center">
+          <Nav.Link
+            as={Link}
+            to="/vendor"
+            className="d-flex align-items-center"
+          >
             <i className="fas fa-users"></i>
-            <span className="ps-2 fs-5">Vendors</span>
+            <span className="ps-2 fs-5">Vendor</span>
+          </Nav.Link>
+          <Nav.Link as={Link} to="/item" className="d-flex align-items-center">
+            <i className="fa-solid fa-cart-shopping"></i>
+            <span className="ps-2 fs-5">Item</span>
           </Nav.Link>
         </Nav>
       </div>

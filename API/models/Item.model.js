@@ -1,44 +1,20 @@
 import { connection } from '../config/db.config.js'
 
-class VendorServices {
+class ItemModel {
   static findAll() {
-    const sql = 'SELECT * FROM vendor'
+    const sql = 'SELECT * FROM item'
     return new Promise((resolve, reject) => {
       connection.query(sql, (error, result) => {
         if (error) {
           return reject(error)
         }
         resolve(result)
-      })
-    })
-  }
-
-  static findAllDropDown() {
-    const sql = 'SELECT id,name FROM vendor'
-    return new Promise((resolve, reject) => {
-      connection.query(sql, (error, result) => {
-        if (error) {
-          return reject(error)
-        }
-        resolve(result)
-      })
-    })
-  }
-
-  static findCountOfAll() {
-    const sql = 'SELECT COUNT(*) AS Count FROM vendor'
-    return new Promise((resolve, reject) => {
-      connection.query(sql, (error, result) => {
-        if (error) {
-          return reject(error)
-        }
-        resolve(result?.[0])
       })
     })
   }
 
   static findById(id) {
-    const sql = 'SELECT * FROM vendor WHERE id = ?'
+    const sql = 'SELECT * FROM item WHERE id=?'
     return new Promise((resolve, reject) => {
       connection.query(sql, [id], (error, result) => {
         if (error) {
@@ -49,19 +25,26 @@ class VendorServices {
     })
   }
 
-  static createVendor(name, address, phone) {
-    const sql = 'INSERT INTO vendor (name, address, phone) VALUES (?,?,?)'
+  static create(payload) {
+    const { sku, item_name, category_id, vendor_id } = payload
+
+    const sql =
+      'INSERT INTO item (sku, item_name, category_id, vendor_id) VALUES (?,?,?,?)'
     return new Promise((resolve, reject) => {
-      connection.query(sql, [name, address, phone], (error, result) => {
-        if (error) {
-          return reject(error)
+      connection.query(
+        sql,
+        [sku, item_name, category_id, vendor_id],
+        (error, result) => {
+          if (error) {
+            return reject(error)
+          }
+          resolve(result)
         }
-        resolve(result)
-      })
+      )
     })
   }
 
-  static updateVendorById(id, updateData) {
+  static updateById(id, updateData) {
     const fields = []
     const values = []
 
@@ -70,7 +53,7 @@ class VendorServices {
       values.push(value)
     }
 
-    const sql = `UPDATE vendor SET ${fields.join(', ')} WHERE id = ?`
+    const sql = `UPDATE item SET ${fields.join(', ')} WHERE id = ?`
     values.push(id)
 
     return new Promise((resolve, reject) => {
@@ -83,8 +66,8 @@ class VendorServices {
     })
   }
 
-  static deleteVendorById(id) {
-    const sql = 'DELETE FROM vendor WHERE id = ?'
+  static deleteById(id) {
+    const sql = 'DELETE FROM item WHERE id = ?'
 
     return new Promise((resolve, reject) => {
       connection.query(sql, [id], (error, result) => {
@@ -97,4 +80,4 @@ class VendorServices {
   }
 }
 
-export default VendorServices
+export default ItemModel

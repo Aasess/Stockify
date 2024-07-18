@@ -13,6 +13,18 @@ class CategoryServices {
     })
   }
 
+  static findAllDropDown() {
+    const sql = 'SELECT id,category_name FROM category'
+    return new Promise((resolve, reject) => {
+      connection.query(sql, (error, result) => {
+        if (error) {
+          return reject(error)
+        }
+        resolve(result)
+      })
+    })
+  }
+
   static findCountOfAll() {
     const sql = 'SELECT COUNT(*) AS Count FROM category'
     return new Promise((resolve, reject) => {
