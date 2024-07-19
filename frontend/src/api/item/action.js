@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { ItemEndPoint } from './endpoint'
 import apiClient from '../apiClient'
 

@@ -13,101 +13,101 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import StockAction from '../../api/stock/action';
-import ItemAction from '../../api/item/action'; // Assuming you have an Item API for dropdown
-import NavbarComponent from '../../components/NavbarComponent';
+import ItemAction from '../../api/item/action'
+import NavbarComponent from '../../components/NavbarComponent'
+import NoRecordFound from '../../components/NoRecordFound';
 
 const Stock = () => {
-  const [stocks, setStocks] = useState([]);
-  const [items, setItems] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [stocks, setStocks] = useState([])
+  const [items, setItems] = useState([])
+  const [showModal, setShowModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [currentStock, setCurrentStock] = useState({
     id: '',
     item_id: '',
     price: '',
     received_quantity: '',
-  });
-  const [isEdit, setIsEdit] = useState(false);
-  const [stockToDelete, setStockToDelete] = useState(null);
-
-  useEffect(() => {
-    fetchStocks();
-    fetchItems();
-  }, []);
+  })
+  const [isEdit, setIsEdit] = useState(false)
+  const [stockToDelete, setStockToDelete] = useState(null)
 
   const fetchStocks = async () => {
     try {
-      const data = await StockAction.findAllStock();
-      setStocks(data ?? []);
+      const data = await StockAction.findAllStocks()
+      setStocks(data ?? [])
     } catch (error) {
-      console.error('There was an error fetching the stocks!', error);
+      console.error('There was an error fetching the stocks!', error)
     }
-  };
+  }
 
   const fetchItems = async () => {
     try {
-      const data = await ItemAction.findAllItems(); // Adjust according to your API
-      setItems(data ?? []);
+      const data = await ItemAction.findAllItem()
+      setItems(data ?? [])
     } catch (error) {
-      console.error('There was an error fetching the items!', error);
+      console.error('There was an error fetching the items!', error)
     }
-  };
+  }
 
   const handleSave = async () => {
     try {
       if (isEdit) {
-        await StockAction.updateStockById(currentStock.id, currentStock);
+        await StockAction.updateStockById(currentStock.id, currentStock)
       } else {
-        await StockAction.createNewStock(currentStock);
+        await StockAction.createNewStock(currentStock)
       }
-      fetchStocks();
-      setShowModal(false);
+      fetchStocks()
+      setShowModal(false)
     } catch (error) {
-      console.error('There was an error saving the stock!', error);
+      console.error('There was an error saving the stock!', error)
     }
-  };
+  }
 
   const handleDelete = async () => {
     try {
-      await StockAction.deleteStockById(stockToDelete);
-      fetchStocks();
-      setShowDeleteModal(false);
+      await StockAction.deleteStockById(stockToDelete)
+      fetchStocks()
+      setShowDeleteModal(false)
     } catch (error) {
-      console.error('There was an error deleting the stock!', error);
+      console.error('There was an error deleting the stock!', error)
     }
-  };
+  }
 
   const openEditModal = (stock) => {
-    setCurrentStock(stock);
-    setIsEdit(true);
-    setShowModal(true);
-  };
+    setCurrentStock(stock)
+    setIsEdit(true)
+    setShowModal(true)
+  }
 
   const openCreateModal = () => {
-    setCurrentStock({ id: '', item_id: '', price: '', received_quantity: '' });
-    setIsEdit(false);
-    setShowModal(true);
-  };
+    setCurrentStock({ id: '', item_id: '', price: '', received_quantity: '' })
+    setIsEdit(false)
+    setShowModal(true)
+  }
 
   const openDeleteModal = (id) => {
-    setStockToDelete(id);
-    setShowDeleteModal(true);
-  };
+    setStockToDelete(id)
+    setShowDeleteModal(true)
+  }
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setCurrentStock({
       ...currentStock,
       [name]: value,
-    });
-  };
+    })
+  }
 
   const handleItemSelect = (item_id) => {
     setCurrentStock({
       ...currentStock,
       item_id: item_id,
-    });
-  };
+    })
+  }
+
+  useEffect(() => {
+    Promise.all([fetchItems(), fetchStocks()])
+  }, [])
 
   return (
     <div>
@@ -128,10 +128,10 @@ const Stock = () => {
                 </Button>
               </Card.Header>
               <Card.Body>
-                <Table responsive striped bordered hover className="mb-0">
+                {stocks?.length > 0 ? <Table responsive striped bordered hover className="mb-0">
                   <thead>
                     <tr>
-                      <th>Item ID</th>
+                      <th>Item</th>
                       <th>Price</th>
                       <th>Received Quantity</th>
                       <th></th>
@@ -147,18 +147,34 @@ const Stock = () => {
                           <Dropdown>
                             <Dropdown.Toggle
                               as="div"
-                              style={{ border: 'none', background: 'none', padding: 0, cursor: 'pointer' }}
+                              style={{
+                                border: 'none',
+                                background: 'none',
+                                padding: 0,
+                                cursor: 'pointer',
+                              }}
                             >
                               <FontAwesomeIcon icon={faEllipsisV} />
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                              <Dropdown.Item onClick={() => openEditModal(stock)}>
-                                <FontAwesomeIcon icon={faEdit} className="me-2" />
+                              <Dropdown.Item
+                                onClick={() => openEditModal(stock)}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faEdit}
+                                  className="me-2"
+                                />
                                 Edit
                               </Dropdown.Item>
-                              <Dropdown.Item style={{ color: 'red' }} onClick={() => openDeleteModal(stock.id)}>
-                                <FontAwesomeIcon icon={faTrash} className="me-2" />
+                              <Dropdown.Item
+                                style={{ color: 'red' }}
+                                onClick={() => openDeleteModal(stock.id)}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faTrash}
+                                  className="me-2"
+                                />
                                 Delete
                               </Dropdown.Item>
                             </Dropdown.Menu>
@@ -167,7 +183,8 @@ const Stock = () => {
                       </tr>
                     ))}
                   </tbody>
-                </Table>
+                </Table>: <NoRecordFound />}
+                
               </Card.Body>
             </Card>
           </Col>
@@ -232,7 +249,10 @@ const Stock = () => {
           </Modal.Header>
           <Modal.Body>Are you sure you want to delete this stock?</Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            <Button
+              variant="secondary"
+              onClick={() => setShowDeleteModal(false)}
+            >
               Cancel
             </Button>
             <Button variant="danger" onClick={handleDelete}>
@@ -242,7 +262,7 @@ const Stock = () => {
         </Modal>
       </Container>
     </div>
-  );
-};
+  )
+}
 
 export default Stock;
