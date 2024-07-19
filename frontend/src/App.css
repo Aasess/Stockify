@@ -198,3 +198,10 @@ body {
   display: none !important;
 }
 
+/* Loader.css */
+.fixed-top {
+  backdrop-filter: brightness(0.80);
+}
+
+
+

@@ -8,16 +8,17 @@ import UserLogin from './components/UserLogin'
 import UserRegistration from './components/UserRegistration'
 import UserForgetPassword from './components/UserForgetPassword'
 import UserResetPassword from './components/UserResetPassword'
+import Loader from './components/Loader'
 
 const Dashboard = lazy(() => import('./scenes/dashboard'))
 const Category = lazy(() => import('./scenes/category'))
 const Vendor = lazy(() => import('./scenes/vendor'))
-const Item = lazy(()=> import("./scenes/item"))
-const Stock = lazy(()=> import("./scenes/stock"))
+const Item = lazy(() => import('./scenes/item'))
+const Stock = lazy(() => import('./scenes/stock'))
 
 const RouteList = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<Loader />}>
       <Routes>
         <Route path="/dashboard" exact element={<Dashboard />} />
         <Route path="/login" exact element={<UserLogin />} />
