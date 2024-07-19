@@ -9,6 +9,7 @@ import {
   Modal,
   Form,
   Dropdown,
+  Pagination
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -25,6 +26,10 @@ const Category = () => {
   });
   const [isEdit, setIsEdit] = useState(false);
   const [categoryToDelete, setCategoryToDelete] = useState(null);
+
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   useEffect(() => {
     fetchCategories();
@@ -88,6 +93,18 @@ const Category = () => {
     });
   };
 
+  // Pagination logic
+  const indexOfLastCategory = currentPage * itemsPerPage;
+  const indexOfFirstCategory = indexOfLastCategory - itemsPerPage;
+  const currentCategories = categories.slice(indexOfFirstCategory, indexOfLastCategory);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(categories.length / itemsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div>
       <NavbarComponent />
@@ -116,7 +133,7 @@ const Category = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {categories?.map((category) => (
+                    {currentCategories.map((category) => (
                       <tr key={category.id}>
                         <td>{category.id}</td>
                         <td>{category.category_name}</td>
@@ -145,6 +162,25 @@ const Category = () => {
                     ))}
                   </tbody>
                 </Table>
+                <Pagination className="justify-content-center mt-4">
+                  <Pagination.Prev
+                    onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}
+                    disabled={currentPage === 1}
+                  />
+                  {pageNumbers.map((number) => (
+                    <Pagination.Item
+                      key={number}
+                      active={number === currentPage}
+                      onClick={() => paginate(number)}
+                    >
+                      {number}
+                    </Pagination.Item>
+                  ))}
+                  <Pagination.Next
+                    onClick={() => setCurrentPage(currentPage < pageNumbers.length ? currentPage + 1 : pageNumbers.length)}
+                    disabled={currentPage === pageNumbers.length}
+                  />
+                </Pagination>
               </Card.Body>
             </Card>
           </Col>
@@ -198,4 +234,5 @@ const Category = () => {
 };
 
 export default Category;
+
 

@@ -9,6 +9,7 @@ import {
   Modal,
   Form,
   Dropdown,
+  Pagination
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -17,7 +18,6 @@ import NavbarComponent from '../../components/NavbarComponent';
 
 const Vendor = () => {
   const [vendors, setVendors] = useState([]);
-
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [currentVendor, setCurrentVendor] = useState({
@@ -28,6 +28,10 @@ const Vendor = () => {
   });
   const [isEdit, setIsEdit] = useState(false);
   const [vendorToDelete, setVendorToDelete] = useState(null);
+
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   useEffect(() => {
     fetchVendors();
@@ -91,6 +95,18 @@ const Vendor = () => {
     });
   };
 
+  // Pagination logic
+  const indexOfLastVendor = currentPage * itemsPerPage;
+  const indexOfFirstVendor = indexOfLastVendor - itemsPerPage;
+  const currentVendors = vendors.slice(indexOfFirstVendor, indexOfLastVendor);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(vendors.length / itemsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div>
       <NavbarComponent />
@@ -121,7 +137,7 @@ const Vendor = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {vendors?.map((vendor) => (
+                    {currentVendors.map((vendor) => (
                       <tr key={vendor.id}>
                         <td>{vendor.id}</td>
                         <td>{vendor.name}</td>
@@ -152,6 +168,25 @@ const Vendor = () => {
                     ))}
                   </tbody>
                 </Table>
+                <Pagination className="justify-content-center mt-4">
+                  <Pagination.Prev
+                    onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}
+                    disabled={currentPage === 1}
+                  />
+                  {pageNumbers.map((number) => (
+                    <Pagination.Item
+                      key={number}
+                      active={number === currentPage}
+                      onClick={() => paginate(number)}
+                    >
+                      {number}
+                    </Pagination.Item>
+                  ))}
+                  <Pagination.Next
+                    onClick={() => setCurrentPage(currentPage < pageNumbers.length ? currentPage + 1 : pageNumbers.length)}
+                    disabled={currentPage === pageNumbers.length}
+                  />
+                </Pagination>
               </Card.Body>
             </Card>
           </Col>
