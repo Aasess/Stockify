@@ -6,26 +6,28 @@ body {
 
 /* Navbar Styles */
 .navbar-custom {
-  background-color: #343a40;
+  background-color: #0064a1;
   padding: 10px 20px;
-  position: relative;
+  position: fixed;
+  top: 0;
+  width: 100%;
   z-index: 1000;
 }
-
+.navbar-toggler-icon {
+  border: none;
+  background: none;
+}
 .navbar-custom .navbar-brand {
   font-size: 1.5rem;
   font-weight: bold;
   color: #ffffff;
 }
-
 .navbar-custom .form-control {
   width: 200px;
 }
-
 .navbar-custom .btn-outline-light {
   margin-left: 10px;
 }
-
 .navbar-custom .nav-icon {
   position: relative;
 }
@@ -156,27 +158,58 @@ body {
   color: #007bff;
 }
 
-/* Sliding Menu */
+/* Sidebar (Slide-in Menu) */
 .slide-in-menu {
   position: fixed;
-  left: -350px;
-  width: 350px;
+  top: 56px; 
+  left: 0;
   height: 100%;
+  width: 250px;
   background: #343a40;
-  transition: left 0.5s ease;
-  overflow-x: hidden;
+  color: white;
   z-index: 999;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
 }
 
 .slide-in-menu.show {
   left: 0;
 }
 
-.slide-in-menu .nav-link {
-  color: white;
-  padding: 15px;
+@media (max-width: 1200px) {
+  .slide-in-menu {
+    transform: translateX(-250px);
+  }
+
+  .slide-in-menu.show {
+    transform: translateX(0);
+  }
+
+  .navbar-toggler-icon {
+    display: block;
+  }
 }
 
+@media (min-width: 1200px) {
+  .slide-in-menu {
+    transform: translateX(0);
+  }
+
+  .navbar-toggler-icon {
+    display: none;
+  }
+}
+
+.slide-in-menu .nav-link {
+  color: white;
+  padding: 1rem 1.5rem;
+}
+
+.slide-in-menu .nav-link:hover {
+  background-color: #005a8c;
+}
+
+/* Custom Badge */
 .custom-badge {
   height: 24px;
   min-width: 24px;
@@ -202,6 +235,3 @@ body {
 .fixed-top {
   backdrop-filter: brightness(0.80);
 }
-
-
-
