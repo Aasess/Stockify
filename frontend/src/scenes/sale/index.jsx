@@ -13,35 +13,36 @@ import {
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import StockAction from '../../api/stock/action';
+import SaleAction from '../../api/sale/action';
 import ItemAction from '../../api/item/action';
+import StockAction from '../../api/stock/action';
 import NavbarComponent from '../../components/NavbarComponent';
 import NoRecordFound from '../../components/NoRecordFound';
 
-const Stock = () => {
-  const [stocks, setStocks] = useState([]);
+const Sale = () => {
+  const [sales, setSales] = useState([]);
   const [items, setItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [currentStock, setCurrentStock] = useState({
+  const [currentSale, setCurrentSale] = useState({
     id: '',
     item: '',
     price: '',
-    received_quantity: '',
+    sold_quantity: '',
   });
   const [isEdit, setIsEdit] = useState(false);
-  const [stockToDelete, setStockToDelete] = useState(null);
+  const [saleToDelete, setSaleToDelete] = useState(null);
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  const fetchStocks = async () => {
+  const fetchSales = async () => {
     try {
-      const data = await StockAction.findAllStocks();
-      setStocks(data ?? []);
+      const data = await SaleAction.findAllSales();
+      setSales(data ?? []);
     } catch (error) {
-      console.error('There was an error fetching the stocks!', error);
+      console.error('There was an error fetching the sales!', error);
     }
   };
 
@@ -61,72 +62,92 @@ const Stock = () => {
   const handleSave = async () => {
     try {
       const formData = {
-        item_id: Number(currentStock.item),
-        price: Number(currentStock.price),
-        received_quantity: Number(currentStock.received_quantity),
+        item_id: Number(currentSale.item),
+        price: Number(currentSale.price),
+        sold_quantity: Number(currentSale.sold_quantity),
       };
       if (isEdit) {
-        await StockAction.updateStockById(currentStock.id, formData);
+        await SaleAction.updateSaleById(currentSale.id, formData);
       } else {
-        await StockAction.createNewStock(formData);
+        await SaleAction.createNewSale(formData);
+        await updateStockAndItem(formData.item_id, formData.sold_quantity);
       }
-      fetchStocks();
+      fetchSales();
       setShowModal(false);
     } catch (error) {
-      console.error('There was an error saving the stock!', error);
+      console.error('There was an error saving the sale!', error);
+    }
+  };
+
+  const updateStockAndItem = async (itemId, soldQuantity) => {
+    try {
+      const item = items.find((item) => item.id === itemId);
+      if (item) {
+        const newQuantity = item.received_quantity - soldQuantity;
+        await ItemAction.updateItemById(itemId, { ...item, received_quantity: newQuantity });
+
+        const stocks = await StockAction.findAllStocks();
+        const stock = stocks.find((stock) => stock.item_id === itemId);
+        if (stock) {
+          await StockAction.updateStockById(stock.id, { ...stock, received_quantity: newQuantity });
+        }
+        fetchItems();
+      }
+    } catch (error) {
+      console.error('There was an error updating the stock and item!', error);
     }
   };
 
   const handleDelete = async () => {
     try {
-      await StockAction.deleteStockById(stockToDelete);
-      fetchStocks();
+      await SaleAction.deleteSaleById(saleToDelete);
+      fetchSales();
       setShowDeleteModal(false);
     } catch (error) {
-      console.error('There was an error deleting the stock!', error);
+      console.error('There was an error deleting the sale!', error);
     }
   };
 
-  const openEditModal = (stock) => {
+  const openEditModal = (sale) => {
     const newState = {
-      item: stock.item_id,
-      ...stock,
+      item: sale.item_id,
+      ...sale,
     };
-    setCurrentStock(newState);
+    setCurrentSale(newState);
     setIsEdit(true);
     setShowModal(true);
   };
 
   const openCreateModal = () => {
-    setCurrentStock({ id: '', item: '', price: '', received_quantity: '' });
+    setCurrentSale({ id: '', item: '', price: '', sold_quantity: '' });
     setIsEdit(false);
     setShowModal(true);
   };
 
   const openDeleteModal = (id) => {
-    setStockToDelete(id);
+    setSaleToDelete(id);
     setShowDeleteModal(true);
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCurrentStock({
-      ...currentStock,
+    setCurrentSale({
+      ...currentSale,
       [name]: value,
     });
   };
 
   useEffect(() => {
-    Promise.all([fetchItems(), fetchStocks()]);
+    Promise.all([fetchItems(), fetchSales()]);
   }, []);
 
   // Pagination logic
-  const indexOfLastStock = currentPage * itemsPerPage;
-  const indexOfFirstStock = indexOfLastStock - itemsPerPage;
-  const currentStocks = stocks.slice(indexOfFirstStock, indexOfLastStock);
+  const indexOfLastSale = currentPage * itemsPerPage;
+  const indexOfFirstSale = indexOfLastSale - itemsPerPage;
+  const currentSales = sales.slice(indexOfFirstSale, indexOfLastSale);
 
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(stocks.length / itemsPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(sales.length / itemsPerPage); i++) {
     pageNumbers.push(i);
   }
 
@@ -138,35 +159,37 @@ const Stock = () => {
       <Container className="py-5">
         <Row className="mb-4">
           <Col>
-            <h2 className="text-center">Stock Management</h2>
+            <h2 className="text-center">Sale Management</h2>
           </Col>
         </Row>
         <Row>
           <Col>
             <Card className="shadow-sm">
               <Card.Header className="d-flex justify-content-between align-items-center">
-                <h4 className="mb-0">Stocks</h4>
+                <h4 className="mb-0">Sales</h4>
                 <Button variant="success" onClick={openCreateModal}>
                   Create
                 </Button>
               </Card.Header>
               <Card.Body>
-                {currentStocks?.length > 0 ? (
+                {currentSales?.length > 0 ? (
                   <Table responsive striped bordered hover className="mb-0">
                     <thead>
                       <tr>
-                        <th>Item</th>
+                        <th>Id</th>
+                        <th>Name</th>
                         <th>Price</th>
-                        <th>Received Quantity</th>
+                        <th>Sold Quantity</th>
                         <th></th>
                       </tr>
                     </thead>
                     <tbody>
-                      {currentStocks?.map((stock) => (
-                        <tr key={stock.id}>
-                          <td>{generateItemName(stock.item_id)}</td>
-                          <td>{stock.price}</td>
-                          <td>{stock.received_quantity}</td>
+                      {currentSales?.map((sale) => (
+                        <tr key={sale.id}>
+                          <td>{sale.id}</td>
+                          <td>{generateItemName(sale.item_id)}</td>
+                          <td>{sale.price}</td>
+                          <td>{sale.sold_quantity}</td>
                           <td>
                             <Dropdown>
                               <Dropdown.Toggle
@@ -183,7 +206,7 @@ const Stock = () => {
 
                               <Dropdown.Menu>
                                 <Dropdown.Item
-                                  onClick={() => openEditModal(stock)}
+                                  onClick={() => openEditModal(sale)}
                                 >
                                   <FontAwesomeIcon
                                     icon={faEdit}
@@ -193,7 +216,7 @@ const Stock = () => {
                                 </Dropdown.Item>
                                 <Dropdown.Item
                                   style={{ color: 'red' }}
-                                  onClick={() => openDeleteModal(stock.id)}
+                                  onClick={() => openDeleteModal(sale.id)}
                                 >
                                   <FontAwesomeIcon
                                     icon={faTrash}
@@ -237,7 +260,7 @@ const Stock = () => {
 
         <Modal show={showModal} onHide={() => setShowModal(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>{isEdit ? 'Edit Stock' : 'Create Stock'}</Modal.Title>
+            <Modal.Title>{isEdit ? 'Edit Sale' : 'Create Sale'}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -246,7 +269,7 @@ const Stock = () => {
                 <Form.Control
                   as="select"
                   name="item"
-                  value={currentStock.item}
+                  value={currentSale.item}
                   onChange={handleChange}
                 >
                   <option value="">Select item</option>
@@ -263,17 +286,17 @@ const Stock = () => {
                   type="text"
                   placeholder="Enter price"
                   name="price"
-                  value={currentStock.price}
+                  value={currentSale.price}
                   onChange={handleChange}
                 />
               </Form.Group>
-              <Form.Group controlId="formReceivedQuantity" className="mb-3">
-                <Form.Label>Received Quantity</Form.Label>
+              <Form.Group controlId="formSoldQuantity" className="mb-3">
+                <Form.Label>Sold Quantity</Form.Label>
                 <Form.Control
                   type="number"
-                  placeholder="Enter received quantity"
-                  name="received_quantity"
-                  value={currentStock.received_quantity}
+                  placeholder="Enter sold quantity"
+                  name="sold_quantity"
+                  value={currentSale.sold_quantity}
                   onChange={handleChange}
                 />
               </Form.Group>
@@ -293,7 +316,7 @@ const Stock = () => {
           <Modal.Header closeButton>
             <Modal.Title>Confirm Delete</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Are you sure you want to delete this stock?</Modal.Body>
+          <Modal.Body>Are you sure you want to delete this sale?</Modal.Body>
           <Modal.Footer>
             <Button
               variant="secondary"
@@ -311,5 +334,4 @@ const Stock = () => {
   );
 };
 
-export default Stock;
-
+export default Sale;
