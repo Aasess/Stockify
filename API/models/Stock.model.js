@@ -78,6 +78,19 @@ class StockModel {
       })
     })
   }
+
+  static findAllByItemId(id) {
+    const sql = 'SELECT * FROM stock WHERE item_id = ?'
+
+    return new Promise((resolve, reject) => {
+      connection.query(sql, [id], (error, result) => {
+        if (error) {
+          return reject(error)
+        }
+        resolve(result)
+      })
+    })
+  }
 }
 
 export default StockModel

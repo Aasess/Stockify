@@ -60,6 +60,13 @@ class StockServices {
         0
       )
 
+      console.log(
+        itemId,
+        soldItems,
+        receivedItems,
+        soldQuantity,
+        receivedQuantity
+      )
       if (receivedQuantity < soldQuantity) {
         throw new Error(
           'Sold quantity cannot be greater than received quantity'

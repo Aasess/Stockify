@@ -9,8 +9,8 @@ class StockController {
         throw new Error('All fields are required')
       }
 
-      const stock = await StockServices.createStock(req.body)
-      await StockServices.calculateStock(stock.item_id)
+      await StockServices.createStock(req.body)
+      await StockServices.calculateStock(item_id)
       res.status(201).send({ status: 'success', message: 'New stock added' })
     } catch (error) {
       res.status(400).send({ status: 'failed', message: error.message })
@@ -46,11 +46,11 @@ class StockController {
       const { id } = req.params
       const { item_id, price, received_quantity } = req.body
 
-      if (!item_id || !price || !received_quantity || !created_by) {
+      if (!item_id || !price || !received_quantity) {
         throw new Error('All fields are required')
       }
 
-      const updateData = { item_id, price, received_quantity, created_by }
+      const updateData = { item_id, price, received_quantity }
 
       const result = await StockServices.updateStock(id, updateData)
       if (result.affectedRows === 0) {
