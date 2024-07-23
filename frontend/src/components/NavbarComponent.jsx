@@ -25,7 +25,7 @@ const NavbarComponent = () => {
             className="navbar-toggler-icon"
             onClick={handleMenuToggle}
           ></Button>
-          <Navbar.Brand href="#home" className="ms-3">
+          <Navbar.Brand href="/" className="ms-3">
             Stockify
           </Navbar.Brand>
           <Form className="d-flex ms-auto">
