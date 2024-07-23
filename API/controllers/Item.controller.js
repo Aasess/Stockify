@@ -10,6 +10,7 @@ class ItemController {
       }
 
       await ItemServices.createItem(req.body)
+
       res.status(201).send({ status: 'success', message: 'New item added' })
     } catch (error) {
       res.status(400).send({ status: 'failed', message: error.message })

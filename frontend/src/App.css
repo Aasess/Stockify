@@ -198,3 +198,11 @@ body {
   display: none !important;
 }
 
+/* Loader.css */
+.fixed-top {
+  backdrop-filter: brightness(0.80);
+}
+
+.table-responsive {
+  overflow: visible !important;
+}

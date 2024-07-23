@@ -8,6 +8,13 @@ import {
   Button,
   Container,
 } from 'react-bootstrap'
+import {
+  Gauge,
+  SquareGanttChart,
+  Building2,
+  ShoppingBasket,
+  PackagePlus,
+} from 'lucide-react'
 
 const NavbarComponent = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -43,7 +50,7 @@ const NavbarComponent = () => {
       <div className={`slide-in-menu ${menuOpen ? 'show' : ''}`}>
         <Nav className="flex-column p-4">
           <Nav.Link as={Link} to="/" className="d-flex align-items-center">
-            <i className="fas fa-home"></i>
+            <Gauge />
             <span className="ps-2 fs-5">Dashboard</span>
           </Nav.Link>
           <Nav.Link
@@ -51,7 +58,7 @@ const NavbarComponent = () => {
             to="/category"
             className="d-flex align-items-center"
           >
-            <i className="fas fa-list"></i>
+            <SquareGanttChart />
             <span className="ps-2 fs-5">Category</span>
           </Nav.Link>
           <Nav.Link
@@ -59,12 +66,16 @@ const NavbarComponent = () => {
             to="/vendor"
             className="d-flex align-items-center"
           >
-            <i className="fas fa-users"></i>
+            <Building2 />
             <span className="ps-2 fs-5">Vendor</span>
           </Nav.Link>
           <Nav.Link as={Link} to="/item" className="d-flex align-items-center">
-            <i className="fa-solid fa-cart-shopping"></i>
+            <ShoppingBasket />
             <span className="ps-2 fs-5">Item</span>
+          </Nav.Link>
+          <Nav.Link as={Link} to="/stock" className="d-flex align-items-center">
+            <PackagePlus />
+            <span className="ps-2 fs-5">Stock</span>
           </Nav.Link>
         </Nav>
       </div>

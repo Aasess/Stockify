@@ -136,9 +136,11 @@ const Item = () => {
   const generateStatus = (status) => {
     const isStock = Boolean(status);
     const styles = {
-      color: 'rgb(183, 29, 24)',
-      backgroundColor: 'rgba(255, 86, 48, 0.16)',
-    };
+      color: isStock ? 'rgb(3 130 38)' : 'rgb(183, 29, 24)',
+      backgroundColor: isStock
+        ? 'rgb(60 249 34 / 16%)'
+        : 'rgba(255, 86, 48, 0.16)',
+    }
     return (
       <div className="custom-badge" style={styles}>
         {isStock ? 'In Stock' : 'Sold'}
