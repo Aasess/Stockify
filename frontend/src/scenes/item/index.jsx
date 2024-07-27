@@ -23,7 +23,7 @@ const Item = () => {
   const [categories, setCategories] = useState([]);
   const [vendors, setVendors] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10
   const [showModal, setShowModal] = useState(false);
   const [editItem, setEditItem] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);

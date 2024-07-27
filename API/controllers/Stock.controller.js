@@ -56,7 +56,7 @@ class StockController {
       if (result.affectedRows === 0) {
         res.status(404).send({ status: 'failed', message: 'Stock not found' })
       } else {
-        await StockServices.calculateStock(result.item_id)
+        await StockServices.calculateStock(item_id)
         res.status(200).send({ status: 'success', message: 'Stock updated' })
       }
     } catch (error) {
@@ -72,7 +72,7 @@ class StockController {
       if (result.affectedRows === 0) {
         res.status(404).send({ status: 'failed', message: 'Stock not found' })
       } else {
-        await StockServices.calculateStock(result.item_id)
+        await StockServices.calculateStock(item_id)
         res.status(200).send({ status: 'success', message: 'Stock deleted' })
       }
     } catch (error) {

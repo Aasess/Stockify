@@ -1,4 +1,4 @@
-import { SaleServices } from '../services/index.js'
+import { StockServices, SaleServices, ItemServices } from '../services/index.js'
 
 class SaleController {
   static createSale = async (req, res) => {
@@ -8,10 +8,25 @@ class SaleController {
       if (!item_id || !price || !sold_quantity) {
         throw new Error('All fields are required')
       }
+      const foundItem = await ItemServices.getItemById(item_id)
+      if (foundItem) {
+        const { remaining_quantity } = foundItem[0]
 
-      const sale = await SaleServices.createSale(req.body)
-      await StockService.calculateStock(sale.item_id)
-      res.status(201).send({ status: 'success', message: 'New sale added' })
+        if (remaining_quantity > sold_quantity) {
+          await SaleServices.createSale(req.body)
+          await StockServices.calculateStock(item_id)
+          return res
+            .status(201)
+            .send({ status: 'success', message: 'New sale added' })
+        }
+        return res.status(400).send({
+          status: 'failed',
+          message: 'Sold quantity cannot be greater than remaining quantity',
+        })
+      }
+      return res
+        .status(400)
+        .send({ status: 'failed', message: 'Item not found' })
     } catch (error) {
       res.status(400).send({ status: 'failed', message: error.message })
     }
@@ -50,15 +65,33 @@ class SaleController {
         throw new Error('All fields are required')
       }
 
-      const updateData = { item_id, price, sold_quantity, created_by }
+      const foundItem = await ItemServices.getItemById(item_id)
+      if (foundItem) {
+        const { remaining_quantity } = foundItem[0]
 
-      const result = await SaleServices.updateSale(id, updateData)
-      if (result.affectedRows === 0) {
-        res.status(404).send({ status: 'failed', message: 'Sale not found' })
-      } else {
-        await StockService.calculateStock(result.item_id)
-        res.status(200).send({ status: 'success', message: 'Sale updated' })
+        if (remaining_quantity > sold_quantity) {
+          const updateData = { item_id, price, sold_quantity }
+
+          const result = await SaleServices.updateSale(id, updateData)
+          if (result.affectedRows === 0) {
+            return res
+              .status(404)
+              .send({ status: 'failed', message: 'Sale not found' })
+          } else {
+            await StockServices.calculateStock(item_id)
+            return res
+              .status(200)
+              .send({ status: 'success', message: 'Sale updated' })
+          }
+        }
+        return res.status(400).send({
+          status: 'failed',
+          message: 'Sold quantity cannot be greater than remaining quantity',
+        })
       }
+      return res
+        .status(400)
+        .send({ status: 'failed', message: 'Item not found' })
     } catch (error) {
       res.status(400).send({ status: 'failed', message: error.message })
     }
@@ -72,7 +105,7 @@ class SaleController {
       if (result.affectedRows === 0) {
         res.status(404).send({ status: 'failed', message: 'Sale not found' })
       } else {
-        await StockService.calculateStock(result.item_id)
+        await StockServices.calculateStock(id)
         res.status(200).send({ status: 'success', message: 'Sale deleted' })
       }
     } catch (error) {

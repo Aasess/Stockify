@@ -14,50 +14,49 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import SaleAction from '../../api/sale/action';
-import ItemAction from '../../api/item/action';
-import StockAction from '../../api/stock/action';
-import NavbarComponent from '../../components/NavbarComponent';
-import NoRecordFound from '../../components/NoRecordFound';
+import ItemAction from '../../api/item/action'
+import NavbarComponent from '../../components/NavbarComponent'
+import NoRecordFound from '../../components/NoRecordFound'
 
 const Sale = () => {
-  const [sales, setSales] = useState([]);
-  const [items, setItems] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [sales, setSales] = useState([])
+  const [items, setItems] = useState([])
+  const [showModal, setShowModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [currentSale, setCurrentSale] = useState({
     id: '',
     item: '',
     price: '',
     sold_quantity: '',
-  });
-  const [isEdit, setIsEdit] = useState(false);
-  const [saleToDelete, setSaleToDelete] = useState(null);
+  })
+  const [isEdit, setIsEdit] = useState(false)
+  const [saleToDelete, setSaleToDelete] = useState(null)
 
   // Pagination states
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
 
   const fetchSales = async () => {
     try {
-      const data = await SaleAction.findAllSales();
-      setSales(data ?? []);
+      const data = await SaleAction.findAllSales()
+      setSales(data ?? [])
     } catch (error) {
-      console.error('There was an error fetching the sales!', error);
+      console.error('There was an error fetching the sales!', error)
     }
-  };
+  }
 
   const fetchItems = async () => {
     try {
-      const data = await ItemAction.findAllItem();
-      setItems(data ?? []);
+      const data = await ItemAction.findAllItem()
+      setItems(data ?? [])
     } catch (error) {
-      console.error('There was an error fetching the items!', error);
+      console.error('There was an error fetching the items!', error)
     }
-  };
+  }
 
   const generateItemName = (id) => {
-    return items.find((item) => item.id === Number(id))?.item_name;
-  };
+    return items.find((item) => item.id === Number(id))?.item_name
+  }
 
   const handleSave = async () => {
     try {
@@ -65,93 +64,73 @@ const Sale = () => {
         item_id: Number(currentSale.item),
         price: Number(currentSale.price),
         sold_quantity: Number(currentSale.sold_quantity),
-      };
+      }
       if (isEdit) {
-        await SaleAction.updateSaleById(currentSale.id, formData);
+        await SaleAction.updateSaleById(currentSale.id, formData)
       } else {
-        await SaleAction.createNewSale(formData);
-        await updateStockAndItem(formData.item_id, formData.sold_quantity);
+        await SaleAction.createNewSale(formData)
       }
-      fetchSales();
-      setShowModal(false);
+      fetchSales()
+      setShowModal(false)
     } catch (error) {
-      console.error('There was an error saving the sale!', error);
+      console.error('There was an error saving the sale!', error)
     }
-  };
-
-  const updateStockAndItem = async (itemId, soldQuantity) => {
-    try {
-      const item = items.find((item) => item.id === itemId);
-      if (item) {
-        const newQuantity = item.received_quantity - soldQuantity;
-        await ItemAction.updateItemById(itemId, { ...item, received_quantity: newQuantity });
-
-        const stocks = await StockAction.findAllStocks();
-        const stock = stocks.find((stock) => stock.item_id === itemId);
-        if (stock) {
-          await StockAction.updateStockById(stock.id, { ...stock, received_quantity: newQuantity });
-        }
-        fetchItems();
-      }
-    } catch (error) {
-      console.error('There was an error updating the stock and item!', error);
-    }
-  };
+  }
 
   const handleDelete = async () => {
     try {
-      await SaleAction.deleteSaleById(saleToDelete);
-      fetchSales();
-      setShowDeleteModal(false);
+      await SaleAction.deleteSaleById(saleToDelete)
+      fetchSales()
+      setShowDeleteModal(false)
     } catch (error) {
-      console.error('There was an error deleting the sale!', error);
+      console.error('There was an error deleting the sale!', error)
     }
-  };
+  }
 
   const openEditModal = (sale) => {
     const newState = {
       item: sale.item_id,
       ...sale,
-    };
-    setCurrentSale(newState);
-    setIsEdit(true);
-    setShowModal(true);
-  };
+    }
+    setCurrentSale(newState)
+    setIsEdit(true)
+    setShowModal(true)
+  }
 
   const openCreateModal = () => {
-    setCurrentSale({ id: '', item: '', price: '', sold_quantity: '' });
-    setIsEdit(false);
-    setShowModal(true);
-  };
+    setCurrentSale({ id: '', item: '', price: '', sold_quantity: '' })
+    setIsEdit(false)
+    setShowModal(true)
+  }
 
   const openDeleteModal = (id) => {
-    setSaleToDelete(id);
-    setShowDeleteModal(true);
-  };
+    setSaleToDelete(id)
+    setShowDeleteModal(true)
+  }
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setCurrentSale({
       ...currentSale,
       [name]: value,
-    });
-  };
-
-  useEffect(() => {
-    Promise.all([fetchItems(), fetchSales()]);
-  }, []);
-
-  // Pagination logic
-  const indexOfLastSale = currentPage * itemsPerPage;
-  const indexOfFirstSale = indexOfLastSale - itemsPerPage;
-  const currentSales = sales.slice(indexOfFirstSale, indexOfLastSale);
-
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(sales.length / itemsPerPage); i++) {
-    pageNumbers.push(i);
+    })
   }
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  useEffect(() => {
+    Promise.all([fetchItems(), fetchSales()])
+  }, [])
+
+  // Pagination logic
+  const indexOfLastSale = currentPage * itemsPerPage
+  const indexOfFirstSale = indexOfLastSale - itemsPerPage
+  const currentSales = sales.slice(indexOfFirstSale, indexOfLastSale)
+
+  const pageNumbers = []
+  for (let i = 1; i <= Math.ceil(sales.length / itemsPerPage); i++) {
+    pageNumbers.push(i)
+  }
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber)
 
   return (
     <div>
@@ -184,9 +163,9 @@ const Sale = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {currentSales?.map((sale) => (
+                      {currentSales?.map((sale, index) => (
                         <tr key={sale.id}>
-                          <td>{sale.id}</td>
+                          <td>{index + 1}</td>
                           <td>{generateItemName(sale.item_id)}</td>
                           <td>{sale.price}</td>
                           <td>{sale.sold_quantity}</td>
@@ -236,7 +215,9 @@ const Sale = () => {
                 )}
                 <Pagination className="justify-content-center mt-4">
                   <Pagination.Prev
-                    onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}
+                    onClick={() =>
+                      setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)
+                    }
                     disabled={currentPage === 1}
                   />
                   {pageNumbers.map((number) => (
@@ -249,7 +230,13 @@ const Sale = () => {
                     </Pagination.Item>
                   ))}
                   <Pagination.Next
-                    onClick={() => setCurrentPage(currentPage < pageNumbers.length ? currentPage + 1 : pageNumbers.length)}
+                    onClick={() =>
+                      setCurrentPage(
+                        currentPage < pageNumbers.length
+                          ? currentPage + 1
+                          : pageNumbers.length
+                      )
+                    }
                     disabled={currentPage === pageNumbers.length}
                   />
                 </Pagination>
@@ -331,7 +318,7 @@ const Sale = () => {
         </Modal>
       </Container>
     </div>
-  );
-};
+  )
+}
 
 export default Sale;
