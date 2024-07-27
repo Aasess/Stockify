@@ -15,6 +15,8 @@ import {
   PackageMinus,
 } from 'lucide-react'
 import ItemAction from '../../api/item/action'
+import StockAction from '../../api/stock/action'
+import useColumn from './useColumn'
 
 const Dashboard = () => {
   const [state, setState] = useState({
@@ -22,9 +24,12 @@ const Dashboard = () => {
     numVender: 0,
     numProducts: 0,
     outOfStockProducts: 0,
+    mostStockItems: [],
   })
 
   const navigate = useNavigate()
+
+  const { barData } = useColumn({ state })
 
   const checkIfUserIsLoggedInOrNot = async () => {
     try {
@@ -82,26 +87,6 @@ const Dashboard = () => {
         pointHoverBackgroundColor: '#fff',
         pointHoverBorderColor: 'rgba(179,181,198,1)',
         data: [65, 59, 90, 81, 56],
-      },
-    ],
-  }
-  const barData = {
-    labels: [
-      'Aspirin',
-      'Ibuprofen',
-      'Paracetamol',
-      'Amoxicillin',
-      'Omeprazole',
-    ],
-    datasets: [
-      {
-        label: 'Average Inventory Levels',
-        backgroundColor: 'rgba(75,192,192,0.4)',
-        borderColor: 'rgba(75,192,192,1)',
-        borderWidth: 1,
-        hoverBackgroundColor: 'rgba(75,192,192,0.6)',
-        hoverBorderColor: 'rgba(75,192,192,1)',
-        data: [5000, 3000, 4000, 2000, 3500],
       },
     ],
   }
@@ -166,12 +151,25 @@ const Dashboard = () => {
       }
     })
   }
+
+  const findMostStockedItem = async () => {
+    const result = await StockAction.findTopStockItems()
+
+    setState((prev) => {
+      return {
+        ...prev,
+        mostStockItems: result,
+      }
+    })
+  }
+
   useEffect(() => {
     checkIfUserIsLoggedInOrNot().then((res) => {
       if (res) {
         findTotalNumberOfCategories()
         findTotalNumberOfVendors()
         findTotalNumberOfItems()
+        findMostStockedItem()
       }
     })
   }, [])
@@ -181,41 +179,41 @@ const Dashboard = () => {
       <Container className="mt-4">
         {/* Top Summary Cards */}
         <div className="col-12 d-flex mb-4 gap-4 flex-wrap">
-          <div class="custom-card">
-            <div class="icon-box">
+          <div className="custom-card">
+            <div className="icon-box">
               <Building2 size={60} color="#6784f9" />
             </div>
-            <div class="text-box">
+            <div className="text-box">
               <h4>{state.numVender}</h4>
               <h6>Vendors</h6>
             </div>
           </div>
-          <div class="custom-card">
-            <div class="icon-box">
+          <div className="custom-card">
+            <div className="icon-box">
               <SquareGanttChart size={60} color="#e4c111" />
             </div>
 
-            <div class="text-box">
+            <div className="text-box">
               <h4>{state.numCategories}</h4>
               <h6>Categories</h6>
             </div>
           </div>
-          <div class="custom-card">
-            <div class="icon-box">
+          <div className="custom-card">
+            <div className="icon-box">
               <ShoppingBasket size={60} color="rgba(75,192,192,1)" />
             </div>
 
-            <div class="text-box">
+            <div className="text-box">
               <h4>{state.numProducts}</h4>
               <h6>Items</h6>
             </div>
           </div>
-          <div class="custom-card">
-            <div class="icon-box">
+          <div className="custom-card">
+            <div className="icon-box">
               <PackageMinus size={60} color="#FF6384" />
             </div>
 
-            <div class="text-box">
+            <div className="text-box">
               <h4>{state.outOfStockProducts}</h4>
               <h6>Out of Stock</h6>
             </div>

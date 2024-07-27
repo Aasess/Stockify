@@ -11,6 +11,7 @@ const router = express.Router()
 //PROTECTED ROUTES
 router.get('/', StockController.findAllStocks)
 router.post('/', StockController.createStock)
+router.get('/most-stock', StockController.findTopStockItems)
 router.get('/:id', StockController.findStockById)
 router.put('/:id', StockController.updateStockById)
 router.delete('/:id', StockController.deleteStockById)

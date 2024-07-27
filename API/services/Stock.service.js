@@ -88,6 +88,15 @@ class StockServices {
       throw error
     }
   }
+
+  static async findTopStockItems() {
+    try {
+      const result = await StockModel.findTopStockItems()
+      return result
+    } catch (error) {
+      throw error
+    }
+  }
 }
 
 export default StockServices

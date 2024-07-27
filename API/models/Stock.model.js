@@ -104,6 +104,20 @@ class StockModel {
       })
     })
   }
+
+  static findTopStockItems() {
+    const sql =
+      'SELECT s.*, i.item_name FROM stock s JOIN item i ON s.item_id = i.id ORDER BY s.received_quantity DESC LIMIT 5'
+
+    return new Promise((resolve, reject) => {
+      connection.query(sql, (error, result) => {
+        if (error) {
+          return reject(error)
+        }
+        resolve(result)
+      })
+    })
+  }
 }
 
 export default StockModel

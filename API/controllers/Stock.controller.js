@@ -79,6 +79,15 @@ class StockController {
       res.status(400).send({ status: 'failed', message: error.message })
     }
   }
+
+  static findTopStockItems = async (req, res) => {
+    try {
+      const result = await StockServices.findTopStockItems()
+      res.status(200).send({ status: 'success', data: result })
+    } catch (error) {
+      res.status(400).send({ status: 'failed', message: error.message })
+    }
+  }
 }
 
 export default StockController
