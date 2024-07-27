@@ -1,4 +1,4 @@
-import { ItemServices } from '../services/index.js'
+import { ItemServices, SaleServices, StockServices } from '../services/index.js'
 
 class ItemController {
   static createItem = async (req, res) => {
@@ -71,6 +71,9 @@ class ItemController {
       if (result.affectedRows === 0) {
         res.status(404).send({ status: 'failed', message: 'Item not found' })
       } else {
+        //now delete all the associated stock and sales too
+        await StockServices.deleteAllItemsById(id)
+        await SaleServices.deleteAllItemsById(id)
         res.status(200).send({ status: 'success', message: 'Item deleted' })
       }
     } catch (error) {

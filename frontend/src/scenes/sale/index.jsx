@@ -193,7 +193,7 @@ const Sale = () => {
                                   />
                                   Edit
                                 </Dropdown.Item>
-                                <Dropdown.Item
+                                {/* <Dropdown.Item
                                   style={{ color: 'red' }}
                                   onClick={() => openDeleteModal(sale.id)}
                                 >
@@ -202,7 +202,7 @@ const Sale = () => {
                                     className="me-2"
                                   />
                                   Delete
-                                </Dropdown.Item>
+                                </Dropdown.Item> */}
                               </Dropdown.Menu>
                             </Dropdown>
                           </td>

@@ -91,6 +91,19 @@ class StockModel {
       })
     })
   }
+
+  static deleteAllItemsById(id) {
+    const sql = 'DELETE FROM stock WHERE item_id = ?'
+
+    return new Promise((resolve, reject) => {
+      connection.query(sql, [id], (error, result) => {
+        if (error) {
+          return reject(error)
+        }
+        resolve(result)
+      })
+    })
+  }
 }
 
 export default StockModel

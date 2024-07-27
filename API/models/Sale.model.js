@@ -80,8 +80,20 @@ class SaleModel {
   }
 
   static findAllByItemId(id) {
-    const sql =
-      'SELECT * FROM sale where item_id = ?'
+    const sql = 'SELECT * FROM sale where item_id = ?'
+
+    return new Promise((resolve, reject) => {
+      connection.query(sql, [id], (error, result) => {
+        if (error) {
+          return reject(error)
+        }
+        resolve(result)
+      })
+    })
+  }
+
+  static deleteAllItemsById(id) {
+    const sql = 'DELETE FROM sale WHERE item_id = ?'
 
     return new Promise((resolve, reject) => {
       connection.query(sql, [id], (error, result) => {

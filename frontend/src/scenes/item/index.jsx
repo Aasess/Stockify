@@ -203,14 +203,20 @@ const Item = () => {
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                               <Dropdown.Item onClick={() => handleEdit(item)}>
-                                <FontAwesomeIcon icon={faEdit} className="me-2" />
+                                <FontAwesomeIcon
+                                  icon={faEdit}
+                                  className="me-2"
+                                />
                                 Edit
                               </Dropdown.Item>
                               <Dropdown.Item
                                 style={{ color: 'red' }}
                                 onClick={() => handleDelete(item.id)}
                               >
-                                <FontAwesomeIcon icon={faTrash} className="me-2" />
+                                <FontAwesomeIcon
+                                  icon={faTrash}
+                                  className="me-2"
+                                />
                                 Delete
                               </Dropdown.Item>
                             </Dropdown.Menu>
@@ -265,7 +271,13 @@ const Item = () => {
           <Modal.Header closeButton>
             <Modal.Title>Delete Item</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Are you sure you want to delete this item?</Modal.Body>
+          <Modal.Body>
+            <div>Are you sure you want to delete this item?</div>
+
+            <div className="mt-2 text-danger fs-9">
+              All the associated stocks and sales record will also be deleted.
+            </div>
+          </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
               Cancel
@@ -277,7 +289,7 @@ const Item = () => {
         </Modal>
       </Container>
     </div>
-  );
+  )
 };
 
 export default Item;

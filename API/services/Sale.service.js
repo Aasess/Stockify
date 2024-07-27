@@ -45,6 +45,15 @@ class SaleServices {
       throw error
     }
   }
+
+  static async deleteAllItemsById(id) {
+    try {
+      const result = await SaleModel.deleteAllItemsById(id)
+      return result
+    } catch (error) {
+      throw error
+    }
+  }
 }
 
 export default SaleServices

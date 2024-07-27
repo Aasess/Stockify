@@ -191,7 +191,7 @@ const Stock = () => {
                                   />
                                   Edit
                                 </Dropdown.Item>
-                                <Dropdown.Item
+                                {/* <Dropdown.Item
                                   style={{ color: 'red' }}
                                   onClick={() => openDeleteModal(stock.id)}
                                 >
@@ -200,7 +200,7 @@ const Stock = () => {
                                     className="me-2"
                                   />
                                   Delete
-                                </Dropdown.Item>
+                                </Dropdown.Item> */}
                               </Dropdown.Menu>
                             </Dropdown>
                           </td>
@@ -213,7 +213,9 @@ const Stock = () => {
                 )}
                 <Pagination className="justify-content-center mt-4">
                   <Pagination.Prev
-                    onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}
+                    onClick={() =>
+                      setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)
+                    }
                     disabled={currentPage === 1}
                   />
                   {pageNumbers.map((number) => (
@@ -226,7 +228,13 @@ const Stock = () => {
                     </Pagination.Item>
                   ))}
                   <Pagination.Next
-                    onClick={() => setCurrentPage(currentPage < pageNumbers.length ? currentPage + 1 : pageNumbers.length)}
+                    onClick={() =>
+                      setCurrentPage(
+                        currentPage < pageNumbers.length
+                          ? currentPage + 1
+                          : pageNumbers.length
+                      )
+                    }
                     disabled={currentPage === pageNumbers.length}
                   />
                 </Pagination>
@@ -308,7 +316,7 @@ const Stock = () => {
         </Modal>
       </Container>
     </div>
-  );
+  )
 };
 
 export default Stock;

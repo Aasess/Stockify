@@ -60,13 +60,6 @@ class StockServices {
         0
       )
 
-      console.log(
-        itemId,
-        soldItems,
-        receivedItems,
-        soldQuantity,
-        receivedQuantity
-      )
       if (receivedQuantity < soldQuantity) {
         throw new Error(
           'Sold quantity cannot be greater than received quantity'
@@ -84,6 +77,15 @@ class StockServices {
       throw new Error(
         `Error calculating stock for item ${itemId}: ${error.message}`
       )
+    }
+  }
+
+  static async deleteAllItemsById(id) {
+    try {
+      const result = await StockModel.deleteAllItemsById(id)
+      return result
+    } catch (error) {
+      throw error
     }
   }
 }
