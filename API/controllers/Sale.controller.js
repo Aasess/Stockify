@@ -12,7 +12,7 @@ class SaleController {
       if (foundItem) {
         const { remaining_quantity } = foundItem[0]
 
-        if (remaining_quantity > sold_quantity) {
+        if (remaining_quantity >= sold_quantity) {
           await SaleServices.createSale(req.body)
           await StockServices.calculateStock(item_id)
           return res
@@ -69,7 +69,7 @@ class SaleController {
       if (foundItem) {
         const { remaining_quantity } = foundItem[0]
 
-        if (remaining_quantity > sold_quantity) {
+        if (remaining_quantity >= sold_quantity) {
           const updateData = { item_id, price, sold_quantity }
 
           const result = await SaleServices.updateSale(id, updateData)
