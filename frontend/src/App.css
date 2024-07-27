@@ -1,6 +1,6 @@
 /* General Styles */
 body {
-  background-color: #f8f9fa;
+  background-color: rgb(249, 250, 251)!important;
   font-family: 'Public Sans', sans-serif !important;
 }
 
@@ -53,15 +53,6 @@ body {
   margin: 0;
   font-size: 24px;
   color: #333;
-}
-
-/* Search Bar */
-.search-bar input {
-  width: 400px;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
 }
 
 /* User Options */
@@ -146,7 +137,8 @@ body {
   position: fixed;
   width: 250px;
   height: 100%;
-  background: #343a40;
+  /* background: #343a40; */
+  border-right: 1px solid rgb(99 115 129 / 14%);
   transition: left 0.5s ease;
   overflow-x: hidden;
   z-index: 999;
@@ -158,7 +150,7 @@ body {
 }
 
 .slide-in-menu .nav-link {
-  color: white;
+  color: rgb(99, 115, 129);
   padding: 15px;
 }
 
@@ -219,4 +211,14 @@ body {
   padding-top: 6px;
   font-size: 0.9rem;
   color: #6c757d;
+}
+
+.nav-link span {
+  font-size: 16px!important;
+}
+
+.nav-link.active {
+  color: rgb(24, 119, 242);
+  background-color: rgba(24, 119, 242, 0.08);
+  border-radius: 8px;
 }
