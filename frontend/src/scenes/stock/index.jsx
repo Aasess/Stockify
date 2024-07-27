@@ -150,94 +150,96 @@ const Stock = () => {
               </Card.Header>
               <Card.Body>
                 {currentStocks?.length > 0 ? (
-                  <Table responsive striped bordered hover className="mb-0">
-                    <thead>
-                      <tr>
-                      <th>Id</th>
-                        <th>Item</th>
-                        <th>Price</th>
-                        <th>Received Quantity</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {currentStocks?.map((stock,index) => (
-                        <tr key={stock.id}>
-                          <td>{index+1}</td>
-                          <td>{generateItemName(stock.item_id)}</td>
-                          <td>{stock.price}</td>
-                          <td>{stock.received_quantity}</td>
-                          <td>
-                            <Dropdown>
-                              <Dropdown.Toggle
-                                as="div"
-                                style={{
-                                  border: 'none',
-                                  background: 'none',
-                                  padding: 0,
-                                  cursor: 'pointer',
-                                }}
-                              >
-                                <FontAwesomeIcon icon={faEllipsisV} />
-                              </Dropdown.Toggle>
-
-                              <Dropdown.Menu>
-                                <Dropdown.Item
-                                  onClick={() => openEditModal(stock)}
-                                >
-                                  <FontAwesomeIcon
-                                    icon={faEdit}
-                                    className="me-2"
-                                  />
-                                  Edit
-                                </Dropdown.Item>
-                                {/* <Dropdown.Item
-                                  style={{ color: 'red' }}
-                                  onClick={() => openDeleteModal(stock.id)}
-                                >
-                                  <FontAwesomeIcon
-                                    icon={faTrash}
-                                    className="me-2"
-                                  />
-                                  Delete
-                                </Dropdown.Item> */}
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </td>
+                  <>
+                    <Table responsive striped bordered hover className="mb-0">
+                      <thead>
+                        <tr>
+                          <th>Id</th>
+                          <th>Item</th>
+                          <th>Price</th>
+                          <th>Received Quantity</th>
+                          <th></th>
                         </tr>
+                      </thead>
+                      <tbody>
+                        {currentStocks?.map((stock, index) => (
+                          <tr key={stock.id}>
+                            <td>{index + 1}</td>
+                            <td>{generateItemName(stock.item_id)}</td>
+                            <td>{stock.price}</td>
+                            <td>{stock.received_quantity}</td>
+                            <td>
+                              <Dropdown>
+                                <Dropdown.Toggle
+                                  as="div"
+                                  style={{
+                                    border: 'none',
+                                    background: 'none',
+                                    padding: 0,
+                                    cursor: 'pointer',
+                                  }}
+                                >
+                                  <FontAwesomeIcon icon={faEllipsisV} />
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu>
+                                  <Dropdown.Item
+                                    onClick={() => openEditModal(stock)}
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faEdit}
+                                      className="me-2"
+                                    />
+                                    Edit
+                                  </Dropdown.Item>
+                                  {/* <Dropdown.Item
+                                style={{ color: 'red' }}
+                                onClick={() => openDeleteModal(stock.id)}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faTrash}
+                                  className="me-2"
+                                />
+                                Delete
+                              </Dropdown.Item> */}
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                    <Pagination className="justify-content-center mt-4">
+                      <Pagination.Prev
+                        onClick={() =>
+                          setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)
+                        }
+                        disabled={currentPage === 1}
+                      />
+                      {pageNumbers.map((number) => (
+                        <Pagination.Item
+                          key={number}
+                          active={number === currentPage}
+                          onClick={() => paginate(number)}
+                        >
+                          {number}
+                        </Pagination.Item>
                       ))}
-                    </tbody>
-                  </Table>
+                      <Pagination.Next
+                        onClick={() =>
+                          setCurrentPage(
+                            currentPage < pageNumbers.length
+                              ? currentPage + 1
+                              : pageNumbers.length
+                          )
+                        }
+                        disabled={currentPage === pageNumbers.length}
+                      />
+                    </Pagination>
+                  </>
                 ) : (
                   <NoRecordFound />
                 )}
-                <Pagination className="justify-content-center mt-4">
-                  <Pagination.Prev
-                    onClick={() =>
-                      setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)
-                    }
-                    disabled={currentPage === 1}
-                  />
-                  {pageNumbers.map((number) => (
-                    <Pagination.Item
-                      key={number}
-                      active={number === currentPage}
-                      onClick={() => paginate(number)}
-                    >
-                      {number}
-                    </Pagination.Item>
-                  ))}
-                  <Pagination.Next
-                    onClick={() =>
-                      setCurrentPage(
-                        currentPage < pageNumbers.length
-                          ? currentPage + 1
-                          : pageNumbers.length
-                      )
-                    }
-                    disabled={currentPage === pageNumbers.length}
-                  />
-                </Pagination>
               </Card.Body>
             </Card>
           </Col>

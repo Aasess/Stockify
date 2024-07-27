@@ -16,9 +16,12 @@ import ItemAction from '../../api/item/action';
 import VendorAction from '../../api/vendor/action';
 import CategoryAction from '../../api/category/action'
 import ItemForm from './itemForm'
+import Filter from './filter'
+import NoRecordFound from '../../components/NoRecordFound'
 
 const Item = () => {
   const [items, setItems] = useState([])
+  const [filteredItems, setFilteredItems] = useState([])
   const [categories, setCategories] = useState([])
   const [vendors, setVendors] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
@@ -38,6 +41,7 @@ const Item = () => {
     try {
       const data = await ItemAction.findAllItem()
       setItems(data ?? [])
+      setFilteredItems(data ?? [])
     } catch (error) {
       console.error('There was an error fetching the items!', error)
     }
@@ -114,7 +118,7 @@ const Item = () => {
 
   const indexOfLastItem = currentPage * itemsPerPage
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
-  const currentItems = items.slice(indexOfFirstItem, indexOfLastItem)
+  const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem)
 
   const pageNumbers = []
   for (let i = 1; i <= Math.ceil(items.length / itemsPerPage); i++) {
@@ -147,6 +151,22 @@ const Item = () => {
     )
   }
 
+  const handleFilter = (payload) => {
+    const filteredItems = items.filter((item) => {
+      const nameMatches = payload.name
+        ? item.item_name.toLowerCase().includes(payload.name.toLowerCase())
+        : true
+      const statusMatches = payload.status
+        ? payload.status === 'inStock'
+          ? item.is_stock === 1
+          : item.is_stock === 0
+        : true
+      return nameMatches && statusMatches
+    })
+
+    setFilteredItems(filteredItems)
+  }
+
   return (
     <div>
       <Container className="py-5">
@@ -165,92 +185,101 @@ const Item = () => {
                 </Button>
               </Card.Header>
               <Card.Body>
-                <Table responsive striped bordered hover className="mb-0">
-                  <thead>
-                    <tr>
-                      <th>Id</th>
-                      <th>Name</th>
-                      <th>Category</th>
-                      <th>Vendor</th>
-                      <th>Remaining Qty</th>
-                      <th>Status</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {currentItems.map((item, index) => (
-                      <tr key={item.id}>
-                        <td>{index + 1}</td>
-                        <td>{item.item_name}</td>
-                        <td>{generateCategoryName(item.category_id)}</td>
-                        <td>{generateVendorName(item.vendor_id)}</td>
-                        <td>{item.remaining_quantity}</td>
-                        <td>{generateStatus(item.is_stock)}</td>
-                        <td>
-                          <Dropdown>
-                            <Dropdown.Toggle
-                              as="div"
-                              style={{
-                                border: 'none',
-                                background: 'none',
-                                padding: 0,
-                                cursor: 'pointer',
-                              }}
-                            >
-                              <FontAwesomeIcon icon={faEllipsisV} />
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                              <Dropdown.Item onClick={() => handleEdit(item)}>
-                                <FontAwesomeIcon
-                                  icon={faEdit}
-                                  className="me-2"
-                                />
-                                Edit
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                style={{ color: 'red' }}
-                                onClick={() => handleDelete(item.id)}
-                              >
-                                <FontAwesomeIcon
-                                  icon={faTrash}
-                                  className="me-2"
-                                />
-                                Delete
-                              </Dropdown.Item>
-                            </Dropdown.Menu>
-                          </Dropdown>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-                <Pagination className="justify-content-center mt-4">
-                  <Pagination.Prev
-                    onClick={() =>
-                      setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)
-                    }
-                    disabled={currentPage === 1}
-                  />
-                  {pageNumbers.map((number) => (
-                    <Pagination.Item
-                      key={number}
-                      active={number === currentPage}
-                      onClick={() => paginate(number)}
-                    >
-                      {number}
-                    </Pagination.Item>
-                  ))}
-                  <Pagination.Next
-                    onClick={() =>
-                      setCurrentPage(
-                        currentPage < pageNumbers.length
-                          ? currentPage + 1
-                          : pageNumbers.length
-                      )
-                    }
-                    disabled={currentPage === pageNumbers.length}
-                  />
-                </Pagination>
+                <Filter {...{ handleFilter }} />
+                {currentItems?.length > 0 ? (
+                  <>
+                    <Table responsive striped bordered hover className="mb-0">
+                      <thead>
+                        <tr>
+                          <th>Id</th>
+                          <th>Name</th>
+                          <th>Category</th>
+                          <th>Vendor</th>
+                          <th>Remaining Qty</th>
+                          <th>Status</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {currentItems.map((item, index) => (
+                          <tr key={item.id}>
+                            <td>{index + 1}</td>
+                            <td>{item.item_name}</td>
+                            <td>{generateCategoryName(item.category_id)}</td>
+                            <td>{generateVendorName(item.vendor_id)}</td>
+                            <td>{item.remaining_quantity}</td>
+                            <td>{generateStatus(item.is_stock)}</td>
+                            <td>
+                              <Dropdown>
+                                <Dropdown.Toggle
+                                  as="div"
+                                  style={{
+                                    border: 'none',
+                                    background: 'none',
+                                    padding: 0,
+                                    cursor: 'pointer',
+                                  }}
+                                >
+                                  <FontAwesomeIcon icon={faEllipsisV} />
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                  <Dropdown.Item
+                                    onClick={() => handleEdit(item)}
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faEdit}
+                                      className="me-2"
+                                    />
+                                    Edit
+                                  </Dropdown.Item>
+                                  <Dropdown.Item
+                                    style={{ color: 'red' }}
+                                    onClick={() => handleDelete(item.id)}
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faTrash}
+                                      className="me-2"
+                                    />
+                                    Delete
+                                  </Dropdown.Item>
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                    <Pagination className="justify-content-center mt-4">
+                      <Pagination.Prev
+                        onClick={() =>
+                          setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)
+                        }
+                        disabled={currentPage === 1}
+                      />
+                      {pageNumbers.map((number) => (
+                        <Pagination.Item
+                          key={number}
+                          active={number === currentPage}
+                          onClick={() => paginate(number)}
+                        >
+                          {number}
+                        </Pagination.Item>
+                      ))}
+                      <Pagination.Next
+                        onClick={() =>
+                          setCurrentPage(
+                            currentPage < pageNumbers.length
+                              ? currentPage + 1
+                              : pageNumbers.length
+                          )
+                        }
+                        disabled={currentPage === pageNumbers.length}
+                      />
+                    </Pagination>
+                  </>
+                ) : (
+                  <NoRecordFound />
+                )}
               </Card.Body>
             </Card>
           </Col>
