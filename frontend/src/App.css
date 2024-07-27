@@ -203,5 +203,6 @@ body {
   backdrop-filter: brightness(0.80);
 }
 
-
-
+.table-responsive {
+  overflow: visible !important;
+}

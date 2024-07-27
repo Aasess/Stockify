@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Card,
@@ -6,194 +6,168 @@ import {
   Row,
   Col,
   Table,
-  Pagination,
   Modal,
-} from 'react-bootstrap'
-
-import ItemAction from '../../api/item/action'
-import VendorAction from '../../api/vendor/action'
-import CategoryAction from '../../api/category/action'
-
-import NavbarComponent from '../../components/NavbarComponent'
-import ItemForm from './itemForm'
+  Pagination,
+  Dropdown,
+} from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsisV, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import ItemAction from '../../api/item/action';
+import VendorAction from '../../api/vendor/action';
+import CategoryAction from '../../api/category/action';
+import NavbarComponent from '../../components/NavbarComponent';
+import ItemForm from './itemForm';
 
 const Item = () => {
-  const [items, setItems] = useState([])
-  const [categories, setCategories] = useState([])
-  const [vendors, setVendors] = useState([])
+  const [items, setItems] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [vendors, setVendors] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10
+  const [showModal, setShowModal] = useState(false);
+  const [editItem, setEditItem] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState(null);
 
-  const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 5
-  const [showModal, setShowModal] = useState(false)
-  const [newItemName, setNewItemName] = useState('')
-  const [editItem, setEditItem] = useState(null)
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [deleteItemId, setDeleteItemId] = useState(null)
+  useEffect(() => {
+    fetchItems();
+    findAllCategoryDropDown();
+    fetchVendorsDropDown();
+  }, []);
 
   const fetchItems = async () => {
     try {
-      const data = await ItemAction.findAllItem()
-      setItems(data ?? [])
+      const data = await ItemAction.findAllItem();
+      setItems(data ?? []);
     } catch (error) {
-      console.error('There was an error fetching the items!', error)
+      console.error('There was an error fetching the items!', error);
     }
-  }
+  };
 
   const findAllCategoryDropDown = async () => {
     try {
-      const data = await CategoryAction.findAllCategoryDropDown()
-      setCategories(data ?? [])
+      const data = await CategoryAction.findAllCategoryDropDown();
+      setCategories(data ?? []);
     } catch (error) {
-      console.error('There was an error fetching the categorys!', error)
+      console.error('There was an error fetching the categories!', error);
     }
-  }
+  };
 
   const fetchVendorsDropDown = async () => {
     try {
-      const data = await VendorAction.findAllVendorsDropDown()
-      setVendors(data ?? [])
+      const data = await VendorAction.findAllVendorsDropDown();
+      setVendors(data ?? []);
     } catch (error) {
-      console.error('There was an error fetching the vendors!', error)
+      console.error('There was an error fetching the vendors!', error);
     }
-  }
+  };
 
   const handleCreate = () => {
-    setShowModal(true)
-    setEditItem(null)
-    setNewItemName('')
-  }
+    setShowModal(true);
+    setEditItem(null);
+  };
 
   const handleClose = () => {
-    setShowModal(false)
-    setShowDeleteModal(false)
-  }
+    setShowModal(false);
+    setShowDeleteModal(false);
+  };
 
   const handleSave = async (payload) => {
     try {
       const formData = {
-        item_name: payload?.itemName,
-        sku: payload?.sku,
-        category_id: Number(payload?.selectedCategory),
-        vendor_id: Number(payload?.selectedVendor),
-      }
+        item_name: payload.itemName,
+        sku: payload.sku,
+        category_id: Number(payload.selectedCategory),
+        vendor_id: Number(payload.selectedVendor),
+      };
 
       if (editItem) {
-        await ItemAction.updateItemById(editItem.id, formData)
+        await ItemAction.updateItemById(editItem.id, formData);
       } else {
-        await ItemAction.createNewItem(formData)
+        await ItemAction.createNewItem(formData);
       }
-      fetchItems()
-      handleClose()
+      fetchItems();
+      handleClose();
     } catch (error) {
-      console.error('There was an error saving the item!', error)
+      console.error('There was an error saving the item!', error);
     }
-  }
+  };
 
   const handleEdit = (item) => {
-    setEditItem(item)
-    setNewItemName(item.item_name)
-    setShowModal(true)
-  }
+    setEditItem(item);
+    setShowModal(true);
+  };
 
   const handleDelete = (id) => {
-    setDeleteItemId(id)
-    setShowDeleteModal(true)
-  }
+    setDeleteItemId(id);
+    setShowDeleteModal(true);
+  };
 
   const confirmDelete = async () => {
     try {
-      await ItemAction.deleteItemById(deleteItemId)
-      fetchItems()
-      handleClose()
+      await ItemAction.deleteItemById(deleteItemId);
+      fetchItems();
+      handleClose();
     } catch (error) {
-      console.error('There was an error deleting the item!', error)
+      console.error('There was an error deleting the item!', error);
     }
-  }
+  };
 
-  // Get current items
-  const indexOfLastItem = currentPage * itemsPerPage
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage
-  const currentItems = items?.slice(indexOfFirstItem, indexOfLastItem)
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Change page
-  const paginate = (pageNumber) => setCurrentPage(pageNumber)
-
-  const nextPage = () => {
-    if (currentPage < Math.ceil(items.length / itemsPerPage)) {
-      setCurrentPage(currentPage + 1)
-    }
-  }
-
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1)
-    }
-  }
-
-  const pageNumbers = []
+  const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(items.length / itemsPerPage); i++) {
-    pageNumbers.push(i)
+    pageNumbers.push(i);
   }
 
-  const maxPageNumbersToShow = 5
-  const startPageIndex = Math.max(
-    currentPage - Math.floor(maxPageNumbersToShow / 2),
-    0
-  )
-  const endPageIndex = Math.min(
-    startPageIndex + maxPageNumbersToShow,
-    pageNumbers.length
-  )
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const generateVendorName = (id) => {
-    return vendors.find((vendor) => vendor.id === Number(id))?.name
-  }
+    return vendors.find((vendor) => vendor.id === Number(id))?.name;
+  };
 
   const generateCategoryName = (id) => {
     return categories.find((category) => category.id === Number(id))
-      ?.category_name
-  }
+      ?.category_name;
+  };
 
   const generateStatus = (status) => {
-    const isStock = Boolean(status)
+    const isStock = Boolean(status);
     const styles = {
-      color: 'rgb(183, 29, 24)',
-      backgroundColor: 'rgba(255, 86, 48, 0.16)',
+      color: isStock ? 'rgb(3 130 38)' : 'rgb(183, 29, 24)',
+      backgroundColor: isStock
+        ? 'rgb(60 249 34 / 16%)'
+        : 'rgba(255, 86, 48, 0.16)',
     }
     return (
       <div className="custom-badge" style={styles}>
         {isStock ? 'In Stock' : 'Sold'}
       </div>
-    )
-  }
-  useEffect(() => {
-    Promise.all([
-      fetchItems(),
-      findAllCategoryDropDown(),
-      fetchVendorsDropDown(),
-    ])
-  }, [])
+    );
+  };
 
   return (
     <div>
       <NavbarComponent />
-      <Container
-        className="d-flex justify-content-center align-items-center min-vh-100"
-        style={{ backgroundColor: '#F5EEE6' }}
-      >
-        <Row className="w-100 justify-content-center">
-          <Col md={10} lg={8}>
-            <Card className="p-4 shadow-sm">
+      <Container className="py-5">
+        <Row className="mb-4">
+          <Col>
+            <h2 className="text-center">Item Management</h2>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Card className="shadow-sm">
+              <Card.Header className="d-flex justify-content-between align-items-center">
+                <h4 className="mb-0">Items</h4>
+                <Button variant="success" onClick={handleCreate}>
+                  Create
+                </Button>
+              </Card.Header>
               <Card.Body>
-                <div className="d-flex justify-content-between align-items-center mb-4">
-                  <Card.Title>
-                    <b>Items</b>
-                  </Card.Title>
-                  <Button variant="success" onClick={handleCreate}>
-                    Create
-                  </Button>
-                </div>
-                <Table striped bordered hover>
+                <Table responsive striped bordered hover className="mb-0">
                   <thead>
                     <tr>
                       <th>Id</th>
@@ -215,65 +189,78 @@ const Item = () => {
                         <td>{item.remaining_quantity}</td>
                         <td>{generateStatus(item.is_stock)}</td>
                         <td>
-                          <Button
-                            variant="warning"
-                            onClick={() => handleEdit(item)}
-                            className="me-2"
-                          >
-                            Edit
-                          </Button>
-                          <Button
-                            variant="danger"
-                            onClick={() => handleDelete(item.id)}
-                          >
-                            Delete
-                          </Button>
+                          <Dropdown>
+                            <Dropdown.Toggle
+                              as="div"
+                              style={{
+                                border: 'none',
+                                background: 'none',
+                                padding: 0,
+                                cursor: 'pointer',
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faEllipsisV} />
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                              <Dropdown.Item onClick={() => handleEdit(item)}>
+                                <FontAwesomeIcon icon={faEdit} className="me-2" />
+                                Edit
+                              </Dropdown.Item>
+                              <Dropdown.Item
+                                style={{ color: 'red' }}
+                                onClick={() => handleDelete(item.id)}
+                              >
+                                <FontAwesomeIcon icon={faTrash} className="me-2" />
+                                Delete
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </Table>
-                <Pagination className="justify-content-center">
+                <Pagination className="justify-content-center mt-4">
                   <Pagination.Prev
-                    onClick={prevPage}
+                    onClick={() =>
+                      setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)
+                    }
                     disabled={currentPage === 1}
                   />
-                  {pageNumbers
-                    .slice(startPageIndex, endPageIndex)
-                    .map((number) => (
-                      <Pagination.Item
-                        key={number}
-                        active={number === currentPage}
-                        onClick={() => paginate(number)}
-                      >
-                        {number}
-                      </Pagination.Item>
-                    ))}
+                  {pageNumbers.map((number) => (
+                    <Pagination.Item
+                      key={number}
+                      active={number === currentPage}
+                      onClick={() => paginate(number)}
+                    >
+                      {number}
+                    </Pagination.Item>
+                  ))}
                   <Pagination.Next
-                    onClick={nextPage}
-                    disabled={
-                      currentPage === Math.ceil(items.length / itemsPerPage)
+                    onClick={() =>
+                      setCurrentPage(
+                        currentPage < pageNumbers.length
+                          ? currentPage + 1
+                          : pageNumbers.length
+                      )
                     }
+                    disabled={currentPage === pageNumbers.length}
                   />
                 </Pagination>
               </Card.Body>
             </Card>
           </Col>
         </Row>
-
         {showModal && (
           <ItemForm
-            {...{
-              categories,
-              vendors,
-              showModal,
-              handleClose,
-              handleSave,
-              editItem,
-            }}
+            categories={categories}
+            vendors={vendors}
+            showModal={showModal}
+            handleClose={handleClose}
+            handleSave={handleSave}
+            editItem={editItem}
           />
         )}
-
         <Modal show={showDeleteModal} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Delete Item</Modal.Title>
@@ -290,7 +277,8 @@ const Item = () => {
         </Modal>
       </Container>
     </div>
-  )
-}
+  );
+};
 
-export default Item
+export default Item;
+

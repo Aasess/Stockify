@@ -13,124 +13,124 @@ import {
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import StockAction from '../../api/stock/action';
-import ItemAction from '../../api/item/action';
-import NavbarComponent from '../../components/NavbarComponent';
-import NoRecordFound from '../../components/NoRecordFound';
+import SaleAction from '../../api/sale/action';
+import ItemAction from '../../api/item/action'
+import NavbarComponent from '../../components/NavbarComponent'
+import NoRecordFound from '../../components/NoRecordFound'
 
-const Stock = () => {
-  const [stocks, setStocks] = useState([]);
-  const [items, setItems] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [currentStock, setCurrentStock] = useState({
+const Sale = () => {
+  const [sales, setSales] = useState([])
+  const [items, setItems] = useState([])
+  const [showModal, setShowModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [currentSale, setCurrentSale] = useState({
     id: '',
     item: '',
     price: '',
-    received_quantity: '',
-  });
-  const [isEdit, setIsEdit] = useState(false);
-  const [stockToDelete, setStockToDelete] = useState(null);
+    sold_quantity: '',
+  })
+  const [isEdit, setIsEdit] = useState(false)
+  const [saleToDelete, setSaleToDelete] = useState(null)
 
   // Pagination states
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
 
-  const fetchStocks = async () => {
+  const fetchSales = async () => {
     try {
-      const data = await StockAction.findAllStocks();
-      setStocks(data ?? []);
+      const data = await SaleAction.findAllSales()
+      setSales(data ?? [])
     } catch (error) {
-      console.error('There was an error fetching the stocks!', error);
+      console.error('There was an error fetching the sales!', error)
     }
-  };
+  }
 
   const fetchItems = async () => {
     try {
-      const data = await ItemAction.findAllItem();
-      setItems(data ?? []);
+      const data = await ItemAction.findAllItem()
+      setItems(data ?? [])
     } catch (error) {
-      console.error('There was an error fetching the items!', error);
+      console.error('There was an error fetching the items!', error)
     }
-  };
+  }
 
   const generateItemName = (id) => {
-    return items.find((item) => item.id === Number(id))?.item_name;
-  };
+    return items.find((item) => item.id === Number(id))?.item_name
+  }
 
   const handleSave = async () => {
     try {
       const formData = {
-        item_id: Number(currentStock.item),
-        price: Number(currentStock.price),
-        received_quantity: Number(currentStock.received_quantity),
-      };
-      if (isEdit) {
-        await StockAction.updateStockById(currentStock.id, formData);
-      } else {
-        await StockAction.createNewStock(formData);
+        item_id: Number(currentSale.item),
+        price: Number(currentSale.price),
+        sold_quantity: Number(currentSale.sold_quantity),
       }
-      fetchStocks();
-      setShowModal(false);
+      if (isEdit) {
+        await SaleAction.updateSaleById(currentSale.id, formData)
+      } else {
+        await SaleAction.createNewSale(formData)
+      }
+      fetchSales()
+      setShowModal(false)
     } catch (error) {
-      console.error('There was an error saving the stock!', error);
+      console.error('There was an error saving the sale!', error)
     }
-  };
+  }
 
   const handleDelete = async () => {
     try {
-      await StockAction.deleteStockById(stockToDelete);
-      fetchStocks();
-      setShowDeleteModal(false);
+      await SaleAction.deleteSaleById(saleToDelete)
+      fetchSales()
+      setShowDeleteModal(false)
     } catch (error) {
-      console.error('There was an error deleting the stock!', error);
+      console.error('There was an error deleting the sale!', error)
     }
-  };
-
-  const openEditModal = (stock) => {
-    const newState = {
-      item: stock.item_id,
-      ...stock,
-    };
-    setCurrentStock(newState);
-    setIsEdit(true);
-    setShowModal(true);
-  };
-
-  const openCreateModal = () => {
-    setCurrentStock({ id: '', item: '', price: '', received_quantity: '' });
-    setIsEdit(false);
-    setShowModal(true);
-  };
-
-  const openDeleteModal = (id) => {
-    setStockToDelete(id);
-    setShowDeleteModal(true);
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCurrentStock({
-      ...currentStock,
-      [name]: value,
-    });
-  };
-
-  useEffect(() => {
-    Promise.all([fetchItems(), fetchStocks()]);
-  }, []);
-
-  // Pagination logic
-  const indexOfLastStock = currentPage * itemsPerPage;
-  const indexOfFirstStock = indexOfLastStock - itemsPerPage;
-  const currentStocks = stocks.slice(indexOfFirstStock, indexOfLastStock);
-
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(stocks.length / itemsPerPage); i++) {
-    pageNumbers.push(i);
   }
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const openEditModal = (sale) => {
+    const newState = {
+      item: sale.item_id,
+      ...sale,
+    }
+    setCurrentSale(newState)
+    setIsEdit(true)
+    setShowModal(true)
+  }
+
+  const openCreateModal = () => {
+    setCurrentSale({ id: '', item: '', price: '', sold_quantity: '' })
+    setIsEdit(false)
+    setShowModal(true)
+  }
+
+  const openDeleteModal = (id) => {
+    setSaleToDelete(id)
+    setShowDeleteModal(true)
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setCurrentSale({
+      ...currentSale,
+      [name]: value,
+    })
+  }
+
+  useEffect(() => {
+    Promise.all([fetchItems(), fetchSales()])
+  }, [])
+
+  // Pagination logic
+  const indexOfLastSale = currentPage * itemsPerPage
+  const indexOfFirstSale = indexOfLastSale - itemsPerPage
+  const currentSales = sales.slice(indexOfFirstSale, indexOfLastSale)
+
+  const pageNumbers = []
+  for (let i = 1; i <= Math.ceil(sales.length / itemsPerPage); i++) {
+    pageNumbers.push(i)
+  }
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber)
 
   return (
     <div>
@@ -138,35 +138,37 @@ const Stock = () => {
       <Container className="py-5">
         <Row className="mb-4">
           <Col>
-            <h2 className="text-center">Stock Management</h2>
+            <h2 className="text-center">Sale Management</h2>
           </Col>
         </Row>
         <Row>
           <Col>
             <Card className="shadow-sm">
               <Card.Header className="d-flex justify-content-between align-items-center">
-                <h4 className="mb-0">Stocks</h4>
+                <h4 className="mb-0">Sales</h4>
                 <Button variant="success" onClick={openCreateModal}>
                   Create
                 </Button>
               </Card.Header>
               <Card.Body>
-                {currentStocks?.length > 0 ? (
+                {currentSales?.length > 0 ? (
                   <Table responsive striped bordered hover className="mb-0">
                     <thead>
                       <tr>
-                        <th>Item</th>
+                        <th>Id</th>
+                        <th>Name</th>
                         <th>Price</th>
-                        <th>Received Quantity</th>
+                        <th>Sold Quantity</th>
                         <th></th>
                       </tr>
                     </thead>
                     <tbody>
-                      {currentStocks?.map((stock) => (
-                        <tr key={stock.id}>
-                          <td>{generateItemName(stock.item_id)}</td>
-                          <td>{stock.price}</td>
-                          <td>{stock.received_quantity}</td>
+                      {currentSales?.map((sale, index) => (
+                        <tr key={sale.id}>
+                          <td>{index + 1}</td>
+                          <td>{generateItemName(sale.item_id)}</td>
+                          <td>{sale.price}</td>
+                          <td>{sale.sold_quantity}</td>
                           <td>
                             <Dropdown>
                               <Dropdown.Toggle
@@ -183,7 +185,7 @@ const Stock = () => {
 
                               <Dropdown.Menu>
                                 <Dropdown.Item
-                                  onClick={() => openEditModal(stock)}
+                                  onClick={() => openEditModal(sale)}
                                 >
                                   <FontAwesomeIcon
                                     icon={faEdit}
@@ -193,7 +195,7 @@ const Stock = () => {
                                 </Dropdown.Item>
                                 <Dropdown.Item
                                   style={{ color: 'red' }}
-                                  onClick={() => openDeleteModal(stock.id)}
+                                  onClick={() => openDeleteModal(sale.id)}
                                 >
                                   <FontAwesomeIcon
                                     icon={faTrash}
@@ -213,7 +215,9 @@ const Stock = () => {
                 )}
                 <Pagination className="justify-content-center mt-4">
                   <Pagination.Prev
-                    onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}
+                    onClick={() =>
+                      setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)
+                    }
                     disabled={currentPage === 1}
                   />
                   {pageNumbers.map((number) => (
@@ -226,7 +230,13 @@ const Stock = () => {
                     </Pagination.Item>
                   ))}
                   <Pagination.Next
-                    onClick={() => setCurrentPage(currentPage < pageNumbers.length ? currentPage + 1 : pageNumbers.length)}
+                    onClick={() =>
+                      setCurrentPage(
+                        currentPage < pageNumbers.length
+                          ? currentPage + 1
+                          : pageNumbers.length
+                      )
+                    }
                     disabled={currentPage === pageNumbers.length}
                   />
                 </Pagination>
@@ -237,7 +247,7 @@ const Stock = () => {
 
         <Modal show={showModal} onHide={() => setShowModal(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>{isEdit ? 'Edit Stock' : 'Create Stock'}</Modal.Title>
+            <Modal.Title>{isEdit ? 'Edit Sale' : 'Create Sale'}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -246,7 +256,7 @@ const Stock = () => {
                 <Form.Control
                   as="select"
                   name="item"
-                  value={currentStock.item}
+                  value={currentSale.item}
                   onChange={handleChange}
                 >
                   <option value="">Select item</option>
@@ -263,17 +273,17 @@ const Stock = () => {
                   type="text"
                   placeholder="Enter price"
                   name="price"
-                  value={currentStock.price}
+                  value={currentSale.price}
                   onChange={handleChange}
                 />
               </Form.Group>
-              <Form.Group controlId="formReceivedQuantity" className="mb-3">
-                <Form.Label>Received Quantity</Form.Label>
+              <Form.Group controlId="formSoldQuantity" className="mb-3">
+                <Form.Label>Sold Quantity</Form.Label>
                 <Form.Control
                   type="number"
-                  placeholder="Enter received quantity"
-                  name="received_quantity"
-                  value={currentStock.received_quantity}
+                  placeholder="Enter sold quantity"
+                  name="sold_quantity"
+                  value={currentSale.sold_quantity}
                   onChange={handleChange}
                 />
               </Form.Group>
@@ -293,7 +303,7 @@ const Stock = () => {
           <Modal.Header closeButton>
             <Modal.Title>Confirm Delete</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Are you sure you want to delete this stock?</Modal.Body>
+          <Modal.Body>Are you sure you want to delete this sale?</Modal.Body>
           <Modal.Footer>
             <Button
               variant="secondary"
@@ -308,8 +318,7 @@ const Stock = () => {
         </Modal>
       </Container>
     </div>
-  );
-};
+  )
+}
 
-export default Stock;
-
+export default Sale;

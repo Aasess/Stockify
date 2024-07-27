@@ -77,6 +77,10 @@ const NavbarComponent = () => {
             <PackagePlus />
             <span className="ps-2 fs-5">Stock</span>
           </Nav.Link>
+          <Nav.Link as={Link} to="/sale" className="d-flex align-items-center">
+            <PackagePlus />
+            <span className="ps-2 fs-5">Sales</span>
+          </Nav.Link>
         </Nav>
       </div>
     </div>

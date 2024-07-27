@@ -9,12 +9,14 @@ import UserRegistration from './components/UserRegistration'
 import UserForgetPassword from './components/UserForgetPassword'
 import UserResetPassword from './components/UserResetPassword'
 import Loader from './components/Loader'
+import Sale from './scenes/sale'
 
 const Dashboard = lazy(() => import('./scenes/dashboard'))
 const Category = lazy(() => import('./scenes/category'))
 const Vendor = lazy(() => import('./scenes/vendor'))
 const Item = lazy(() => import('./scenes/item'))
 const Stock = lazy(() => import('./scenes/stock'))
+
 
 const RouteList = () => {
   return (
@@ -34,6 +36,7 @@ const RouteList = () => {
         <Route path="/vendor" exact element={<Vendor />} />
         <Route path="/item" exact element={<Item />} />
         <Route path="/stock" exact element={<Stock />} />
+        <Route path="/sale" exact element={<Sale />} />
       </Routes>
     </Suspense>
   )
