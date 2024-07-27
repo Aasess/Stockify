@@ -8,12 +8,20 @@ import { useNavigate } from 'react-router-dom'
 import CategoryAction from '../../api/category/action'
 import VendorAction from '../../api/vendor/action'
 import UserAction from '../../api/user/action'
-import NavbarComponent from '../../components/NavbarComponent'
+import {
+  SquareGanttChart,
+  Building2,
+  ShoppingBasket,
+  PackageMinus,
+} from 'lucide-react'
+import ItemAction from '../../api/item/action'
 
 const Dashboard = () => {
   const [state, setState] = useState({
     numCategories: 0,
     numVender: 0,
+    numProducts: 0,
+    outOfStockProducts: 0,
   })
 
   const navigate = useNavigate()
@@ -147,63 +155,70 @@ const Dashboard = () => {
     })
   }
 
+  const findTotalNumberOfItems = async () => {
+    const result = await ItemAction.findNumberOfItem()
+
+    setState((prev) => {
+      return {
+        ...prev,
+        numProducts: result?.allRecords,
+        outOfStockProducts: result?.outOfStockCount,
+      }
+    })
+  }
   useEffect(() => {
     checkIfUserIsLoggedInOrNot().then((res) => {
       if (res) {
         findTotalNumberOfCategories()
         findTotalNumberOfVendors()
+        findTotalNumberOfItems()
       }
     })
   }, [])
 
-  const vendorData = {
-    labels: ['Vendors'],
-    datasets: [
-      {
-        label: 'Number of Vendors',
-        data: [state.numVender],
-        backgroundColor: ['#36A2EB'],
-      },
-    ],
-  }
-
-  const categoryData = {
-    labels: ['Categories'],
-    datasets: [
-      {
-        label: 'Number of Categories',
-        data: [state.numCategories],
-        backgroundColor: ['#FF6384'],
-      },
-    ],
-  }
-
   return (
     <div>
-      <NavbarComponent />
-
       <Container className="mt-4">
         {/* Top Summary Cards */}
-        <div className="col-12 d-flex justify-content-between">
-          <div className="card p-3 m-2 summary-card" style={{ width: '18rem' }}>
-            <h5 className="card-title">Number of Vendors</h5>
-            <p className="card-text">{state.numVender}</p>
+        <div className="col-12 d-flex mb-4 gap-4 flex-wrap">
+          <div class="custom-card">
+            <div class="icon-box">
+              <Building2 size={60} color="#6784f9" />
+            </div>
+            <div class="text-box">
+              <h4>{state.numVender}</h4>
+              <h6>Vendors</h6>
+            </div>
           </div>
-          <div className="card p-3 m-2 summary-card" style={{ width: '18rem' }}>
-            <h5 className="card-title">Number of Category</h5>
-            <p className="card-text">{state.numCategories}</p>
+          <div class="custom-card">
+            <div class="icon-box">
+              <SquareGanttChart size={60} color="#e4c111" />
+            </div>
+
+            <div class="text-box">
+              <h4>{state.numCategories}</h4>
+              <h6>Categories</h6>
+            </div>
           </div>
-          <div className="card p-3 m-2 summary-card" style={{ width: '18rem' }}>
-            <h5 className="card-title">Number of Product 1</h5>
-            <p className="card-text">0</p>
+          <div class="custom-card">
+            <div class="icon-box">
+              <ShoppingBasket size={60} color="rgba(75,192,192,1)" />
+            </div>
+
+            <div class="text-box">
+              <h4>{state.numProducts}</h4>
+              <h6>Items</h6>
+            </div>
           </div>
-          <div className="card p-3 m-2 summary-card" style={{ width: '18rem' }}>
-            <h5 className="card-title">Number of Product 2</h5>
-            <p className="card-text">0</p>
-          </div>
-          <div className="card p-3 m-2 summary-card" style={{ width: '18rem' }}>
-            <h5 className="card-title">Number of Product 3</h5>
-            <p className="card-text">0</p>
+          <div class="custom-card">
+            <div class="icon-box">
+              <PackageMinus size={60} color="#FF6384" />
+            </div>
+
+            <div class="text-box">
+              <h4>{state.outOfStockProducts}</h4>
+              <h6>Out of Stock</h6>
+            </div>
           </div>
         </div>
         <div className="row">

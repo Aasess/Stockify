@@ -1,88 +1,56 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import {
-  Navbar,
-  Nav,
-  Form,
-  FormControl,
-  Button,
-  Container,
-} from 'react-bootstrap'
-import {
-  Gauge,
-  SquareGanttChart,
-  Building2,
-  ShoppingBasket,
-  PackagePlus,
-} from 'lucide-react'
+import React from 'react'
+
+import { Navbar, Container, Dropdown } from 'react-bootstrap'
+import Sidebar from './Sidebar'
+
+import { CircleUser } from 'lucide-react'
+
+import { Outlet } from 'react-router-dom'
 
 const NavbarComponent = () => {
-  const [menuOpen, setMenuOpen] = useState(false)
-
-  const handleMenuToggle = () => {
-    setMenuOpen(!menuOpen)
-  }
+  const username = localStorage.getItem('username')
 
   return (
     <div className="navbar__component">
-      <Navbar bg="dark" variant="dark" expand="lg" className="navbar-custom">
-        <Container className="d-flex justify-content-between align-items-center">
-          <Button
-            variant="dark"
-            className="navbar-toggler-icon"
-            onClick={handleMenuToggle}
-          ></Button>
+      <Navbar
+        variant="dark"
+        expand="lg"
+        className="navbar-custom position-fixed w-100"
+        style={{ backgroundColor: '#343a40 !important' }}
+      >
+        <Container
+          className="d-flex justify-content-between align-items-center mx-2"
+          fluid={true}
+        >
           <Navbar.Brand href="/" className="ms-3">
             Stockify
           </Navbar.Brand>
-          <Form className="d-flex ms-auto">
-            <FormControl
-              type="search"
-              placeholder="Search..."
-              className="me-2"
-              aria-label="Search"
-            />
-            <Button variant="outline-light">Search</Button>
-          </Form>
+          <Dropdown align="end" className="ms-3">
+            <Dropdown.Toggle
+              variant="primary"
+              id="dropdown-basic"
+              style={{ backgroundColor: '#0064a1', border: 'none' }}
+            >
+              <div className="d-flex gap-2 align-items-center">
+                <CircleUser />
+                <span className="fw-bold">Welcome, {username} </span>
+              </div>
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="mt-3">
+              <Dropdown.Item href="#/action-2">Profile</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item href="#/action-4">Logout</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </Container>
       </Navbar>
+      <Sidebar />
 
-      <div className={`slide-in-menu ${menuOpen ? 'show' : ''}`}>
-        <Nav className="flex-column p-4">
-          <Nav.Link as={Link} to="/" className="d-flex align-items-center">
-            <Gauge />
-            <span className="ps-2 fs-5">Dashboard</span>
-          </Nav.Link>
-          <Nav.Link
-            as={Link}
-            to="/category"
-            className="d-flex align-items-center"
-          >
-            <SquareGanttChart />
-            <span className="ps-2 fs-5">Category</span>
-          </Nav.Link>
-          <Nav.Link
-            as={Link}
-            to="/vendor"
-            className="d-flex align-items-center"
-          >
-            <Building2 />
-            <span className="ps-2 fs-5">Vendor</span>
-          </Nav.Link>
-          <Nav.Link as={Link} to="/item" className="d-flex align-items-center">
-            <ShoppingBasket />
-            <span className="ps-2 fs-5">Item</span>
-          </Nav.Link>
-          <Nav.Link as={Link} to="/stock" className="d-flex align-items-center">
-            <PackagePlus />
-            <span className="ps-2 fs-5">Stock</span>
-          </Nav.Link>
-          <Nav.Link as={Link} to="/sale" className="d-flex align-items-center">
-            <PackagePlus />
-            <span className="ps-2 fs-5">Sales</span>
-          </Nav.Link>
-        </Nav>
-      </div>
+      <main
+        style={{ marginLeft: '250px', padding: '20px', paddingTop: '62px' }}
+      >
+        <Outlet />
+      </main>
     </div>
   )
 }

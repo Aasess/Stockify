@@ -11,6 +11,7 @@ const router = express.Router()
 //PROTECTED ROUTES
 router.get('/', ItemController.findAllItems)
 router.post('/', ItemController.createItem)
+router.get('/count', ItemController.findCountOfItems)
 router.get('/:id', ItemController.findItemById)
 router.put('/:id', ItemController.updateItemById)
 router.delete('/:id', ItemController.deleteItemById)

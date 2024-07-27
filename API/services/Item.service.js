@@ -45,6 +45,15 @@ class ItemServices {
       throw error
     }
   }
+
+  static async findCountOfAll(id) {
+    try {
+      const result = await ItemModel.findCountOfAll(id)
+      return result
+    } catch (error) {
+      throw error
+    }
+  }
 }
 
 export default ItemServices

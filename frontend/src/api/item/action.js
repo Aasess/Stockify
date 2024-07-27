@@ -56,7 +56,6 @@ class ItemAction {
 
   static async deleteItemById(id) {
     try {
-      console.log(id)
       const response = await apiClient.delete(
         ItemEndPoint.itemById.replace('id', id)
       )
@@ -66,5 +65,6 @@ class ItemAction {
     }
   }
 }
+
 
 export default ItemAction

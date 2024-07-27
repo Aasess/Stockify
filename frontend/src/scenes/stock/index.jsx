@@ -12,51 +12,50 @@ import {
   Pagination,
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisV, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import StockAction from '../../api/stock/action';
-import ItemAction from '../../api/item/action';
-import NavbarComponent from '../../components/NavbarComponent';
-import NoRecordFound from '../../components/NoRecordFound';
+import { faEllipsisV, faEdit } from '@fortawesome/free-solid-svg-icons'
+import StockAction from '../../api/stock/action'
+import ItemAction from '../../api/item/action'
+import NoRecordFound from '../../components/NoRecordFound'
 
 const Stock = () => {
-  const [stocks, setStocks] = useState([]);
-  const [items, setItems] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [stocks, setStocks] = useState([])
+  const [items, setItems] = useState([])
+  const [showModal, setShowModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [currentStock, setCurrentStock] = useState({
     id: '',
     item: '',
     price: '',
     received_quantity: '',
-  });
-  const [isEdit, setIsEdit] = useState(false);
-  const [stockToDelete, setStockToDelete] = useState(null);
+  })
+  const [isEdit, setIsEdit] = useState(false)
+  const [stockToDelete, setStockToDelete] = useState(null)
 
   // Pagination states
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
 
   const fetchStocks = async () => {
     try {
-      const data = await StockAction.findAllStocks();
-      setStocks(data ?? []);
+      const data = await StockAction.findAllStocks()
+      setStocks(data ?? [])
     } catch (error) {
-      console.error('There was an error fetching the stocks!', error);
+      console.error('There was an error fetching the stocks!', error)
     }
-  };
+  }
 
   const fetchItems = async () => {
     try {
-      const data = await ItemAction.findAllItem();
-      setItems(data ?? []);
+      const data = await ItemAction.findAllItem()
+      setItems(data ?? [])
     } catch (error) {
-      console.error('There was an error fetching the items!', error);
+      console.error('There was an error fetching the items!', error)
     }
-  };
+  }
 
   const generateItemName = (id) => {
-    return items.find((item) => item.id === Number(id))?.item_name;
-  };
+    return items.find((item) => item.id === Number(id))?.item_name
+  }
 
   const handleSave = async () => {
     try {
@@ -64,77 +63,76 @@ const Stock = () => {
         item_id: Number(currentStock.item),
         price: Number(currentStock.price),
         received_quantity: Number(currentStock.received_quantity),
-      };
-      if (isEdit) {
-        await StockAction.updateStockById(currentStock.id, formData);
-      } else {
-        await StockAction.createNewStock(formData);
       }
-      fetchStocks();
-      setShowModal(false);
+      if (isEdit) {
+        await StockAction.updateStockById(currentStock.id, formData)
+      } else {
+        await StockAction.createNewStock(formData)
+      }
+      fetchStocks()
+      setShowModal(false)
     } catch (error) {
-      console.error('There was an error saving the stock!', error);
+      console.error('There was an error saving the stock!', error)
     }
-  };
+  }
 
   const handleDelete = async () => {
     try {
-      await StockAction.deleteStockById(stockToDelete);
-      fetchStocks();
-      setShowDeleteModal(false);
+      await StockAction.deleteStockById(stockToDelete)
+      fetchStocks()
+      setShowDeleteModal(false)
     } catch (error) {
-      console.error('There was an error deleting the stock!', error);
+      console.error('There was an error deleting the stock!', error)
     }
-  };
+  }
 
   const openEditModal = (stock) => {
     const newState = {
       item: stock.item_id,
       ...stock,
-    };
-    setCurrentStock(newState);
-    setIsEdit(true);
-    setShowModal(true);
-  };
+    }
+    setCurrentStock(newState)
+    setIsEdit(true)
+    setShowModal(true)
+  }
 
   const openCreateModal = () => {
-    setCurrentStock({ id: '', item: '', price: '', received_quantity: '' });
-    setIsEdit(false);
-    setShowModal(true);
-  };
+    setCurrentStock({ id: '', item: '', price: '', received_quantity: '' })
+    setIsEdit(false)
+    setShowModal(true)
+  }
 
   const openDeleteModal = (id) => {
-    setStockToDelete(id);
-    setShowDeleteModal(true);
-  };
+    setStockToDelete(id)
+    setShowDeleteModal(true)
+  }
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setCurrentStock({
       ...currentStock,
       [name]: value,
-    });
-  };
-
-  useEffect(() => {
-    Promise.all([fetchItems(), fetchStocks()]);
-  }, []);
-
-  // Pagination logic
-  const indexOfLastStock = currentPage * itemsPerPage;
-  const indexOfFirstStock = indexOfLastStock - itemsPerPage;
-  const currentStocks = stocks.slice(indexOfFirstStock, indexOfLastStock);
-
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(stocks.length / itemsPerPage); i++) {
-    pageNumbers.push(i);
+    })
   }
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  useEffect(() => {
+    Promise.all([fetchItems(), fetchStocks()])
+  }, [])
+
+  // Pagination logic
+  const indexOfLastStock = currentPage * itemsPerPage
+  const indexOfFirstStock = indexOfLastStock - itemsPerPage
+  const currentStocks = stocks.slice(indexOfFirstStock, indexOfLastStock)
+
+  const pageNumbers = []
+  for (let i = 1; i <= Math.ceil(stocks.length / itemsPerPage); i++) {
+    pageNumbers.push(i)
+  }
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber)
 
   return (
     <div>
-      <NavbarComponent />
       <Container className="py-5">
         <Row className="mb-4">
           <Col>
@@ -155,6 +153,7 @@ const Stock = () => {
                   <Table responsive striped bordered hover className="mb-0">
                     <thead>
                       <tr>
+                      <th>Id</th>
                         <th>Item</th>
                         <th>Price</th>
                         <th>Received Quantity</th>
@@ -162,8 +161,9 @@ const Stock = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {currentStocks?.map((stock) => (
+                      {currentStocks?.map((stock,index) => (
                         <tr key={stock.id}>
+                          <td>{index+1}</td>
                           <td>{generateItemName(stock.item_id)}</td>
                           <td>{stock.price}</td>
                           <td>{stock.received_quantity}</td>
@@ -317,7 +317,7 @@ const Stock = () => {
       </Container>
     </div>
   )
-};
+}
 
 export default Stock;
 

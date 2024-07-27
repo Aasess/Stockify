@@ -13,103 +13,101 @@ import {
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import VendorAction from '../../api/vendor/action';
-import NavbarComponent from '../../components/NavbarComponent';
+import VendorAction from '../../api/vendor/action'
 
 const Vendor = () => {
-  const [vendors, setVendors] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [vendors, setVendors] = useState([])
+  const [showModal, setShowModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [currentVendor, setCurrentVendor] = useState({
     id: '',
     name: '',
     address: '',
     phone: '',
-  });
-  const [isEdit, setIsEdit] = useState(false);
-  const [vendorToDelete, setVendorToDelete] = useState(null);
+  })
+  const [isEdit, setIsEdit] = useState(false)
+  const [vendorToDelete, setVendorToDelete] = useState(null)
 
   // Pagination states
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
 
   useEffect(() => {
-    fetchVendors();
-  }, []);
+    fetchVendors()
+  }, [])
 
   const fetchVendors = async () => {
     try {
-      const data = await VendorAction.findAllVendor();
-      setVendors(data ?? []);
+      const data = await VendorAction.findAllVendor()
+      setVendors(data ?? [])
     } catch (error) {
-      console.error('There was an error fetching the vendors!', error);
+      console.error('There was an error fetching the vendors!', error)
     }
-  };
+  }
 
   const handleSave = async () => {
     try {
       if (isEdit) {
-        await VendorAction.updateVendorById(currentVendor.id, currentVendor);
+        await VendorAction.updateVendorById(currentVendor.id, currentVendor)
       } else {
-        await VendorAction.createNewVendor(currentVendor);
+        await VendorAction.createNewVendor(currentVendor)
       }
-      fetchVendors();
-      setShowModal(false);
+      fetchVendors()
+      setShowModal(false)
     } catch (error) {
-      console.error('There was an error saving the vendor!', error);
+      console.error('There was an error saving the vendor!', error)
     }
-  };
+  }
 
   const handleDelete = async () => {
     try {
-      await VendorAction.deleteVendorById(vendorToDelete);
-      fetchVendors();
-      setShowDeleteModal(false);
+      await VendorAction.deleteVendorById(vendorToDelete)
+      fetchVendors()
+      setShowDeleteModal(false)
     } catch (error) {
-      console.error('There was an error deleting the vendor!', error);
+      console.error('There was an error deleting the vendor!', error)
     }
-  };
+  }
 
   const openEditModal = (vendor) => {
-    setCurrentVendor(vendor);
-    setIsEdit(true);
-    setShowModal(true);
-  };
+    setCurrentVendor(vendor)
+    setIsEdit(true)
+    setShowModal(true)
+  }
 
   const openCreateModal = () => {
-    setCurrentVendor({ id: '', name: '', address: '', phone: '' });
-    setIsEdit(false);
-    setShowModal(true);
-  };
+    setCurrentVendor({ id: '', name: '', address: '', phone: '' })
+    setIsEdit(false)
+    setShowModal(true)
+  }
 
   const openDeleteModal = (id) => {
-    setVendorToDelete(id);
-    setShowDeleteModal(true);
-  };
+    setVendorToDelete(id)
+    setShowDeleteModal(true)
+  }
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setCurrentVendor({
       ...currentVendor,
       [name]: value,
-    });
-  };
-
-  // Pagination logic
-  const indexOfLastVendor = currentPage * itemsPerPage;
-  const indexOfFirstVendor = indexOfLastVendor - itemsPerPage;
-  const currentVendors = vendors.slice(indexOfFirstVendor, indexOfLastVendor);
-
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(vendors.length / itemsPerPage); i++) {
-    pageNumbers.push(i);
+    })
   }
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // Pagination logic
+  const indexOfLastVendor = currentPage * itemsPerPage
+  const indexOfFirstVendor = indexOfLastVendor - itemsPerPage
+  const currentVendors = vendors.slice(indexOfFirstVendor, indexOfLastVendor)
+
+  const pageNumbers = []
+  for (let i = 1; i <= Math.ceil(vendors.length / itemsPerPage); i++) {
+    pageNumbers.push(i)
+  }
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber)
 
   return (
     <div>
-      <NavbarComponent />
       <Container className="py-5">
         <Row className="mb-4">
           <Col>
@@ -137,9 +135,9 @@ const Vendor = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentVendors.map((vendor) => (
+                    {currentVendors.map((vendor,index) => (
                       <tr key={vendor.id}>
-                        <td>{vendor.id}</td>
+                        <td>{index+1}</td>
                         <td>{vendor.name}</td>
                         <td>{vendor.address}</td>
                         <td>{vendor.phone}</td>
@@ -147,18 +145,34 @@ const Vendor = () => {
                           <Dropdown>
                             <Dropdown.Toggle
                               as="div"
-                              style={{ border: 'none', background: 'none', padding: 0, cursor: 'pointer' }}
+                              style={{
+                                border: 'none',
+                                background: 'none',
+                                padding: 0,
+                                cursor: 'pointer',
+                              }}
                             >
                               <FontAwesomeIcon icon={faEllipsisV} />
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                              <Dropdown.Item onClick={() => openEditModal(vendor)}>
-                                <FontAwesomeIcon icon={faEdit} className="me-2" />
+                              <Dropdown.Item
+                                onClick={() => openEditModal(vendor)}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faEdit}
+                                  className="me-2"
+                                />
                                 Edit
                               </Dropdown.Item>
-                              <Dropdown.Item style={{ color: 'red' }} onClick={() => openDeleteModal(vendor.id)}>
-                                <FontAwesomeIcon icon={faTrash} className="me-2" />
+                              <Dropdown.Item
+                                style={{ color: 'red' }}
+                                onClick={() => openDeleteModal(vendor.id)}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faTrash}
+                                  className="me-2"
+                                />
                                 Delete
                               </Dropdown.Item>
                             </Dropdown.Menu>
@@ -170,7 +184,9 @@ const Vendor = () => {
                 </Table>
                 <Pagination className="justify-content-center mt-4">
                   <Pagination.Prev
-                    onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}
+                    onClick={() =>
+                      setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)
+                    }
                     disabled={currentPage === 1}
                   />
                   {pageNumbers.map((number) => (
@@ -183,7 +199,13 @@ const Vendor = () => {
                     </Pagination.Item>
                   ))}
                   <Pagination.Next
-                    onClick={() => setCurrentPage(currentPage < pageNumbers.length ? currentPage + 1 : pageNumbers.length)}
+                    onClick={() =>
+                      setCurrentPage(
+                        currentPage < pageNumbers.length
+                          ? currentPage + 1
+                          : pageNumbers.length
+                      )
+                    }
                     disabled={currentPage === pageNumbers.length}
                   />
                 </Pagination>
@@ -194,7 +216,9 @@ const Vendor = () => {
 
         <Modal show={showModal} onHide={() => setShowModal(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>{isEdit ? 'Edit Vendor' : 'Create Vendor'}</Modal.Title>
+            <Modal.Title>
+              {isEdit ? 'Edit Vendor' : 'Create Vendor'}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -246,7 +270,10 @@ const Vendor = () => {
           </Modal.Header>
           <Modal.Body>Are you sure you want to delete this vendor?</Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            <Button
+              variant="secondary"
+              onClick={() => setShowDeleteModal(false)}
+            >
               Cancel
             </Button>
             <Button variant="danger" onClick={handleDelete}>
@@ -256,8 +283,8 @@ const Vendor = () => {
         </Modal>
       </Container>
     </div>
-  );
-};
+  )
+}
 
 export default Vendor;
 

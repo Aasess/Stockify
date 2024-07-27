@@ -80,6 +80,15 @@ class ItemController {
       res.status(400).send({ status: 'failed', message: error.message })
     }
   }
+
+  static findCountOfItems = async (req, res) => {
+    try {
+      const count = await ItemServices.findCountOfAll()
+      res.status(200).send({ status: 'success', data: count })
+    } catch (error) {
+      res.status(400).send({ status: 'failed', message: error.message })
+    }
+  }
 }
 
 export default ItemController

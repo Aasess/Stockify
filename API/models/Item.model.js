@@ -78,6 +78,30 @@ class ItemModel {
       })
     })
   }
+
+  static findCountOfAll() {
+    const sql1 = 'SELECT COUNT(*) AS CountTotal FROM item'
+    const sql2 = 'SELECT Count(*) AS CountOutStock FROM item WHERE is_stock=0'
+
+    return new Promise((resolve, reject) => {
+      connection.query(sql1, (error, count) => {
+        if (error) {
+          return reject(error)
+        }
+
+        connection.query(sql2, (error, countOutOfStockResult) => {
+          if (error) {
+            return reject(error)
+          }
+
+          resolve({
+            allRecords: count?.[0].CountTotal,
+            outOfStockCount: countOutOfStockResult[0].CountOutStock,
+          })
+        })
+      })
+    })
+  }
 }
 
 export default ItemModel

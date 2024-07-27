@@ -15,7 +15,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import SaleAction from '../../api/sale/action';
 import ItemAction from '../../api/item/action'
-import NavbarComponent from '../../components/NavbarComponent'
 import NoRecordFound from '../../components/NoRecordFound'
 
 const Sale = () => {
@@ -134,7 +133,6 @@ const Sale = () => {
 
   return (
     <div>
-      <NavbarComponent />
       <Container className="py-5">
         <Row className="mb-4">
           <Col>
