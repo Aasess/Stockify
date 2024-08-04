@@ -12,10 +12,11 @@ import {
   Pagination,
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisV, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import SaleAction from '../../api/sale/action';
+import { faEllipsisV, faEdit } from '@fortawesome/free-solid-svg-icons'
+import SaleAction from '../../api/sale/action'
 import ItemAction from '../../api/item/action'
 import NoRecordFound from '../../components/NoRecordFound'
+import displayToast from '../../helpers/displayToast';
 
 const Sale = () => {
   const [sales, setSales] = useState([])
@@ -64,14 +65,18 @@ const Sale = () => {
         price: Number(currentSale.price),
         sold_quantity: Number(currentSale.sold_quantity),
       }
+      let status
       if (isEdit) {
-        await SaleAction.updateSaleById(currentSale.id, formData)
+        status = await SaleAction.updateSaleById(currentSale.id, formData)
       } else {
-        await SaleAction.createNewSale(formData)
+        status = await SaleAction.createNewSale(formData)
       }
-      fetchSales()
-      setShowModal(false)
+      if (status === 'success') {
+        fetchSales()
+        setShowModal(false)
+      }
     } catch (error) {
+      displayToast('There was an error saving the sale!', 'error')
       console.error('There was an error saving the sale!', error)
     }
   }

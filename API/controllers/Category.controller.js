@@ -3,13 +3,13 @@ import { CategoryServices } from '../services/index.js'
 class CategoryController {
   static createCategory = async (req, res) => {
     try {
-      const { categoryName } = req.body
+      const { category_name } = req.body
 
-      if (!categoryName) {
+      if (!category_name) {
         throw new Error('All fields are required')
       }
 
-      await CategoryServices.createCategory(categoryName)
+      await CategoryServices.createCategory(category_name)
       res.status(201).send({ status: 'success', message: 'New category added' })
     } catch (error) {
       res.status(400).send({ status: 'failed', message: error.message })
@@ -53,13 +53,13 @@ class CategoryController {
   static updateCategoryById = async (req, res) => {
     try {
       const { id } = req.params
-      const { categoryName } = req.body
+      const { category_name } = req.body
 
-      if (!categoryName) {
+      if (!category_name) {
         throw new Error('All fields are required')
       }
 
-      const result = await CategoryServices.updateCategoryById(id, categoryName)
+      const result = await CategoryServices.updateCategoryById(id, category_name)
       if (result.affectedRows === 0) {
         res
           .status(404)

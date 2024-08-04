@@ -18,6 +18,8 @@ import CategoryAction from '../../api/category/action'
 import ItemForm from './itemForm'
 import Filter from './filter'
 import NoRecordFound from '../../components/NoRecordFound'
+import displayToast from '../../helpers/displayToast'
+import Loader from '../../components/Loader'
 
 const Item = () => {
   const [items, setItems] = useState([])
@@ -30,6 +32,7 @@ const Item = () => {
   const [editItem, setEditItem] = useState(null)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [deleteItemId, setDeleteItemId] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     fetchItems()
@@ -39,9 +42,11 @@ const Item = () => {
 
   const fetchItems = async () => {
     try {
+      setIsLoading(true)
       const data = await ItemAction.findAllItem()
       setItems(data ?? [])
       setFilteredItems(data ?? [])
+      setIsLoading(false)
     } catch (error) {
       console.error('There was an error fetching the items!', error)
     }
@@ -84,14 +89,18 @@ const Item = () => {
         vendor_id: Number(payload.selectedVendor),
       }
 
+      let status
       if (editItem) {
-        await ItemAction.updateItemById(editItem.id, formData)
+        status = await ItemAction.updateItemById(editItem.id, formData)
       } else {
-        await ItemAction.createNewItem(formData)
+        status = await ItemAction.createNewItem(formData)
       }
-      fetchItems()
-      handleClose()
+      if (status === 'success') {
+        fetchItems()
+        handleClose()
+      }
     } catch (error) {
+      displayToast('There was an error saving the item!', 'error')
       console.error('There was an error saving the item!', error)
     }
   }
@@ -169,152 +178,158 @@ const Item = () => {
 
   return (
     <div>
-      <Container className="py-5">
-        <Row className="mb-4">
-          <Col>
-            <h2 className="text-center">Item Management</h2>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Card className="shadow-sm">
-              <Card.Header className="d-flex justify-content-between align-items-center">
-                <h4 className="mb-0">Items</h4>
-                <Button variant="success" onClick={handleCreate}>
-                  Create
-                </Button>
-              </Card.Header>
-              <Card.Body>
-                <Filter {...{ handleFilter }} />
-                {currentItems?.length > 0 ? (
-                  <>
-                    <Table responsive striped bordered hover className="mb-0">
-                      <thead>
-                        <tr>
-                          <th>Id</th>
-                          <th>Name</th>
-                          <th>Category</th>
-                          <th>Vendor</th>
-                          <th>Remaining Qty</th>
-                          <th>Status</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {currentItems.map((item, index) => (
-                          <tr key={item.id}>
-                            <td>{index + 1}</td>
-                            <td>{item.item_name}</td>
-                            <td>{generateCategoryName(item.category_id)}</td>
-                            <td>{generateVendorName(item.vendor_id)}</td>
-                            <td>{item.remaining_quantity}</td>
-                            <td>{generateStatus(item.is_stock)}</td>
-                            <td>
-                              <Dropdown>
-                                <Dropdown.Toggle
-                                  as="div"
-                                  style={{
-                                    border: 'none',
-                                    background: 'none',
-                                    padding: 0,
-                                    cursor: 'pointer',
-                                  }}
-                                >
-                                  <FontAwesomeIcon icon={faEllipsisV} />
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                  <Dropdown.Item
-                                    onClick={() => handleEdit(item)}
-                                  >
-                                    <FontAwesomeIcon
-                                      icon={faEdit}
-                                      className="me-2"
-                                    />
-                                    Edit
-                                  </Dropdown.Item>
-                                  <Dropdown.Item
-                                    style={{ color: 'red' }}
-                                    onClick={() => handleDelete(item.id)}
-                                  >
-                                    <FontAwesomeIcon
-                                      icon={faTrash}
-                                      className="me-2"
-                                    />
-                                    Delete
-                                  </Dropdown.Item>
-                                </Dropdown.Menu>
-                              </Dropdown>
-                            </td>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <Container className="py-5">
+          <Row className="mb-4">
+            <Col>
+              <h2 className="text-center">Item Management</h2>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Card className="shadow-sm">
+                <Card.Header className="d-flex justify-content-between align-items-center">
+                  <h4 className="mb-0">Items</h4>
+                  <Button variant="success" onClick={handleCreate}>
+                    Create
+                  </Button>
+                </Card.Header>
+                <Card.Body>
+                  <Filter {...{ handleFilter }} />
+                  {currentItems?.length > 0 ? (
+                    <>
+                      <Table responsive striped bordered hover className="mb-0">
+                        <thead>
+                          <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Vendor</th>
+                            <th>Remaining Qty</th>
+                            <th>Status</th>
+                            <th></th>
                           </tr>
+                        </thead>
+                        <tbody>
+                          {currentItems.map((item, index) => (
+                            <tr key={item.id}>
+                              <td>{index + 1}</td>
+                              <td>{item.item_name}</td>
+                              <td>{generateCategoryName(item.category_id)}</td>
+                              <td>{generateVendorName(item.vendor_id)}</td>
+                              <td>{item.remaining_quantity}</td>
+                              <td>{generateStatus(item.is_stock)}</td>
+                              <td>
+                                <Dropdown>
+                                  <Dropdown.Toggle
+                                    as="div"
+                                    style={{
+                                      border: 'none',
+                                      background: 'none',
+                                      padding: 0,
+                                      cursor: 'pointer',
+                                    }}
+                                  >
+                                    <FontAwesomeIcon icon={faEllipsisV} />
+                                  </Dropdown.Toggle>
+                                  <Dropdown.Menu>
+                                    <Dropdown.Item
+                                      onClick={() => handleEdit(item)}
+                                    >
+                                      <FontAwesomeIcon
+                                        icon={faEdit}
+                                        className="me-2"
+                                      />
+                                      Edit
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                      style={{ color: 'red' }}
+                                      onClick={() => handleDelete(item.id)}
+                                    >
+                                      <FontAwesomeIcon
+                                        icon={faTrash}
+                                        className="me-2"
+                                      />
+                                      Delete
+                                    </Dropdown.Item>
+                                  </Dropdown.Menu>
+                                </Dropdown>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                      <Pagination className="justify-content-center mt-4">
+                        <Pagination.Prev
+                          onClick={() =>
+                            setCurrentPage(
+                              currentPage > 1 ? currentPage - 1 : 1
+                            )
+                          }
+                          disabled={currentPage === 1}
+                        />
+                        {pageNumbers.map((number) => (
+                          <Pagination.Item
+                            key={number}
+                            active={number === currentPage}
+                            onClick={() => paginate(number)}
+                          >
+                            {number}
+                          </Pagination.Item>
                         ))}
-                      </tbody>
-                    </Table>
-                    <Pagination className="justify-content-center mt-4">
-                      <Pagination.Prev
-                        onClick={() =>
-                          setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)
-                        }
-                        disabled={currentPage === 1}
-                      />
-                      {pageNumbers.map((number) => (
-                        <Pagination.Item
-                          key={number}
-                          active={number === currentPage}
-                          onClick={() => paginate(number)}
-                        >
-                          {number}
-                        </Pagination.Item>
-                      ))}
-                      <Pagination.Next
-                        onClick={() =>
-                          setCurrentPage(
-                            currentPage < pageNumbers.length
-                              ? currentPage + 1
-                              : pageNumbers.length
-                          )
-                        }
-                        disabled={currentPage === pageNumbers.length}
-                      />
-                    </Pagination>
-                  </>
-                ) : (
-                  <NoRecordFound />
-                )}
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-        {showModal && (
-          <ItemForm
-            categories={categories}
-            vendors={vendors}
-            showModal={showModal}
-            handleClose={handleClose}
-            handleSave={handleSave}
-            editItem={editItem}
-          />
-        )}
-        <Modal show={showDeleteModal} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Delete Item</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div>Are you sure you want to delete this item?</div>
+                        <Pagination.Next
+                          onClick={() =>
+                            setCurrentPage(
+                              currentPage < pageNumbers.length
+                                ? currentPage + 1
+                                : pageNumbers.length
+                            )
+                          }
+                          disabled={currentPage === pageNumbers.length}
+                        />
+                      </Pagination>
+                    </>
+                  ) : (
+                    <NoRecordFound />
+                  )}
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+          {showModal && (
+            <ItemForm
+              categories={categories}
+              vendors={vendors}
+              showModal={showModal}
+              handleClose={handleClose}
+              handleSave={handleSave}
+              editItem={editItem}
+            />
+          )}
+          <Modal show={showDeleteModal} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Delete Item</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div>Are you sure you want to delete this item?</div>
 
-            <div className="mt-2 text-danger fs-9">
-              All the associated stocks and sales record will also be deleted.
-            </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Cancel
-            </Button>
-            <Button variant="danger" onClick={confirmDelete}>
-              Delete
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </Container>
+              <div className="mt-2 text-danger fs-9">
+                All the associated stocks and sales record will also be deleted.
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Cancel
+              </Button>
+              <Button variant="danger" onClick={confirmDelete}>
+                Delete
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </Container>
+      )}
     </div>
   )
 }

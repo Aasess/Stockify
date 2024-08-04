@@ -19,7 +19,7 @@ class SaleController {
             .status(201)
             .send({ status: 'success', message: 'New sale added' })
         }
-        return res.status(400).send({
+        return res.send({
           status: 'failed',
           message: 'Sold quantity cannot be greater than remaining quantity',
         })
@@ -28,7 +28,7 @@ class SaleController {
         .status(400)
         .send({ status: 'failed', message: 'Item not found' })
     } catch (error) {
-      res.status(400).send({ status: 'failed', message: error.message })
+      res.send({ status: 'failed', message: error.message })
     }
   }
 
@@ -84,7 +84,7 @@ class SaleController {
               .send({ status: 'success', message: 'Sale updated' })
           }
         }
-        return res.status(400).send({
+        return res.send({
           status: 'failed',
           message: 'Sold quantity cannot be greater than remaining quantity',
         })
@@ -93,7 +93,7 @@ class SaleController {
         .status(400)
         .send({ status: 'failed', message: 'Item not found' })
     } catch (error) {
-      res.status(400).send({ status: 'failed', message: error.message })
+      res.send({ status: 'failed', message: error.message })
     }
   }
 

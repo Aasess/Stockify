@@ -17,6 +17,7 @@ import {
 import ItemAction from '../../api/item/action'
 import StockAction from '../../api/stock/action'
 import useColumn from './useColumn'
+import Loader from '../../components/Loader'
 
 const Dashboard = () => {
   const [state, setState] = useState({
@@ -26,6 +27,7 @@ const Dashboard = () => {
     outOfStockProducts: 0,
     mostStockItems: [],
   })
+  const [isLoading, setIsLoading] = useState(false)
 
   const navigate = useNavigate()
 
@@ -33,7 +35,9 @@ const Dashboard = () => {
 
   const checkIfUserIsLoggedInOrNot = async () => {
     try {
+      setIsLoading(true)
       const response = await UserAction.userDetails()
+      setIsLoading(false)
       return response
     } catch (error) {
       return navigate('/login')
@@ -176,76 +180,80 @@ const Dashboard = () => {
 
   return (
     <div>
-      <Container className="mt-4">
-        {/* Top Summary Cards */}
-        <div className="col-12 d-flex mb-4 gap-4 flex-wrap">
-          <div className="custom-card">
-            <div className="icon-box">
-              <Building2 size={60} color="#6784f9" />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <Container className="mt-4">
+          {/* Top Summary Cards */}
+          <div className="col-12 d-flex mb-4 gap-4 flex-wrap">
+            <div className="custom-card">
+              <div className="icon-box">
+                <Building2 size={60} color="#6784f9" />
+              </div>
+              <div className="text-box">
+                <h4>{state.numVender}</h4>
+                <h6>Vendors</h6>
+              </div>
             </div>
-            <div className="text-box">
-              <h4>{state.numVender}</h4>
-              <h6>Vendors</h6>
-            </div>
-          </div>
-          <div className="custom-card">
-            <div className="icon-box">
-              <SquareGanttChart size={60} color="#e4c111" />
-            </div>
+            <div className="custom-card">
+              <div className="icon-box">
+                <SquareGanttChart size={60} color="#e4c111" />
+              </div>
 
-            <div className="text-box">
-              <h4>{state.numCategories}</h4>
-              <h6>Categories</h6>
+              <div className="text-box">
+                <h4>{state.numCategories}</h4>
+                <h6>Categories</h6>
+              </div>
             </div>
-          </div>
-          <div className="custom-card">
-            <div className="icon-box">
-              <ShoppingBasket size={60} color="rgba(75,192,192,1)" />
-            </div>
+            <div className="custom-card">
+              <div className="icon-box">
+                <ShoppingBasket size={60} color="rgba(75,192,192,1)" />
+              </div>
 
-            <div className="text-box">
-              <h4>{state.numProducts}</h4>
-              <h6>Items</h6>
+              <div className="text-box">
+                <h4>{state.numProducts}</h4>
+                <h6>Items</h6>
+              </div>
             </div>
-          </div>
-          <div className="custom-card">
-            <div className="icon-box">
-              <PackageMinus size={60} color="#FF6384" />
-            </div>
+            <div className="custom-card">
+              <div className="icon-box">
+                <PackageMinus size={60} color="#FF6384" />
+              </div>
 
-            <div className="text-box">
-              <h4>{state.outOfStockProducts}</h4>
-              <h6>Out of Stock</h6>
-            </div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-12">
-            <div className="row">
-              <div className="col-md-6 mb-4">
-                <div className="chart-card">
-                  <Radar data={radarData} />
-                </div>
-              </div>
-              <div className="col-md-6 mb-4">
-                <div className="chart-card">
-                  <Doughnut data={doughnutData} />
-                </div>
-              </div>
-              <div className="col-md-6 mb-4">
-                <div className="chart-card">
-                  <Bar data={barData} />
-                </div>
-              </div>
-              <div className="col-md-6 mb-4">
-                <div className="chart-card">
-                  <Line data={lineData} />
-                </div>
+              <div className="text-box">
+                <h4>{state.outOfStockProducts}</h4>
+                <h6>Out of Stock</h6>
               </div>
             </div>
           </div>
-        </div>
-      </Container>
+          <div className="row">
+            <div className="col-12">
+              <div className="row">
+                <div className="col-md-6 mb-4">
+                  <div className="chart-card">
+                    <Radar data={radarData} />
+                  </div>
+                </div>
+                <div className="col-md-6 mb-4">
+                  <div className="chart-card">
+                    <Doughnut data={doughnutData} />
+                  </div>
+                </div>
+                <div className="col-md-6 mb-4">
+                  <div className="chart-card">
+                    <Bar data={barData} />
+                  </div>
+                </div>
+                <div className="col-md-6 mb-4">
+                  <div className="chart-card">
+                    <Line data={lineData} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Container>
+      )}
     </div>
   )
 }

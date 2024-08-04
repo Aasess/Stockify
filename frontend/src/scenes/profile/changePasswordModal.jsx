@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 import { Button, Modal, Form } from 'react-bootstrap'
 import UserAction from '../../api/user/action'
+import displayToast from '../../helpers/displayToast'
 
 const ChangePasswordModal = ({ id, show, handleClose }) => {
   const [formData, setFormData] = useState({
@@ -16,7 +17,7 @@ const ChangePasswordModal = ({ id, show, handleClose }) => {
     e.preventDefault()
 
     if (formData.password !== formData.confirmationPassword) {
-      alert('Passwords do not match!')
+      displayToast("Password doesn't match", 'error')
       return
     }
     try {
@@ -25,7 +26,7 @@ const ChangePasswordModal = ({ id, show, handleClose }) => {
         handleClose()
       }
     } catch (error) {
-      console.error('There was an error changing the user password!', error)
+      displayToast('There was an error changing the user password!', 'error')
     }
   }
 

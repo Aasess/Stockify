@@ -48,7 +48,7 @@ class UserController {
         .status(201)
         .send({ status: 'success', message: 'Registration successful' })
     } catch (error) {
-      res.status(400).send({ status: 'failed', message: error.message })
+      res.send({ status: 'failed', message: error.message })
     }
   }
 

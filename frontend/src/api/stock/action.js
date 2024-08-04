@@ -1,5 +1,6 @@
 import { StockEndPoint } from './endpoint'; // Adjust path as needed
 import apiClient from '../apiClient'; // Adjust path as needed
+import displayToast from '../../helpers/displayToast'
 
 class StockAction {
   static async findAllStocks() {
@@ -25,8 +26,10 @@ class StockAction {
   static async createNewStock(formData) {
     try {
       const response = await apiClient.post(StockEndPoint.stocks, formData)
-      return response.data
+      displayToast(response.data.message, response.data.status)
+      return response.data.status
     } catch (error) {
+      displayToast(error.message, 'error')
       throw error
     }
   }
@@ -37,8 +40,10 @@ class StockAction {
         StockEndPoint.stockById.replace('id', id),
         formData
       )
-      return response.data
+      displayToast(response.data.message, response.data.status)
+      return response.data.status
     } catch (error) {
+      displayToast(error.message, 'error')
       throw error
     }
   }
@@ -48,8 +53,10 @@ class StockAction {
       const response = await apiClient.delete(
         StockEndPoint.stockById.replace('id', id)
       )
+      displayToast(response.data.message, response.data.status)
       return response.data
     } catch (error) {
+      displayToast(error.message, 'error')
       throw error
     }
   }

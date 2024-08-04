@@ -16,6 +16,7 @@ import { faEllipsisV, faEdit } from '@fortawesome/free-solid-svg-icons'
 import StockAction from '../../api/stock/action'
 import ItemAction from '../../api/item/action'
 import NoRecordFound from '../../components/NoRecordFound'
+import displayToast from '../../helpers/displayToast'
 
 const Stock = () => {
   const [stocks, setStocks] = useState([])
@@ -64,14 +65,18 @@ const Stock = () => {
         price: Number(currentStock.price),
         received_quantity: Number(currentStock.received_quantity),
       }
+      let status
       if (isEdit) {
-        await StockAction.updateStockById(currentStock.id, formData)
+        status = await StockAction.updateStockById(currentStock.id, formData)
       } else {
-        await StockAction.createNewStock(formData)
+        status = await StockAction.createNewStock(formData)
       }
-      fetchStocks()
-      setShowModal(false)
+      if (status === 'success') {
+        fetchStocks()
+        setShowModal(false)
+      }
     } catch (error) {
+      displayToast('There was an error saving the stock!', 'error')
       console.error('There was an error saving the stock!', error)
     }
   }

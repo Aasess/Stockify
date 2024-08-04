@@ -1,5 +1,6 @@
 import { ItemEndPoint } from './endpoint'
 import apiClient from '../apiClient'
+import displayToast from '../../helpers/displayToast'
 
 class ItemAction {
   static async findNumberOfItem() {
@@ -36,8 +37,10 @@ class ItemAction {
   static async createNewItem(formData) {
     try {
       const response = await apiClient.post(ItemEndPoint.item, formData)
-      return response.data
+      displayToast(response.data.message, response.data.status)
+      return response.data.status
     } catch (error) {
+      displayToast(error.message, 'error')
       throw error
     }
   }
@@ -48,8 +51,10 @@ class ItemAction {
         ItemEndPoint.itemById.replace('id', id),
         formData
       )
-      return response.data
+      displayToast(response.data.message, response.data.status)
+      return response.data.status
     } catch (error) {
+      displayToast(error.message, 'error')
       throw error
     }
   }
@@ -59,8 +64,10 @@ class ItemAction {
       const response = await apiClient.delete(
         ItemEndPoint.itemById.replace('id', id)
       )
+      displayToast(response.data.message, response.data.status)
       return response.data
     } catch (error) {
+      displayToast(error.message, 'error')
       throw error
     }
   }

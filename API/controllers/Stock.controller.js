@@ -13,7 +13,7 @@ class StockController {
       await StockServices.calculateStock(item_id)
       res.status(201).send({ status: 'success', message: 'New stock added' })
     } catch (error) {
-      res.status(400).send({ status: 'failed', message: error.message })
+      res.send({ status: 'failed', message: error.message })
     }
   }
 
@@ -60,7 +60,7 @@ class StockController {
         res.status(200).send({ status: 'success', message: 'Stock updated' })
       }
     } catch (error) {
-      res.status(400).send({ status: 'failed', message: error.message })
+      res.send({ status: 'failed', message: error.message })
     }
   }
 

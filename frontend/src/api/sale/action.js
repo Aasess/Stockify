@@ -1,13 +1,14 @@
 import { SaleEndPoint } from './endpoint'; // Adjust path as needed
 import apiClient from '../apiClient'; // Adjust path as needed
+import displayToast from '../../helpers/displayToast'
 
 class SaleAction {
   static async findAllSales() {
     try {
-      const response = await apiClient.get(SaleEndPoint.sales);
-      return response.data?.data;
+      const response = await apiClient.get(SaleEndPoint.sales)
+      return response.data?.data
     } catch (error) {
-      throw error;
+      throw error
     }
   }
 
@@ -15,19 +16,21 @@ class SaleAction {
     try {
       const response = await apiClient.get(
         SaleEndPoint.saleById.replace('id', id)
-      );
-      return response.data;
+      )
+      return response.data
     } catch (error) {
-      throw error;
+      throw error
     }
   }
 
   static async createNewSale(formData) {
     try {
-      const response = await apiClient.post(SaleEndPoint.sales, formData);
-      return response.data;
+      const response = await apiClient.post(SaleEndPoint.sales, formData)
+      displayToast(response.data.message, response.data.status)
+      return response.data.status
     } catch (error) {
-      throw error;
+      displayToast(error.message, 'error')
+      throw error
     }
   }
 
@@ -36,10 +39,12 @@ class SaleAction {
       const response = await apiClient.put(
         SaleEndPoint.saleById.replace('id', id),
         formData
-      );
-      return response.data;
+      )
+      displayToast(response.data.message, response.data.status)
+      return response.data.status
     } catch (error) {
-      throw error;
+      displayToast(error.message, 'error')
+      throw error
     }
   }
 
@@ -47,10 +52,12 @@ class SaleAction {
     try {
       const response = await apiClient.delete(
         SaleEndPoint.saleById.replace('id', id)
-      );
-      return response.data;
+      )
+      displayToast(response.data.message, response.data.status)
+      return response.data
     } catch (error) {
-      throw error;
+      displayToast(error.message, 'error')
+      throw error
     }
   }
 }

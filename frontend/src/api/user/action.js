@@ -1,5 +1,6 @@
 import { UserEndPoint } from './endpoint'
 import apiClient from '../apiClient'
+import displayToast from '../../helpers/displayToast'
 
 apiClient.defaults.withCredentials = true
 class UserAction {
@@ -11,8 +12,10 @@ class UserAction {
         password: formData.password,
         rePassword: formData.confirmPassword,
       })
+      displayToast(response.data.message, response.data.status)
       return response.data
     } catch (error) {
+      displayToast('There was an error registering the user!', 'error')
       throw error
     }
   }
@@ -28,8 +31,10 @@ class UserAction {
       localStorage.setItem('userId', response?.data?.data?.id)
       localStorage.setItem('username', response?.data?.data?.username)
 
+      displayToast(response.data.message, response.data.status)
       return response.data
     } catch (error) {
+      displayToast(error.message, 'error')
       throw error
     }
   }
@@ -39,8 +44,10 @@ class UserAction {
       const response = await apiClient.post(UserEndPoint.resetPasswordLink, {
         email: formData.email,
       })
+      displayToast(response.data.message, response.data.status)
       return response.data
     } catch (error) {
+      displayToast(error.message, 'error')
       throw error
     }
   }
@@ -51,8 +58,10 @@ class UserAction {
         UserEndPoint.resetPassword.replace('id', id),
         formData
       )
+      displayToast(response.data.message, response.data.status)
       return response.data
     } catch (error) {
+      displayToast(error.message, 'error')
       throw error
     }
   }
@@ -71,6 +80,7 @@ class UserAction {
       )
       return response.data
     } catch (error) {
+      displayToast(error.message, 'error')
       throw error
     }
   }
@@ -81,8 +91,11 @@ class UserAction {
         UserEndPoint.resetPassword.replace('id', id),
         formData
       )
+
+      displayToast(response.data.message, response.data.status)
       return response.data
     } catch (error) {
+      displayToast(error.message, 'error')
       throw error
     }
   }

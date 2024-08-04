@@ -1,5 +1,13 @@
 import React, { useState } from 'react'
-import { Form, Button, Card, Container, Row, Col, Alert } from 'react-bootstrap'
+import {
+  Form,
+  Button,
+  Card,
+  Container,
+  Row,
+  Col,
+  Spinner,
+} from 'react-bootstrap'
 
 //API
 import UserAction from '../api/user/action'
@@ -9,13 +17,14 @@ import { Link, useNavigate } from 'react-router-dom'
 
 //HELPERS
 import { verifyStatus } from '../helpers'
+import displayToast from '../helpers/displayToast'
 
 const UserLogin = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
   })
-  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState('')
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -29,13 +38,14 @@ const UserLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
+      setIsLoading(true)
       const result = await UserAction.userLogin(formData)
       if (verifyStatus(result.status)) {
         navigate('/dashboard') // Redirect to a dashboard after successful login
       }
-      throw result.message
+      setIsLoading(false)
     } catch (error) {
-      setError(error || 'Failed to login user')
+      displayToast('Failed to login user', 'error')
     }
   }
 
@@ -81,13 +91,21 @@ const UserLogin = () => {
                 </Form.Group>
 
                 <Button type="submit" className="btn btn-primary w-100">
-                  Login
+                  {isLoading ? (
+                    <>
+                      <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                      />
+                      <span className="sr-only">Loading...</span>
+                    </>
+                  ) : (
+                    'Login'
+                  )}
                 </Button>
-                {error && (
-                  <Alert variant="danger" className="mt-3">
-                    {error}
-                  </Alert>
-                )}
               </Form>
               <div className="mt-3 text-center">
                 <Link to="/register">Don't have an account? Register here</Link>

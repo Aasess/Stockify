@@ -222,7 +222,7 @@ const Category = () => {
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group controlId="formCategoryName">
+              <Form.Group controlId="formcategory_name">
                 <Form.Label>Name</Form.Label>
                 <Form.Control
                   type="text"

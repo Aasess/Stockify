@@ -13,7 +13,7 @@ class ItemController {
 
       res.status(201).send({ status: 'success', message: 'New item added' })
     } catch (error) {
-      res.status(400).send({ status: 'failed', message: error.message })
+      res.send({ status: 'failed', message: error.message })
     }
   }
 
@@ -59,7 +59,7 @@ class ItemController {
         res.status(200).send({ status: 'success', message: 'Item updated' })
       }
     } catch (error) {
-      res.status(400).send({ status: 'failed', message: error.message })
+      res.send({ status: 'failed', message: error.message })
     }
   }
 
@@ -67,14 +67,16 @@ class ItemController {
     try {
       const { id } = req.params
 
-      const result = await ItemServices.deleteItem(id)
-      if (result.affectedRows === 0) {
-        res.status(404).send({ status: 'failed', message: 'Item not found' })
-      } else {
+      const item = await ItemServices.getItemById(id)
+      if (item) {
         //now delete all the associated stock and sales too
         await StockServices.deleteAllItemsById(id)
         await SaleServices.deleteAllItemsById(id)
+        const result = await ItemServices.deleteItem(id)
+
         res.status(200).send({ status: 'success', message: 'Item deleted' })
+      } else {
+        res.status(404).send({ status: 'failed', message: 'Item not found' })
       }
     } catch (error) {
       res.status(400).send({ status: 'failed', message: error.message })

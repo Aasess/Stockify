@@ -12,7 +12,7 @@ class VendorController {
       await VendorServices.createVendor(name, address, phone)
       res.status(201).send({ status: 'success', message: 'New vendor added' })
     } catch (error) {
-      res.status(400).send({ status: 'failed', message: error.message })
+      res.send({ status: 'failed', message: error.message })
     }
   }
 
@@ -66,7 +66,7 @@ class VendorController {
         res.status(200).send({ status: 'success', message: 'Vendor updated' })
       }
     } catch (error) {
-      res.status(400).send({ status: 'failed', message: error.message })
+      res.send({ status: 'failed', message: error.message })
     }
   }
 

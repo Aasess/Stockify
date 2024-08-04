@@ -1,5 +1,6 @@
 import { VendorEndPoint } from './endpoint'
 import apiClient from '../apiClient'
+import displayToast from '../../helpers/displayToast'
 
 class VendorAction {
   static async findNumberOfVendor() {
@@ -43,8 +44,10 @@ class VendorAction {
   static async createNewVendor(formData) {
     try {
       const response = await apiClient.post(VendorEndPoint.vendor, formData)
-      return response.data
+      displayToast(response.data.message, response.data.status)
+      return response.data.status
     } catch (error) {
+      displayToast(error.message, 'error')
       throw error
     }
   }
@@ -55,8 +58,10 @@ class VendorAction {
         VendorEndPoint.vendorById.replace('id', id),
         formData
       )
-      return response.data
+      displayToast(response.data.message, response.data.status)
+      return response.data.status
     } catch (error) {
+      displayToast(error.message, 'error')
       throw error
     }
   }
@@ -66,8 +71,10 @@ class VendorAction {
       const response = await apiClient.delete(
         VendorEndPoint.vendorById.replace('id', id)
       )
+      displayToast(response.data.message, response.data.status)
       return response.data
     } catch (error) {
+      displayToast(error.message, 'error')
       throw error
     }
   }

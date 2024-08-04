@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { CategoryEndPoint } from './endpoint'
 import apiClient from '../apiClient'
+import displayToast from '../../helpers/displayToast'
 
 class CategoryAction {
   static async findNumberOfCategory() {
@@ -10,6 +11,7 @@ class CategoryAction {
       })
       return response.data?.data
     } catch (error) {
+      displayToast(error.message, 'error')
       throw error
     }
   }
@@ -19,6 +21,7 @@ class CategoryAction {
       const response = await apiClient.get(CategoryEndPoint.category)
       return response.data?.data
     } catch (error) {
+      displayToast(error.message, 'error')
       throw error
     }
   }
@@ -28,6 +31,7 @@ class CategoryAction {
       const response = await apiClient.get(CategoryEndPoint.dropDown)
       return response.data?.data
     } catch (error) {
+      displayToast(error.message, 'error')
       throw error
     }
   }
@@ -46,8 +50,10 @@ class CategoryAction {
   static async createNewCategory(formData) {
     try {
       const response = await apiClient.post(CategoryEndPoint.category, formData)
+      displayToast(response.data.message, response.data.status)
       return response.data
     } catch (error) {
+      displayToast(error.message, 'error')
       throw error
     }
   }
@@ -58,20 +64,23 @@ class CategoryAction {
         CategoryEndPoint.categoryById.replace('id', id),
         formData
       )
+      displayToast(response.data.message, response.data.status)
       return response.data
     } catch (error) {
+      displayToast(error.message, 'error')
       throw error
     }
   }
 
   static async deleteCategoryById(id) {
     try {
-      console.log(id)
       const response = await apiClient.delete(
         CategoryEndPoint.categoryById.replace('id', id)
       )
+      displayToast(response.data.message, response.data.status)
       return response.data
     } catch (error) {
+      displayToast(error.message, 'error')
       throw error
     }
   }

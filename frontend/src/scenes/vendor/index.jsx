@@ -14,6 +14,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import VendorAction from '../../api/vendor/action'
+import displayToast from '../../helpers/displayToast'
 
 const Vendor = () => {
   const [vendors, setVendors] = useState([])
@@ -47,14 +48,22 @@ const Vendor = () => {
 
   const handleSave = async () => {
     try {
+      let status
       if (isEdit) {
-        await VendorAction.updateVendorById(currentVendor.id, currentVendor)
+        status = await VendorAction.updateVendorById(
+          currentVendor.id,
+          currentVendor
+        )
       } else {
-        await VendorAction.createNewVendor(currentVendor)
+        status = await VendorAction.createNewVendor(currentVendor)
       }
-      fetchVendors()
-      setShowModal(false)
+
+      if (status === 'success') {
+        fetchVendors()
+        setShowModal(false)
+      }
     } catch (error) {
+      displayToast('There was an error saving the vendor!', 'error')
       console.error('There was an error saving the vendor!', error)
     }
   }
@@ -135,9 +144,9 @@ const Vendor = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentVendors.map((vendor,index) => (
+                    {currentVendors.map((vendor, index) => (
                       <tr key={vendor.id}>
-                        <td>{index+1}</td>
+                        <td>{index + 1}</td>
                         <td>{vendor.name}</td>
                         <td>{vendor.address}</td>
                         <td>{vendor.phone}</td>
