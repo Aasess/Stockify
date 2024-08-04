@@ -17,6 +17,7 @@ const Category = lazy(() => import('./scenes/category'))
 const Vendor = lazy(() => import('./scenes/vendor'))
 const Item = lazy(() => import('./scenes/item'))
 const Stock = lazy(() => import('./scenes/stock'))
+const Profile = lazy(() => import('./scenes/profile'))
 
 const RouteList = () => {
   return (
@@ -39,6 +40,7 @@ const RouteList = () => {
           <Route path="/item" exact element={<Item />} />
           <Route path="/stock" exact element={<Stock />} />
           <Route path="/sale" exact element={<Sale />} />
+          <Route path="/profile" exact element={<Profile />} />
         </Route>
       </Routes>
     </Suspense>

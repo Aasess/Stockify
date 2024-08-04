@@ -222,3 +222,8 @@ body {
   background-color: rgba(24, 119, 242, 0.08);
   border-radius: 8px;
 }
+
+#logout-btn {
+  color:#fff;
+  text-decoration: none;
+}

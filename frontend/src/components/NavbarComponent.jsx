@@ -1,14 +1,22 @@
 import React from 'react'
 
-import { Navbar, Container, Dropdown } from 'react-bootstrap'
+import { Navbar, Container, Dropdown, Button, Nav } from 'react-bootstrap'
 import Sidebar from './Sidebar'
 
 import { CircleUser } from 'lucide-react'
 
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate, Link } from 'react-router-dom'
 
 const NavbarComponent = () => {
   const username = localStorage.getItem('username')
+
+  const navigate = useNavigate()
+
+  const handleLogOutFunctionality = () => {
+    localStorage.removeItem('userId')
+    localStorage.removeItem('username')
+    navigate('/login')
+  }
 
   return (
     <div className="navbar__component">
@@ -37,9 +45,17 @@ const NavbarComponent = () => {
               </div>
             </Dropdown.Toggle>
             <Dropdown.Menu className="mt-3">
-              <Dropdown.Item href="#/action-2">Profile</Dropdown.Item>
+              <Nav.Link as={Link} to="/profile" className="text-white ps-3">
+                Profile
+              </Nav.Link>
               <Dropdown.Divider />
-              <Dropdown.Item href="#/action-4">Logout</Dropdown.Item>
+              <Button
+                variant="link"
+                onClick={handleLogOutFunctionality}
+                id="logout-btn"
+              >
+                Logout
+              </Button>
             </Dropdown.Menu>
           </Dropdown>
         </Container>

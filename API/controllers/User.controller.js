@@ -9,7 +9,13 @@ class UserController {
     try {
       const foundUser = await UserServices.findById(req.params.id)
       if (foundUser) {
-        return res.status(201).send({ status: 'success', detail: foundUser })
+       const filterDetail = {
+         id: foundUser.id,
+         username: foundUser.username,
+         email: foundUser.email,
+         isAdmin: foundUser.isAdmin,
+       }
+       return res.status(201).send({ status: 'success', detail: filterDetail })
       }
       throw new Error('Access denied. Please log in.')
     } catch (error) {
@@ -80,11 +86,12 @@ class UserController {
   static changeUserPassword = async (req, res) => {
     try {
       const { password, confirmationPassword } = req.body
+      const { id: userId } = req.params
 
       if (password && confirmationPassword) {
         if (password.trim() === confirmationPassword.trim()) {
           const hashedPassword = await bcrypt.hash(password, 10)
-          await UserServices.updatePassword(req.userId, hashedPassword)
+          await UserServices.updatePassword(userId, hashedPassword)
           res
             .status(201)
             .send({ status: 'success', message: 'Password reset completed' })

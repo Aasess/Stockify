@@ -74,6 +74,18 @@ class UserAction {
       throw error
     }
   }
+
+  static async userChangePassword(id, formData) {
+    try {
+      const response = await apiClient.post(
+        UserEndPoint.resetPassword.replace('id', id),
+        formData
+      )
+      return response.data
+    } catch (error) {
+      throw error
+    }
+  }
 }
 
 export default UserAction
