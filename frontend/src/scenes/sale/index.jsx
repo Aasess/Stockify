@@ -12,11 +12,12 @@ import {
   Pagination,
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisV, faEdit } from '@fortawesome/free-solid-svg-icons'
+import { faEllipsisV, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import SaleAction from '../../api/sale/action'
 import ItemAction from '../../api/item/action'
 import NoRecordFound from '../../components/NoRecordFound'
-import displayToast from '../../helpers/displayToast';
+import displayToast from '../../helpers/displayToast'
+import AuthorizeRoleComponent from '../../components/AuthorizeRoleComponent'
 
 const Sale = () => {
   const [sales, setSales] = useState([])
@@ -196,16 +197,18 @@ const Sale = () => {
                                   />
                                   Edit
                                 </Dropdown.Item>
-                                {/* <Dropdown.Item
-                                  style={{ color: 'red' }}
-                                  onClick={() => openDeleteModal(sale.id)}
-                                >
-                                  <FontAwesomeIcon
-                                    icon={faTrash}
-                                    className="me-2"
-                                  />
-                                  Delete
-                                </Dropdown.Item> */}
+                                <AuthorizeRoleComponent>
+                                  <Dropdown.Item
+                                    style={{ color: 'red' }}
+                                    onClick={() => openDeleteModal(sale.id)}
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faTrash}
+                                      className="me-2"
+                                    />
+                                    Delete
+                                  </Dropdown.Item>
+                                </AuthorizeRoleComponent>
                               </Dropdown.Menu>
                             </Dropdown>
                           </td>

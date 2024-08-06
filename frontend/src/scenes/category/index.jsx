@@ -17,6 +17,7 @@ import CategoryAction from '../../api/category/action'
 import Filter from './filter'
 import NoRecordFound from '../../components/NoRecordFound'
 import Loader from '../../components/Loader'
+import AuthorizeRoleComponent from '../../components/AuthorizeRoleComponent'
 
 const Category = () => {
   const [categories, setCategories] = useState([])
@@ -148,9 +149,11 @@ const Category = () => {
               <Card className="shadow-sm">
                 <Card.Header className="d-flex justify-content-between align-items-center">
                   <h4 className="mb-0">Categories</h4>
-                  <Button variant="success" onClick={openCreateModal}>
-                    Create
-                  </Button>
+                  <AuthorizeRoleComponent>
+                    <Button variant="success" onClick={openCreateModal}>
+                      Create
+                    </Button>
+                  </AuthorizeRoleComponent>
                 </Card.Header>
                 <Card.Body>
                   <Filter {...{ handleFilter }} />
@@ -170,43 +173,45 @@ const Category = () => {
                               <td>{category.id}</td>
                               <td>{category.category_name}</td>
                               <td>
-                                <Dropdown>
-                                  <Dropdown.Toggle
-                                    as="div"
-                                    style={{
-                                      border: 'none',
-                                      background: 'none',
-                                      padding: 0,
-                                      cursor: 'pointer',
-                                    }}
-                                  >
-                                    <FontAwesomeIcon icon={faEllipsisV} />
-                                  </Dropdown.Toggle>
+                                <AuthorizeRoleComponent>
+                                  <Dropdown>
+                                    <Dropdown.Toggle
+                                      as="div"
+                                      style={{
+                                        border: 'none',
+                                        background: 'none',
+                                        padding: 0,
+                                        cursor: 'pointer',
+                                      }}
+                                    >
+                                      <FontAwesomeIcon icon={faEllipsisV} />
+                                    </Dropdown.Toggle>
 
-                                  <Dropdown.Menu>
-                                    <Dropdown.Item
-                                      onClick={() => openEditModal(category)}
-                                    >
-                                      <FontAwesomeIcon
-                                        icon={faEdit}
-                                        className="me-2"
-                                      />
-                                      Edit
-                                    </Dropdown.Item>
-                                    <Dropdown.Item
-                                      style={{ color: 'red' }}
-                                      onClick={() =>
-                                        openDeleteModal(category.id)
-                                      }
-                                    >
-                                      <FontAwesomeIcon
-                                        icon={faTrash}
-                                        className="me-2"
-                                      />
-                                      Delete
-                                    </Dropdown.Item>
-                                  </Dropdown.Menu>
-                                </Dropdown>
+                                    <Dropdown.Menu>
+                                      <Dropdown.Item
+                                        onClick={() => openEditModal(category)}
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faEdit}
+                                          className="me-2"
+                                        />
+                                        Edit
+                                      </Dropdown.Item>
+                                      <Dropdown.Item
+                                        style={{ color: 'red' }}
+                                        onClick={() =>
+                                          openDeleteModal(category.id)
+                                        }
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faTrash}
+                                          className="me-2"
+                                        />
+                                        Delete
+                                      </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                  </Dropdown>
+                                </AuthorizeRoleComponent>
                               </td>
                             </tr>
                           ))}

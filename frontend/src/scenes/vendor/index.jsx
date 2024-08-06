@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import VendorAction from '../../api/vendor/action'
 import displayToast from '../../helpers/displayToast'
+import AuthorizeRoleComponent from '../../components/AuthorizeRoleComponent'
 
 const Vendor = () => {
   const [vendors, setVendors] = useState([])
@@ -128,9 +129,11 @@ const Vendor = () => {
             <Card className="shadow-sm">
               <Card.Header className="d-flex justify-content-between align-items-center">
                 <h4 className="mb-0">Vendors</h4>
-                <Button variant="success" onClick={openCreateModal}>
-                  Create
-                </Button>
+                <AuthorizeRoleComponent>
+                  <Button variant="success" onClick={openCreateModal}>
+                    Create
+                  </Button>
+                </AuthorizeRoleComponent>
               </Card.Header>
               <Card.Body>
                 <Table responsive striped bordered hover className="mb-0">
@@ -151,41 +154,43 @@ const Vendor = () => {
                         <td>{vendor.address}</td>
                         <td>{vendor.phone}</td>
                         <td>
-                          <Dropdown>
-                            <Dropdown.Toggle
-                              as="div"
-                              style={{
-                                border: 'none',
-                                background: 'none',
-                                padding: 0,
-                                cursor: 'pointer',
-                              }}
-                            >
-                              <FontAwesomeIcon icon={faEllipsisV} />
-                            </Dropdown.Toggle>
+                          <AuthorizeRoleComponent>
+                            <Dropdown>
+                              <Dropdown.Toggle
+                                as="div"
+                                style={{
+                                  border: 'none',
+                                  background: 'none',
+                                  padding: 0,
+                                  cursor: 'pointer',
+                                }}
+                              >
+                                <FontAwesomeIcon icon={faEllipsisV} />
+                              </Dropdown.Toggle>
 
-                            <Dropdown.Menu>
-                              <Dropdown.Item
-                                onClick={() => openEditModal(vendor)}
-                              >
-                                <FontAwesomeIcon
-                                  icon={faEdit}
-                                  className="me-2"
-                                />
-                                Edit
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                style={{ color: 'red' }}
-                                onClick={() => openDeleteModal(vendor.id)}
-                              >
-                                <FontAwesomeIcon
-                                  icon={faTrash}
-                                  className="me-2"
-                                />
-                                Delete
-                              </Dropdown.Item>
-                            </Dropdown.Menu>
-                          </Dropdown>
+                              <Dropdown.Menu>
+                                <Dropdown.Item
+                                  onClick={() => openEditModal(vendor)}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faEdit}
+                                    className="me-2"
+                                  />
+                                  Edit
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  style={{ color: 'red' }}
+                                  onClick={() => openDeleteModal(vendor.id)}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faTrash}
+                                    className="me-2"
+                                  />
+                                  Delete
+                                </Dropdown.Item>
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          </AuthorizeRoleComponent>
                         </td>
                       </tr>
                     ))}

@@ -20,6 +20,7 @@ import Filter from './filter'
 import NoRecordFound from '../../components/NoRecordFound'
 import displayToast from '../../helpers/displayToast'
 import Loader from '../../components/Loader'
+import AuthorizeRoleComponent from '../../components/AuthorizeRoleComponent'
 
 const Item = () => {
   const [items, setItems] = useState([])
@@ -192,9 +193,11 @@ const Item = () => {
               <Card className="shadow-sm">
                 <Card.Header className="d-flex justify-content-between align-items-center">
                   <h4 className="mb-0">Items</h4>
-                  <Button variant="success" onClick={handleCreate}>
-                    Create
-                  </Button>
+                  <AuthorizeRoleComponent>
+                    <Button variant="success" onClick={handleCreate}>
+                      Create
+                    </Button>
+                  </AuthorizeRoleComponent>
                 </Card.Header>
                 <Card.Body>
                   <Filter {...{ handleFilter }} />
@@ -222,40 +225,42 @@ const Item = () => {
                               <td>{item.remaining_quantity}</td>
                               <td>{generateStatus(item.is_stock)}</td>
                               <td>
-                                <Dropdown>
-                                  <Dropdown.Toggle
-                                    as="div"
-                                    style={{
-                                      border: 'none',
-                                      background: 'none',
-                                      padding: 0,
-                                      cursor: 'pointer',
-                                    }}
-                                  >
-                                    <FontAwesomeIcon icon={faEllipsisV} />
-                                  </Dropdown.Toggle>
-                                  <Dropdown.Menu>
-                                    <Dropdown.Item
-                                      onClick={() => handleEdit(item)}
+                                <AuthorizeRoleComponent>
+                                  <Dropdown>
+                                    <Dropdown.Toggle
+                                      as="div"
+                                      style={{
+                                        border: 'none',
+                                        background: 'none',
+                                        padding: 0,
+                                        cursor: 'pointer',
+                                      }}
                                     >
-                                      <FontAwesomeIcon
-                                        icon={faEdit}
-                                        className="me-2"
-                                      />
-                                      Edit
-                                    </Dropdown.Item>
-                                    <Dropdown.Item
-                                      style={{ color: 'red' }}
-                                      onClick={() => handleDelete(item.id)}
-                                    >
-                                      <FontAwesomeIcon
-                                        icon={faTrash}
-                                        className="me-2"
-                                      />
-                                      Delete
-                                    </Dropdown.Item>
-                                  </Dropdown.Menu>
-                                </Dropdown>
+                                      <FontAwesomeIcon icon={faEllipsisV} />
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                      <Dropdown.Item
+                                        onClick={() => handleEdit(item)}
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faEdit}
+                                          className="me-2"
+                                        />
+                                        Edit
+                                      </Dropdown.Item>
+                                      <Dropdown.Item
+                                        style={{ color: 'red' }}
+                                        onClick={() => handleDelete(item.id)}
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faTrash}
+                                          className="me-2"
+                                        />
+                                        Delete
+                                      </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                  </Dropdown>
+                                </AuthorizeRoleComponent>
                               </td>
                             </tr>
                           ))}
