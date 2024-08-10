@@ -10,6 +10,9 @@ import { Link } from 'react-router-dom'
 //HELPERS
 import { verifyStatus } from '../helpers'
 
+//COMPONENT
+import LogoDisplay from './LogoDisplay'
+
 const UserForgetPassword = () => {
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
@@ -37,44 +40,63 @@ const UserForgetPassword = () => {
   }
 
   return (
+    <div className='unauthorized-container'>
     <Container className="mt-5">
-      <Row className="justify-content-md-center">
+      <LogoDisplay />
+
+      <Row className="justify-content-md-center mt-5">
         <Col md="6">
-          <h2>Forgot Password</h2>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
+          <Form.Label>
+            Enter the email address associated with your account and we will
+            send you a link to reset your password.
+          </Form.Label>
+
+          <div>
+            {message && (
+              <Alert variant="success" className="mt-3">
+                {message}
+              </Alert>
+            )}
+            {error && (
+              <Alert variant="danger" className="mt-3">
+                {error}
+              </Alert>
+            )}
+          </div>
+          <Form
+            onSubmit={handleSubmit}
+            className="d-flex align-items-baseline gap-3 mt-3"
+          >
+            <Form.Group controlId="formBasicEmail" className="mt-1 mb-3 w-100">
               <Form.Control
                 type="email"
-                placeholder="Enter email"
+                placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </Form.Group>
             <Button variant="primary" type="submit">
-              Submit
+              Continue
             </Button>
           </Form>
-          {message && (
-            <Alert variant="success" className="mt-3">
-              {message}
-            </Alert>
-          )}
-          {error && (
-            <Alert variant="danger" className="mt-3">
-              {error}
-            </Alert>
-          )}
-          <div className="mt-3 text-center">
-            <Link to="/login">Already have an account? Login here!</Link>
+
+          <div className="mt-5 text-center">
+            <span>Already have an account? </span>
+            <Link to="/login" className="text-decoration-none">
+              Login here
+            </Link>
           </div>
           <div className="mt-3 text-center">
-            <Link to="/register">Don't have an account? Register here</Link>
+            <span>Don't have an account? </span>
+            <Link to="/register" className="text-decoration-none">
+              Sign up
+            </Link>
           </div>
         </Col>
       </Row>
     </Container>
+    </div>
   )
 }
 

@@ -18,6 +18,7 @@ import { Link, useNavigate } from 'react-router-dom'
 //HELPERS
 import { verifyStatus } from '../helpers'
 import displayToast from '../helpers/displayToast'
+import LogoDisplay from './LogoDisplay'
 
 const UserLogin = () => {
   const [formData, setFormData] = useState({
@@ -50,75 +51,77 @@ const UserLogin = () => {
   }
 
   return (
-    <Container
-      className="d-flex justify-content-center align-items-center min-vh-100"
-      style={{ backgroundColor: '#F5EEE6' }}
-    >
-      <Row className="w-100 justify-content-center">
-        <Col md={7} lg={5}>
-          <Card className="p-4 shadow-sm">
-            <Card.Body>
-              <Card.Title className="mb-4 text-center">
-                <b>LOGIN HERE!</b>
-              </Card.Title>
-              <Form onSubmit={handleSubmit} className="border p-3">
-                <Form.Group className="mb-3" controlId="username">
-                  <Form.Label>
-                    <b>Username:</b>
-                  </Form.Label>
-                  <Form.Control
-                    placeholder="Username"
-                    type="text"
-                    name="username"
-                    value={formData.username}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="password">
-                  <Form.Label>
-                    <b>Password:</b>
-                  </Form.Label>
-                  <Form.Control
-                    placeholder="Password"
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                    autoComplete="off"
-                  />
-                </Form.Group>
+    <div className="unauthorized-container">
+      <Container className="mt-5 ">
+        <LogoDisplay />
+        <Row className="w-100 justify-content-center mt-5">
+          <Col md={7} lg={5}>
+            <Card className="p-4 shadow-sm">
+              <Card.Body>
+                <Card.Title className="mb-4 text-center">
+                  Log in to your account
+                </Card.Title>
+                <Form onSubmit={handleSubmit} className="p-3">
+                  <Form.Group className="mb-4" controlId="username">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control
+                      placeholder="Username"
+                      type="text"
+                      name="username"
+                      value={formData.username}
+                      onChange={handleChange}
+                      required
+                    />
+                  </Form.Group>
+                  <Form.Group className="mb-4" controlId="password">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control
+                      placeholder="Password"
+                      type="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                      autoComplete="off"
+                    />
+                  </Form.Group>
 
-                <Button type="submit" className="btn btn-primary w-100">
-                  {isLoading ? (
-                    <>
-                      <Spinner
-                        as="span"
-                        animation="border"
-                        size="sm"
-                        role="status"
-                        aria-hidden="true"
-                      />
-                      <span className="sr-only">Loading...</span>
-                    </>
-                  ) : (
-                    'Login'
-                  )}
-                </Button>
-              </Form>
-              <div className="mt-3 text-center">
-                <Link to="/register">Don't have an account? Register here</Link>
-              </div>
+                  <Button type="submit" className="btn btn-primary w-100">
+                    {isLoading ? (
+                      <>
+                        <Spinner
+                          as="span"
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          aria-hidden="true"
+                        />
+                        <span className="sr-only">Loading...</span>
+                      </>
+                    ) : (
+                      'Login'
+                    )}
+                  </Button>
+                </Form>
 
-              <div className="mt-3 text-center">
-                <Link to="/forget-password">Forget Password?</Link>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+                <div className="mt-4 text-center">
+                  <span>Don't have an account? </span>
+                  <Link to="/register" className="text-decoration-none">
+                    Sign up
+                  </Link>
+                </div>
+
+                <div className="mt-3 text-center">
+                  <Link to="/forget-password" className="text-decoration-none">
+                    Forget Password?
+                  </Link>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   )
 }
 
