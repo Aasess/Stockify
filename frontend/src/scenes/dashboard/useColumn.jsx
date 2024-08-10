@@ -14,7 +14,7 @@ const useColumn = ({ state }) => {
   const labels = Object.keys(aggregatedData)
   const data = Object.values(aggregatedData)
 
-  const barData = {
+  const barMostStockItem = {
     labels: labels,
     datasets: [
       {
@@ -29,8 +29,116 @@ const useColumn = ({ state }) => {
     ],
   }
 
+  const barMostStockOptions = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Most Stock Items',
+      },
+    },
+  }
+
+  const doughnutMostBeneficialData = {
+    labels: state.mostBeneficialItems.map((item) => item.item_name),
+    datasets: [
+      {
+        data: state.mostBeneficialItems.map((item) => item.total_revenue),
+        backgroundColor: [
+          '#FF6384',
+          '#36A2EB',
+          '#FFCE56',
+          '#FF9F40',
+          '#B4B4B4',
+        ],
+        hoverBackgroundColor: [
+          '#FF6384',
+          '#36A2EB',
+          '#FFCE56',
+          '#FF9F40',
+          '#B4B4B4',
+        ],
+      },
+    ],
+  }
+
+  const doughnutMostBeneficialOptions = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Most Beneficial Items Based on Total Revenue',
+      },
+    },
+  }
+
+  const pieMostStockedData = {
+    labels: state.mostStockedCategories.map(
+      (category) => category.category_name
+    ),
+    datasets: [
+      {
+        data: state.mostStockedCategories.map(
+          (category) => category.total_stocked_quantity
+        ),
+        backgroundColor: [
+          '#FF6384',
+          '#36A2EB',
+          '#FFCE56',
+          '#FF9F40',
+          '#B4B4B4',
+        ],
+        hoverBackgroundColor: [
+          '#FF6384',
+          '#36A2EB',
+          '#FFCE56',
+          '#FF9F40',
+          '#B4B4B4',
+        ],
+      },
+    ],
+  }
+
+  const pieMostStockedOptions = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Most Stocked Categories',
+      },
+    },
+  }
+
+  const barFrequentlySoldData = {
+    labels: state.frequentlySoldItems.map((item) => item.item_name),
+    datasets: [
+      {
+        label: 'Frequently Sold Items',
+        data: state.frequentlySoldItems.map((item) => item.sale_count),
+        backgroundColor: '#36A2EB',
+      },
+    ],
+  }
+
+  const barFrequentlySoldOptions = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Frequently Sold Items',
+      },
+    },
+  }
+
   return {
-    barData,
+    barMostStockItem,
+    barMostStockOptions,
+    doughnutMostBeneficialData,
+    doughnutMostBeneficialOptions,
+    pieMostStockedData,
+    pieMostStockedOptions,
+    barFrequentlySoldData,
+    barFrequentlySoldOptions,
   }
 }
 

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Bar, Doughnut, Radar, Line } from 'react-chartjs-2';
-import 'chart.js/auto';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import { Bar, Doughnut, Pie, Line } from 'react-chartjs-2'
+import 'chart.js/auto'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import '@fortawesome/fontawesome-free/css/all.min.css'
 import { Container } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import CategoryAction from '../../api/category/action'
 import VendorAction from '../../api/vendor/action'
 import UserAction from '../../api/user/action'
+import DashboardAction from '../../api/dasboard/action'
+
 import {
   SquareGanttChart,
   Building2,
@@ -26,12 +28,25 @@ const Dashboard = () => {
     numProducts: 0,
     outOfStockProducts: 0,
     mostStockItems: [],
+    mostBeneficialItems: [],
+    frequentlySoldItems: [],
+    mostStockedCategories: [],
+    mostSoldCategories: [],
   })
   const [isLoading, setIsLoading] = useState(false)
 
   const navigate = useNavigate()
 
-  const { barData } = useColumn({ state })
+  const {
+    barMostStockItem,
+    barMostStockOptions,
+    doughnutMostBeneficialData,
+    doughnutMostBeneficialOptions,
+    pieMostStockedData,
+    pieMostStockedOptions,
+    barFrequentlySoldData,
+    barFrequentlySoldOptions,
+  } = useColumn({ state })
 
   const checkIfUserIsLoggedInOrNot = async () => {
     try {
@@ -42,84 +57,6 @@ const Dashboard = () => {
     } catch (error) {
       return navigate('/login')
     }
-  }
-
-  const doughnutData = {
-    labels: [
-      'Aspirin',
-      'Ibuprofen',
-      'Paracetamol',
-      'Amoxicillin',
-      'Omeprazole',
-    ],
-    datasets: [
-      {
-        data: [5000, 3000, 4000, 2000, 3500],
-        backgroundColor: [
-          '#FF6384',
-          '#36A2EB',
-          '#FFCE56',
-          '#FF9F40',
-          '#B4B4B4',
-        ],
-        hoverBackgroundColor: [
-          '#FF6384',
-          '#36A2EB',
-          '#FFCE56',
-          '#FF9F40',
-          '#B4B4B4',
-        ],
-      },
-    ],
-  }
-
-  const radarData = {
-    labels: [
-      'Aspirin',
-      'Ibuprofen',
-      'Paracetamol',
-      'Amoxicillin',
-      'Omeprazole',
-    ],
-    datasets: [
-      {
-        label: 'Average Usage',
-        backgroundColor: 'rgba(179,181,198,0.2)',
-        borderColor: 'rgba(179,181,198,1)',
-        pointBackgroundColor: 'rgba(179,181,198,1)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(179,181,198,1)',
-        data: [65, 59, 90, 81, 56],
-      },
-    ],
-  }
-
-  const lineData = {
-    labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-    datasets: [
-      {
-        label: 'Quarterly Sales',
-        fill: false,
-        lineTension: 0.1,
-        backgroundColor: 'rgba(75,192,192,0.4)',
-        borderColor: 'rgba(75,192,192,1)',
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderJoinStyle: 'miter',
-        pointBorderColor: 'rgba(75,192,192,1)',
-        pointBackgroundColor: '#fff',
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-        pointHoverBorderColor: 'rgba(220,220,220,1)',
-        pointHoverBorderWidth: 2,
-        pointRadius: 1,
-        pointHitRadius: 10,
-        data: [10000, 15000, 12000, 17000],
-      },
-    ],
   }
 
   const findTotalNumberOfCategories = async () => {
@@ -167,6 +104,24 @@ const Dashboard = () => {
     })
   }
 
+  const findAllDashboardForGraph = async () => {
+    const mostBeneficialItems = await DashboardAction.getMostBeneficialItems()
+    const frequentlySoldItems = await DashboardAction.getFrequentlySoldItems()
+    const mostStockedCategories =
+      await DashboardAction.getMostStockedCategories()
+    const mostSoldCategories = await DashboardAction.getMostSoldCategories()
+
+    setState((prev) => {
+      return {
+        ...prev,
+        mostBeneficialItems,
+        frequentlySoldItems,
+        mostStockedCategories,
+        mostSoldCategories,
+      }
+    })
+  }
+
   useEffect(() => {
     checkIfUserIsLoggedInOrNot().then((res) => {
       if (res) {
@@ -174,6 +129,7 @@ const Dashboard = () => {
         findTotalNumberOfVendors()
         findTotalNumberOfItems()
         findMostStockedItem()
+        findAllDashboardForGraph()
       }
     })
   }, [])
@@ -185,7 +141,7 @@ const Dashboard = () => {
       ) : (
         <Container className="mt-4">
           {/* Top Summary Cards */}
-          <div className="col-12 d-flex mb-4 gap-4 flex-wrap">
+          <div className="row gap-2 d-flex mb-4 flex-wrap">
             <div className="custom-card">
               <div className="icon-box">
                 <Building2 size={60} color="#6784f9" />
@@ -229,24 +185,33 @@ const Dashboard = () => {
           <div className="row">
             <div className="col-12">
               <div className="row">
-                <div className="col-md-6 mb-4">
+                <div className="col-lg-6 col-md-12 mb-4">
                   <div className="chart-card">
-                    <Radar data={radarData} />
+                    <Pie
+                      data={pieMostStockedData}
+                      options={pieMostStockedOptions}
+                    />
                   </div>
                 </div>
-                <div className="col-md-6 mb-4">
+                <div className="col-lg-6 col-md-12 mb-4">
                   <div className="chart-card">
-                    <Doughnut data={doughnutData} />
+                    <Doughnut
+                      data={doughnutMostBeneficialData}
+                      options={doughnutMostBeneficialOptions}
+                    />
                   </div>
                 </div>
-                <div className="col-md-6 mb-4">
+                <div className="col-lg-6 col-md-12 mb-4">
                   <div className="chart-card">
-                    <Bar data={barData} />
+                    <Bar data={barMostStockItem} options={barMostStockOptions}/>
                   </div>
                 </div>
-                <div className="col-md-6 mb-4">
+                <div className="col-lg-6 col-md-12 mb-4">
                   <div className="chart-card">
-                    <Line data={lineData} />
+                    <Bar
+                      data={barFrequentlySoldData}
+                      options={barFrequentlySoldOptions}
+                    />
                   </div>
                 </div>
               </div>

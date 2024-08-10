@@ -4,6 +4,7 @@ import VendorController from './Vendor.controller.js'
 import ItemController from './Item.controller.js'
 import StockController from './Stock.controller.js'
 import SaleController from './Sale.controller.js'
+import DashboardController from './Dashboard.controller.js'
 
 export {
   UserController,
@@ -12,4 +13,5 @@ export {
   ItemController,
   StockController,
   SaleController,
+  DashboardController,
 }

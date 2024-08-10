@@ -4,6 +4,7 @@ import VendorServices from './Vendor.service.js'
 import ItemServices from './Item.service.js'
 import StockServices from './Stock.service.js'
 import SaleServices from './Sale.service.js'
+import DashboardServices from './Dashboard.service.js'
 
 export {
   UserServices,
@@ -12,4 +13,5 @@ export {
   ItemServices,
   StockServices,
   SaleServices,
+  DashboardServices,
 }

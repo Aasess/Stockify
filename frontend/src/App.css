@@ -120,6 +120,8 @@ body {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .summary-card h5 {
@@ -192,10 +194,9 @@ body {
   background-color: #fff;
   box-shadow: 0 0 0.5rem rgba(0,0,0,0.1);
 
-  min-width: 280px;
-    max-width: 300px;
-    width: inherit;
-    height: 120px;
+  width: 280px!important;
+  height: 120px;
+  margin-left: 12px;
 }
 .icon-box {
   margin-right: 1.5rem;
@@ -241,4 +242,34 @@ body {
     .unauthorized-container {
       background-image: none;
     }
+}
+
+@media screen and (min-width: 1478px) {
+  .custom-card {
+    width: 23%!important
+  }
+}
+
+@media screen and (max-width: 1478px) {
+  .custom-card {
+    width: 260px!important
+  }
+}
+
+@media screen and (max-width: 1474px) {
+  .custom-card {
+    width: 240px!important
+  }
+}
+
+@media screen and (max-width: 1361px) {
+  .custom-card {
+    width: 46%!important
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .custom-card {
+    width: 100%!important
+  }
 }
