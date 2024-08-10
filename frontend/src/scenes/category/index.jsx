@@ -30,7 +30,7 @@ const Category = () => {
   })
   const [isEdit, setIsEdit] = useState(false)
   const [categoryToDelete, setCategoryToDelete] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1)

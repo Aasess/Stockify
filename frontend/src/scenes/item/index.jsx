@@ -33,7 +33,7 @@ const Item = () => {
   const [editItem, setEditItem] = useState(null)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [deleteItemId, setDeleteItemId] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     fetchItems()
