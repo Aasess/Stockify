@@ -82,15 +82,15 @@ const useColumn = ({ state }) => {
           (category) => category.total_stocked_quantity
         ),
         backgroundColor: [
-          '#FF6384',
           '#36A2EB',
+          '#FF6384',
           '#FFCE56',
           '#FF9F40',
           '#B4B4B4',
         ],
         hoverBackgroundColor: [
-          '#FF6384',
           '#36A2EB',
+          '#FF6384',
           '#FFCE56',
           '#FF9F40',
           '#B4B4B4',
